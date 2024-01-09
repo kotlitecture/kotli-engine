@@ -1,0 +1,58 @@
+apply plugin: "org.jetbrains.kotlin.jvm"
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+dependencies {
+    api libs.bundles.logging
+    testImplementation libs.bundles.kotlinTest
+}
+
+jar {
+    manifest {
+        attributes(
+                'Implementation-Version': archiveVersion
+        )
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = rootProject.name
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = '<USERNAME>'
+                password = '<PASSWORD>'
+            }
+        }
+    }
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,31 @@
+[versions]
+jimfs = "1.3.0"
+kotlin = "1.9.21"
+kotlinxCoroutines = "1.7.3"
+logback = "1.4.11"
+slf4j = "2.0.9"
+
+[libraries]
+jimfs = { module = "com.google.jimfs:jimfs", version.ref = "jimfs" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+
+[bundles]
+kotlinTest = [
+    "kotlin-coroutines-test",
+    "kotlin-test",
+]
+logging = [
+    "logback-classic",
+    "logback-core",
+    "slf4j-api",
+]
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+spring-boot = "org.springframework.boot:3.2.1"
+version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.3"
+version-catalog-versions = "com.github.ben-manes.versions:0.50.0"

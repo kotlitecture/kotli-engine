@@ -1,0 +1,8 @@
+apply from: "${project.rootDir}/gradle/kotlin/library.gradle"
+
+group = 'com.kotlitecture.kotli'
+version = '0.0.1'
+
+dependencies {
+    implementation libs.jimfs
+}
