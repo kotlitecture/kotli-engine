@@ -1,4 +1,5 @@
-apply plugin: "org.jetbrains.kotlin.jvm"
+apply plugin: 'name.remal.maven-publish-nexus-staging'
+apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
@@ -20,6 +21,29 @@ publishing {
         mavenJava(MavenPublication) {
             artifactId = rootProject.name
             from components.java
+            pom {
+                name = 'Kotli Engine'
+                description = 'Kotli Engine'
+                url = 'https://github.com/kotlitecture/kotli-engine'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/kotlitecture/kotli-engine/blob/main/LICENSE'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'aleksha'
+                        name = 'Aleksha'
+                        email = 'kotlitecture@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/kotlitecture/kotli-engine.git'
+                    developerConnection = 'scm:git:ssh://github.com/kotlitecture/kotli-engine.git'
+                    url = 'https://github.com/kotlitecture/kotli-engine'
+                }
+            }
         }
     }
     repositories {
@@ -27,8 +51,8 @@ publishing {
             name = "OSSRH"
             url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
             credentials {
-                username = '<USERNAME>'
-                password = '<PASSWORD>'
+                username = findProperty('ossrhUsername')
+                password = findProperty('ossrhPassword')
             }
         }
     }
@@ -44,6 +68,9 @@ artifacts {
 }
 
 signing {
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
     sign configurations.archives
 }
 
