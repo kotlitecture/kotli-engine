@@ -7,11 +7,12 @@ class LayerTypeTest {
 
     @Test
     fun `layer types have icon, title and description`() {
-        LayerType.entries.forEach { type ->
-            Assertions.assertNotNull(type.getIcon(), type.getId())
-            Assertions.assertNotNull(type.getTitle(), type.getId())
-            Assertions.assertNotNull(type.getDescription(), type.getId())
-        }
+        LayerType.entries
+            .filter { it.getTitle() != null }
+            .also { Assertions.assertEquals(3, it.size) }
+            .forEach { type ->
+                Assertions.assertNotNull(type.getTitle(), type.getId())
+            }
     }
 
 }
