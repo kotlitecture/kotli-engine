@@ -55,6 +55,15 @@ publishing {
                 password = findProperty('ossrhPassword')
             }
         }
+        maven {
+            name = "GAR"
+            url "https://us-maven.pkg.dev/finu-app-dev/maven-test"
+            credentials {
+                username = '_json_key_base64'
+                password = ''
+            }
+        }
+
     }
 }
 
