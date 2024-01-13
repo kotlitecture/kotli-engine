@@ -57,13 +57,12 @@ publishing {
         }
         maven {
             name = "GAR"
-            url "https://us-maven.pkg.dev/finu-app-dev/maven-test"
+            url "https://us-maven.pkg.dev/kotlitecture/kotli-maven"
             credentials {
                 username = '_json_key_base64'
-                password = ''
+                password = findProperty('artifactRegistryMavenSecret')
             }
         }
-
     }
 }
 

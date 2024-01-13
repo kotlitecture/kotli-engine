@@ -10,7 +10,7 @@ Docs - https://cloud.google.com/artifact-registry/docs/java
 
 1. Go to Google Cloud Console and create or select project - https://console.cloud.google.com/home/dashboard
 2. Enable Artifact Registry for the project - https://console.cloud.google.com/apis/enableflow?apiid=artifactregistry.googleapis.com
-3. Create repository (with Java format) - https://console.cloud.google.com/artifacts
+3. Create repository with Maven format - https://console.cloud.google.com/artifacts
 4. Check created repository and click on 'ADD PRINCIPAL'
 5. Fill the next input fields and then confirm your changes with **Save**: 
    - New principals - **allUsers**
