@@ -21,4 +21,4 @@ jobs:
       - id: unit-tests
         run: ./gradlew test
       - id: publish-google-artifact-registry
-        run: ./gradlew publishMavenJavaPublicationToGARepository
+        run: ./gradlew publishMavenPublicationToGARepository

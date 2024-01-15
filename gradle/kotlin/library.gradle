@@ -18,7 +18,7 @@ jar {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
             artifactId = rootProject.name
             from components.java
             pom {
@@ -76,7 +76,7 @@ artifacts {
 }
 
 signing {
-    sign publishing.publications.mavenJava
+//    sign publishing.publications.maven
 }
 
 javadoc {
