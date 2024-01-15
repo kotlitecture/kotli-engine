@@ -18,7 +18,7 @@ jar {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
             artifactId = rootProject.name
             from components.java
             pom {
@@ -57,7 +57,7 @@ publishing {
         }
         maven {
             println("PROP :: ${findProperty('artifactRegistryMavenSecret')}")
-            name = "GAR"
+            name = "GA"
             url "https://us-maven.pkg.dev/kotlitecture/kotli-maven"
             credentials {
                 username = '_json_key_base64'
@@ -77,7 +77,7 @@ artifacts {
 }
 
 signing {
-    sign publishing.publications.mavenJava
+//    sign publishing.publications.maven
 }
 
 javadoc {
