@@ -19,4 +19,4 @@ jobs:
       - id: unit-tests
         run: ./gradlew test
       - id: publish-google-artifact-registry
-        run: ./gradlew publishMavenPublicationToGARepository -PartifactRegistryMavenSecret="${{ secrets.ORG_GRADLE_PROJECT_ARTIFACTREGISTRYMAVENSECRET }}"
+        run: ./gradlew publishMavenPublicationToGARepository -PartifactRegistryMavenSecret="${{ secrets.ARTIFACT_REGISTRY_MAVEN_SECRET }}"
