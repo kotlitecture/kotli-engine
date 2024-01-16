@@ -56,7 +56,6 @@ publishing {
             }
         }
         maven {
-            println("PROP :: ${findProperty('artifactRegistryMavenSecret')}")
             name = "GA"
             url "https://us-maven.pkg.dev/kotlitecture/kotli-maven"
             credentials {

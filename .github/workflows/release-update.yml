@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          lfs: true
       - uses: actions/setup-java@v4
         with:
           java-version: 17
@@ -21,4 +19,4 @@ jobs:
       - id: unit-tests
         run: ./gradlew test
       - id: publish-google-artifact-registry
-        run: ./gradlew publishMavenPublicationToGARepository -PartifactRegistryMavenSecret="${{ secrets.ORG_GRADLE_PROJECT_ARTIFACTREGISTRYMAVENSECRET }}"
+        run: ./gradlew publishMavenPublicationToGARepository -PartifactRegistryMavenSecret="${{ secrets.ARTIFACT_REGISTRY_MAVEN_SECRET }}"
