@@ -13,14 +13,13 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
         register()
     }
 
-    protected open val templatePath: String by lazy { "kotli/templates/${getId()}" }
     protected open val logger by lazy { LoggerFactory.getLogger(this::class.java) }
     protected abstract fun doPrepare(context: TemplateContext)
     protected abstract fun createProviders(): List<IFeatureProvider>
 
-    private val providerList by lazy { createProviders() }
-
+    private val templatePath: String by lazy { "kotli/templates/${getId()}" }
     private val providerById by lazy { providerList.associateBy { it.id } }
+    private val providerList by lazy { createProviders() }
 
     private val processorByType by lazy {
         providerList
