@@ -31,7 +31,7 @@ object PathUtils {
 
     fun copy(from: Path, to: Path) {
         logger.debug("copy :: {} -> {}", from, to)
-        val followLinks = false
+        val followLinks = true
         from.copyToRecursively(
             to,
             followLinks = followLinks,
