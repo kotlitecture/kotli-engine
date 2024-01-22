@@ -11,12 +11,10 @@ import kotlin.io.path.exists
 import kotlin.io.path.readLines
 import kotlin.io.path.writeText
 
-private val logger = LoggerFactory.getLogger(TemplateMaker::class.java)
-
 class TemplateMaker(private val path: Path) {
 
     companion object {
-        private val LOG = LoggerFactory.getLogger(TemplateMaker::class.java)
+        private val logger = LoggerFactory.getLogger(TemplateMaker::class.java)
     }
 
     private val lines by lazy {
@@ -24,13 +22,13 @@ class TemplateMaker(private val path: Path) {
     }
 
     fun remove() {
-        LOG.debug("remove:\n\t{}", path)
+        logger.debug("remove:\n\t{}", path)
         path.deleteRecursively()
     }
 
     fun replaceText(text: String, replacer: () -> String): TemplateMaker {
         val newText = replacer()
-        LOG.debug("replaceText:\n\t{}\n\t{}", text, newText)
+        logger.debug("replaceText:\n\t{}\n\t{}", text, newText)
         lines.forEachIndexed { index, line ->
             lines[index] = line.replace(text, newText)
         }
@@ -39,7 +37,7 @@ class TemplateMaker(private val path: Path) {
 
     fun replaceText(marker: String, text: String, replacer: () -> String): TemplateMaker {
         val newText = replacer()
-        LOG.debug("replaceText:\n\t{}\n\t{}", text, newText)
+        logger.debug("replaceText:\n\t{}\n\t{}", text, newText)
         lines.forEachIndexed { index, line ->
             if (isMarked(marker, line)) {
                 lines[index] = cleanup(line).replace(text, newText)
@@ -54,7 +52,7 @@ class TemplateMaker(private val path: Path) {
         val startIndex = line.indexOfFirst { it != ' ' }.takeIfIndex() ?: 0
         val newLine = replacer()
         val updatedLine = "${line.substring(0, startIndex)}$newLine"
-        LOG.debug("replaceLine:\n\t{}\n\t{}", line, updatedLine)
+        logger.debug("replaceLine:\n\t{}\n\t{}", line, updatedLine)
         lines[indexOf] = updatedLine
         return this
     }
@@ -69,19 +67,19 @@ class TemplateMaker(private val path: Path) {
     }
 
     fun removeLine(marker: String): TemplateMaker {
-        LOG.debug("removeLine:\n\t{}", marker)
+        logger.debug("removeLine:\n\t{}", marker)
         lines.removeIf { isMarked(it, marker) }
         return this
     }
 
     fun removeLine(isMarked: (line: String) -> Boolean): TemplateMaker {
-        LOG.debug("removeLine:\n\t{}", isMarked)
+        logger.debug("removeLine:\n\t{}", isMarked)
         lines.removeIf { isMarked(it) }
         return this
     }
 
     fun cleanupBlock(marker: String): TemplateMaker {
-        LOG.debug("cleanupBlock:\n\t{}", marker)
+        logger.debug("cleanupBlock:\n\t{}", marker)
         lines.removeIf { isMarked(it, marker) }
         return this
     }
@@ -96,7 +94,7 @@ class TemplateMaker(private val path: Path) {
         repeat(indexOfLast - indexOfFirst + 1) {
             lines.removeAt(indexOfFirst)
         }
-        LOG.debug("replaceBlock:\n\t{}\n\t{}", firstLine, newBlock)
+        logger.debug("replaceBlock:\n\t{}\n\t{}", firstLine, newBlock)
         val newBlockLines = newBlock.lines().map { tab + it }
         lines.addAll(indexOfFirst, newBlockLines)
         return this
@@ -106,7 +104,7 @@ class TemplateMaker(private val path: Path) {
         val indexOfFirst = lines.indexOfFirst { isMarked(it, marker) }.takeIfIndex() ?: return this
         val indexOfLast = lines.indexOfLast { isMarked(it, marker) }.takeIfIndex() ?: return this
         if (indexOfFirst == indexOfLast) return this
-        LOG.debug("removeBlock:\n\t{}", marker)
+        logger.debug("removeBlock:\n\t{}", marker)
         repeat(indexOfLast - indexOfFirst + 1) {
             lines.removeAt(indexOfFirst)
         }
@@ -130,7 +128,7 @@ class TemplateMaker(private val path: Path) {
     private fun cleanup(line: String): String {
         val startIndex = line.indexOfAny(listOf("//", "#")).takeIfIndex() ?: return line
         val newLine = line.substring(0, startIndex).trimEnd()
-        LOG.debug("cleanupLine:\n\t{}\n\t{}", line, newLine)
+        logger.debug("cleanupLine:\n\t{}\n\t{}", line, newLine)
         return newLine
     }
 
