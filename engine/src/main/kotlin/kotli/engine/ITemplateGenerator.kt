@@ -7,6 +7,8 @@ interface ITemplateGenerator : IDictionary {
 
     val type: LayerType
 
+    fun getRepositoryUrl(): String? = null
+
     fun getProcessor(type: Class<out IFeatureProcessor>): IFeatureProcessor
 
     fun getProvider(type: Class<out IFeatureProcessor>): IFeatureProvider
