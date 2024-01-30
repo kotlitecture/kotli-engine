@@ -13,7 +13,7 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
         register()
     }
 
-    protected open val logger by lazy { LoggerFactory.getLogger(this::class.java) }
+    protected val logger by lazy { LoggerFactory.getLogger(this::class.java) }
     protected abstract fun doPrepare(context: TemplateContext)
     protected abstract fun createProviders(): List<IFeatureProvider>
 
@@ -141,11 +141,14 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
                 textBuilder.appendLine(description)
                 textBuilder.appendLine("```")
             }
-            processor.getLinks(context)?.let { links ->
+            val webUrl = processor.getWebUrl(context)
+            val integrationUrl = processor.getIntegrationUrl(context)
+            if (webUrl != null || integrationUrl != null) {
                 textBuilder.appendLine()
                 textBuilder.appendLine("## Links")
                 textBuilder.appendLine()
-                textBuilder.appendLine(links)
+                webUrl?.let { textBuilder.appendLine("[Official site](${it})") }
+                integrationUrl?.let { textBuilder.appendLine("[Integration instruction](${it})") }
             }
             processor.getConfiguration(context)?.let { instruction ->
                 textBuilder.appendLine()

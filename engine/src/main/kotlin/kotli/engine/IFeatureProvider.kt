@@ -6,9 +6,7 @@ interface IFeatureProvider : IFeature {
 
     val id: String
 
-    val type:FeatureType
-
-    fun isRequired(): Boolean = false
+    val type: FeatureType
 
     fun isMultiple(): Boolean = false
 
