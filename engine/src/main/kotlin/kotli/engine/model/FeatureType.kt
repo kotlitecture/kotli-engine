@@ -4,6 +4,11 @@ import kotli.engine.IDictionary
 import kotli.engine.utils.ResourceUtils
 import java.net.URL
 
+/**
+ * FeatureType is just a logical group for features.
+ * It is intended to be used only on frontend to highlight similarity
+ * or common aspects of some of the features.
+ */
 enum class FeatureType(private val code: String, val order: Int = 0) : IDictionary {
 
     Build("build", 1),

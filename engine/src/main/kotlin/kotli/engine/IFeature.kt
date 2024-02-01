@@ -16,6 +16,11 @@ import java.net.URL
 interface IFeature {
 
     /**
+     * Unique identifier of the feature.
+     */
+    val id: String
+
+    /**
      * Icon of the feature. Preferred format is SVG or any other image format of size at least 64px.
      *
      * @param context is current runtime template context with user defined parameters.

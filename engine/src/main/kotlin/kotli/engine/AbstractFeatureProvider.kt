@@ -1,6 +1,9 @@
 package kotli.engine
 
-abstract class FeatureProvider : IFeatureProvider {
+/**
+ * Basic implementation of any provider created.
+ */
+abstract class AbstractFeatureProvider : IFeatureProvider {
 
     private val all by lazy { createProcessors() }
     private val byId by lazy { all.associateBy { it.id } }

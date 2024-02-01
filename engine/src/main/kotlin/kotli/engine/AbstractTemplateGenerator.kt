@@ -7,6 +7,9 @@ import java.nio.file.Files
 import kotlin.io.path.createDirectories
 import kotlin.io.path.writeText
 
+/**
+ * Basic implementation of any template generator.
+ */
 abstract class AbstractTemplateGenerator : ITemplateGenerator {
 
     init {
@@ -65,13 +68,13 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
 
     private fun prepare(context: TemplateContext) {
         val from = PathUtils.getFromResource(templatePath) ?: return
-        val to = context.path
+        val to = context.target
         PathUtils.copy(from, to)
         doPrepare(context)
     }
 
     private fun cleanup(context: TemplateContext) {
-        Files.walk(context.path)
+        Files.walk(context.target)
             .filter(PathUtils::isEmptyDir)
             .forEach(PathUtils::delete)
     }
@@ -80,7 +83,7 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
         context.layer.layers
             .map { childLayer ->
                 TemplateContext(
-                    path = context.path.resolve(childLayer.name),
+                    target = context.target.resolve(childLayer.name),
                     layer = childLayer,
                     parent = context
                 )
@@ -122,7 +125,7 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
         processors: List<IFeatureProcessor>
     ) {
         logger.debug("proceedInstruction for provider:\n\t{}", provider.id)
-        val instruction = context.path.resolve("docs/integrations/${index + 1} - ${provider.id}.md")
+        val instruction = context.target.resolve("docs/integrations/${index + 1} - ${provider.id}.md")
         instruction.parent.createDirectories()
         val textBuilder = StringBuilder()
         processors.forEach { processor ->

@@ -16,7 +16,7 @@ import java.util.zip.ZipOutputStream
 data class TemplateContext(
     val layer: Layer,
     val parent: TemplateContext? = null,
-    val path: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/")
+    val target: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/")
 ) {
 
     val applied: MutableSet<IFeatureProcessor> = mutableSetOf()
@@ -33,9 +33,9 @@ data class TemplateContext(
         generate()
         val zip = ZipOutputStream(stream)
         zip.use { zipOutput ->
-            Files.walkFileTree(path, object : SimpleFileVisitor<Path>() {
+            Files.walkFileTree(target, object : SimpleFileVisitor<Path>() {
                 override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                    val relativePath: Path = path.relativize(file)
+                    val relativePath: Path = target.relativize(file)
                     val zipEntry = ZipEntry(relativePath.toString())
                     zipOutput.putNextEntry(zipEntry)
                     Files.copy(file, zipOutput)
@@ -55,7 +55,7 @@ data class TemplateContext(
             mutableListOf()
         }
         args.addAll(commands.toList())
-        val dir = path
+        val dir = target
         val process = ProcessBuilder()
             .directory(dir.toFile())
             .command(args)
@@ -73,7 +73,7 @@ data class TemplateContext(
     }
 
     fun apply(contextPath: String, block: TemplateMaker.() -> Unit) {
-        val maker = TemplateMaker(path.resolve(contextPath))
+        val maker = TemplateMaker(target.resolve(contextPath))
         maker.block()
         maker.apply()
     }
@@ -100,7 +100,7 @@ data class TemplateContext(
 
     companion object {
         val Empty = TemplateContext(
-            path = Path.of("/"),
+            target = Path.of("/"),
             layer = Layer(
                 id = "<YOUR_LAYER_ID>",
                 name = "<YOUR_LAYER_NAME>",

@@ -2,6 +2,9 @@ package kotli.engine.model
 
 import kotli.engine.ITemplateGenerator
 
+/**
+ * Metadata of a specific layer with all configured features and attributes.
+ */
 data class Layer(
     val id: String,
     val name: String,

@@ -4,6 +4,9 @@ import kotli.engine.IDictionary
 import kotli.engine.utils.ResourceUtils
 import java.net.URL
 
+/**
+ * Layer corresponds to a distinct aspect of a project (Frontend, Backend, Middle, Testing, etc.
+ */
 enum class LayerType(private val code: String, val order: Int = 0) : IDictionary {
 
     App("app", 0),

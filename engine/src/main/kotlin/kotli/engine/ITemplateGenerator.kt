@@ -7,6 +7,8 @@ interface ITemplateGenerator : IDictionary {
 
     val type: LayerType
 
+    fun getVersion(): String = javaClass.`package`.implementationVersion ?: "0.0.0"
+
     fun getRepositoryUrl(): String? = null
 
     fun getProcessor(type: Class<out IFeatureProcessor>): IFeatureProcessor

@@ -9,11 +9,6 @@ package kotli.engine
 interface IFeatureProcessor : IFeature {
 
     /**
-     * Unique identifier of the processor inside of the provider it is part of.
-     */
-    val id: String
-
-    /**
      * Applies given processor to the template generated.
      *
      * @param context is current runtime template context with user defined parameters.

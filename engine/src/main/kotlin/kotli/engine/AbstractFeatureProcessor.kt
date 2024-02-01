@@ -2,9 +2,12 @@ package kotli.engine
 
 import org.slf4j.LoggerFactory
 
-abstract class FeatureProcessor : IFeatureProcessor {
+/**
+ * Basic implementation of any processor created.
+ */
+abstract class AbstractFeatureProcessor : IFeatureProcessor {
 
-    protected val logger = LoggerFactory.getLogger(this::class.java)
+    protected val logger by lazy { LoggerFactory.getLogger(this::class.java) }
 
     protected open fun dependencies(): List<Class<out IFeatureProcessor>> = emptyList()
 

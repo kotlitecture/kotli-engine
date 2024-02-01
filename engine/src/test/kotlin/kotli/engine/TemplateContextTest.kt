@@ -19,7 +19,7 @@ class TemplateContextTest {
             )
         )
         context.generate()
-        Assertions.assertEquals(1, Files.walk(context.path).toList().size)
+        Assertions.assertEquals(1, Files.walk(context.target).toList().size)
     }
 
     @Test
@@ -35,7 +35,7 @@ class TemplateContextTest {
         )
         context.generateAndZip(out)
         Assertions.assertEquals(22, out.size())
-        Assertions.assertEquals(1, Files.walk(context.path).toList().size)
+        Assertions.assertEquals(1, Files.walk(context.target).toList().size)
     }
 
 }
