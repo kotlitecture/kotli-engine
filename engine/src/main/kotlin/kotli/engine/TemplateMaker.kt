@@ -160,6 +160,17 @@ class TemplateMaker(
     }
 
     /**
+     * Cleanups the block marked with #marker at front and #marker at the end of it.
+     *
+     * @param marker - text which must be presented in two lines to be considered as a block.
+     */
+    fun cleanupBlock(marker: String): TemplateMaker {
+        logger.debug("cleanupBlock:\n\t{}", marker)
+        lines.removeIf { isMarked(it, marker) }
+        return this
+    }
+
+    /**
      * Removes the entire block marked with #marker at front and #marker at the end of it.
      *
      * @param marker - text which must be presented in two lines to be considered as a block.
