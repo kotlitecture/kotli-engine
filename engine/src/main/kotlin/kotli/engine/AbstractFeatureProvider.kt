@@ -11,6 +11,10 @@ abstract class AbstractFeatureProvider : IFeatureProvider {
     override fun getProcessors(): List<IFeatureProcessor> = all
     override fun getProcessor(id: String): IFeatureProcessor = byId[id]!!
 
+    /**
+     * Should return all available processors of the given feature provider.
+     * Processor instances must be stateless.
+     */
     abstract fun createProcessors(): List<IFeatureProcessor>
 
 }

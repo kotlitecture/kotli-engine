@@ -27,7 +27,7 @@ interface IFeature {
      *
      * @return URL on the image resource (default value is icon.svg relative to the package declaration).
      */
-    fun getIcon(context: TemplateContext): URL? = ResourceUtils.get(this, "icon.svg")
+    fun getIcon(context: TemplateContext = TemplateContext.Empty): URL? = ResourceUtils.get(this, "icon.svg")
 
     /**
      * Title of the feature. Short name. Used to display to the user and generate required documentation.
@@ -36,7 +36,7 @@ interface IFeature {
      *
      * @return text (default value is value of title.md, relative to the package declaration).
      */
-    fun getTitle(context: TemplateContext): String? = ResourceUtils.getAsString(this, "title.md")
+    fun getTitle(context: TemplateContext = TemplateContext.Empty): String? = ResourceUtils.getAsString(this, "title.md")
 
     /**
      * Description of the feature. Detailed. Used to display to the user and generate required documentation.
@@ -45,7 +45,7 @@ interface IFeature {
      *
      * @return text (default value is value of description.md, relative to the package declaration).
      */
-    fun getDescription(context: TemplateContext): String? = ResourceUtils.getAsString(this, "description.md")
+    fun getDescription(context: TemplateContext = TemplateContext.Empty): String? = ResourceUtils.getAsString(this, "description.md")
 
     /**
      * Step-by-step instruction how to configure the feature in generated template so it can be used properly.
@@ -54,7 +54,7 @@ interface IFeature {
      *
      * @return text (default value is value of configuration.md, relative to the package declaration).
      */
-    fun getConfiguration(context: TemplateContext): String? = ResourceUtils.getAsString(this, "configuration.md")
+    fun getConfiguration(context: TemplateContext = TemplateContext.Empty): String? = ResourceUtils.getAsString(this, "configuration.md")
 
     /**
      * Approximate time estimate, required to configure the given feature by following available step-by-step instructions.
@@ -63,7 +63,7 @@ interface IFeature {
      *
      * @return value in milliseconds.
      */
-    fun getConfigurationEstimate(context: TemplateContext): Long = 0L
+    fun getConfigurationEstimate(context: TemplateContext = TemplateContext.Empty): Long = 0L
 
     /**
      * Approximate time estimate, required to integrate the given feature from scratch
@@ -73,7 +73,7 @@ interface IFeature {
      *
      * @return value in milliseconds.
      */
-    fun getIntegrationEstimate(context: TemplateContext): Long = 0L
+    fun getIntegrationEstimate(context: TemplateContext = TemplateContext.Empty): Long = 0L
 
     /**
      * Approximate impact on the final size of the artifact (apk, jar, etc) when this feature is included.
@@ -83,7 +83,7 @@ interface IFeature {
      *
      * @return value in bytes.
      */
-    fun getSizeImpact(context: TemplateContext): Long = 0L
+    fun getSizeImpact(context: TemplateContext = TemplateContext.Empty): Long = 0L
 
     /**
      * If feature has an official site, it should be provided for possibility to overview it by user.
@@ -92,7 +92,7 @@ interface IFeature {
      *
      * @return web url or null.
      */
-    fun getWebUrl(context: TemplateContext): String? = null
+    fun getWebUrl(context: TemplateContext = TemplateContext.Empty): String? = null
 
     /**
      * If feature has an official integration instruction, it should be provided for possibility to overview it by user.
@@ -101,6 +101,6 @@ interface IFeature {
      *
      * @return web url or null.
      */
-    fun getIntegrationUrl(context: TemplateContext): String? = null
+    fun getIntegrationUrl(context: TemplateContext = TemplateContext.Empty): String? = null
 
 }

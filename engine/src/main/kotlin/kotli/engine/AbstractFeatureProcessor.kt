@@ -9,8 +9,6 @@ abstract class AbstractFeatureProcessor : IFeatureProcessor {
 
     protected val logger by lazy { LoggerFactory.getLogger(this::class.java) }
 
-    protected open fun dependencies(): List<Class<out IFeatureProcessor>> = emptyList()
-
     final override fun apply(context: TemplateContext) {
         val generator = context.layer.generator
         dependencies().forEach { dependency ->

@@ -13,15 +13,23 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
+/**
+ * Execution context for one time generation of a template.
+ *
+ * Once this context is executed
+ */
 data class TemplateContext(
     val layer: Layer,
     val parent: TemplateContext? = null,
     val target: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/")
 ) {
 
-    val applied: MutableSet<IFeatureProcessor> = mutableSetOf()
+    internal val applied: MutableSet<IFeatureProcessor> = mutableSetOf()
     private val generated = AtomicBoolean(false)
 
+    /**
+     * Generates template based on the given context.
+     */
     fun generate(): TemplateContext {
         if (generated.compareAndSet(false, true)) {
             layer.generator.generate(this)
@@ -29,6 +37,9 @@ data class TemplateContext(
         return this
     }
 
+    /**
+     * Generates template into the #stream provided.
+     */
     fun generateAndZip(stream: OutputStream): TemplateContext {
         generate()
         val zip = ZipOutputStream(stream)
@@ -47,55 +58,20 @@ data class TemplateContext(
         return this
     }
 
-    fun generateAndExec(vararg commands: String) {
-        generate()
-        val args = if (isWindows()) {
-            mutableListOf("cmd.exe", "/C")
-        } else {
-            mutableListOf()
-        }
-        args.addAll(commands.toList())
-        val dir = target
-        val process = ProcessBuilder()
-            .directory(dir.toFile())
-            .command(args)
-            .inheritIO()
-            .start()
-        val exitCode = process.waitFor()
-        if (exitCode != 0) throw IllegalStateException("wrong exit code $exitCode")
-    }
-
-    fun generateAndGradlew(vararg commands: String) {
-        if (!isWindows()) {
-            runCatching { generateAndExec("chmod", "-R", "777", "gradlew") }
-        }
-        generateAndExec(gradlew(), *commands)
-    }
-
+    /**
+     * Applies template engine to the #contextPath relative to the root of the target folder.
+     */
     fun apply(contextPath: String, block: TemplateMaker.() -> Unit) {
         val maker = TemplateMaker(target.resolve(contextPath))
         maker.block()
         maker.apply()
     }
 
+    /**
+     * Applies template engine to the 'gradle/libs.versions.toml' in the root of the target folder.
+     */
     fun applyVersionCatalog(block: TemplateMaker.() -> Unit) {
         apply("gradle/libs.versions.toml", block)
-    }
-
-    private fun isWindows(): Boolean {
-        return try {
-            System.getProperty("os.name").lowercase().startsWith("windows")
-        } catch (e: SecurityException) {
-            false
-        }
-    }
-
-    private fun gradlew(): String {
-        if (isWindows()) {
-            return "gradlew"
-        } else {
-            return "./gradlew"
-        }
     }
 
     companion object {

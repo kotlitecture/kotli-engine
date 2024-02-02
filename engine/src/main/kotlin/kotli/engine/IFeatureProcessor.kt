@@ -9,6 +9,12 @@ package kotli.engine
 interface IFeatureProcessor : IFeature {
 
     /**
+     * Returns all dependencies of given processor.
+     * Dependencies must be known at runtime through providers registered in generator.
+     */
+    fun dependencies(): List<Class<out IFeatureProcessor>> = emptyList()
+
+    /**
      * Applies given processor to the template generated.
      *
      * @param context is current runtime template context with user defined parameters.
