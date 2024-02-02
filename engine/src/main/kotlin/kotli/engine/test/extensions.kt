@@ -1,7 +1,7 @@
 package kotli.engine.test
 
 import kotli.engine.ITemplateGenerator
-import kotli.engine.TemplateContext
+import kotli.engine.Kotli
 import kotli.engine.model.Feature
 import org.jetbrains.annotations.TestOnly
 
@@ -27,7 +27,7 @@ fun ITemplateGenerator.getAllFeatures(): List<Feature> {
  * Proceeds with template generation and execution of some commands in the root directory of the template generated.
  */
 @TestOnly
-fun TemplateContext.generateAndExec(vararg commands: String) {
+fun Kotli.generateAndExec(vararg commands: String) {
     generate()
     val args = if (isWindows()) {
         mutableListOf("cmd.exe", "/C")
@@ -49,7 +49,7 @@ fun TemplateContext.generateAndExec(vararg commands: String) {
  * Proceeds with template generation and execution of some gradle commands in the root directory of the template generated.
  */
 @TestOnly
-fun TemplateContext.generateAndGradlew(vararg commands: String) {
+fun Kotli.generateAndGradlew(vararg commands: String) {
     if (!isWindows()) {
         runCatching { generateAndExec("chmod", "-R", "777", "gradlew") }
     }

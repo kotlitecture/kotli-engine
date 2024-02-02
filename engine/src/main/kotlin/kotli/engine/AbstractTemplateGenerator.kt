@@ -82,10 +82,9 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
     private fun proceedChildren(context: TemplateContext) {
         context.layer.layers
             .map { childLayer ->
-                TemplateContext(
+                Kotli(
                     target = context.target.resolve(childLayer.name),
-                    layer = childLayer,
-                    parent = context
+                    layer = childLayer
                 )
             }
             .forEach { it.generate() }

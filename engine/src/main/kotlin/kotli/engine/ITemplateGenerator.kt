@@ -10,15 +10,15 @@ interface ITemplateGenerator : IDictionary {
     val type: LayerType
 
     /**
+     * Returns URL on a public repository with source codes of the given template.
+     */
+    fun getRepositoryUrl(): String? = null
+
+    /**
      * Returns current version of the generator.
      * This version is updated automatically each time the new artifact is released.
      */
     fun getVersion(): String = javaClass.`package`.implementationVersion ?: "0.0.0"
-
-    /**
-     * Returns URL on a public repository with source codes of the given template.
-     */
-    fun getRepositoryUrl(): String? = null
 
     /**
      * Finds a processor by its type.
@@ -40,7 +40,7 @@ interface ITemplateGenerator : IDictionary {
     fun getProviders(): List<IFeatureProvider>
 
     /**
-     * Generated new template based on the context provided.
+     * Generates new template based on the context provided.
      */
     fun generate(context: TemplateContext)
 

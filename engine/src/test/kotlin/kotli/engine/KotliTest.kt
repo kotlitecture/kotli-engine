@@ -6,11 +6,11 @@ import java.io.ByteArrayOutputStream
 import java.nio.file.Files
 import kotlin.test.Test
 
-class TemplateContextTest {
+class KotliTest {
 
     @Test
     fun `generate without extra files inside`() {
-        val context = TemplateContext(
+        val kotli = Kotli(
             layer = Layer(
                 id = "my.app",
                 name = "test",
@@ -18,14 +18,14 @@ class TemplateContextTest {
                 generator = ITemplateGenerator.App
             )
         )
-        context.generate()
-        Assertions.assertEquals(1, Files.walk(context.target).toList().size)
+        kotli.generate()
+        Assertions.assertEquals(1, Files.walk(kotli.target).toList().size)
     }
 
     @Test
     fun `generate and zip without extra files inside`() {
         val out = ByteArrayOutputStream()
-        val context = TemplateContext(
+        val kotli = Kotli(
             layer = Layer(
                 id = "my.app",
                 name = "test",
@@ -33,9 +33,9 @@ class TemplateContextTest {
                 generator = ITemplateGenerator.App
             )
         )
-        context.generateAndZip(out)
+        kotli.generateAndZip(out)
         Assertions.assertEquals(22, out.size())
-        Assertions.assertEquals(1, Files.walk(context.target).toList().size)
+        Assertions.assertEquals(1, Files.walk(kotli.target).toList().size)
     }
 
 }
