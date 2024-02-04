@@ -1,13 +1,13 @@
 package kotli.engine.model
 
-import kotli.engine.IDictionary
+import kotli.engine.ILayerType
 import kotli.engine.utils.ResourceUtils
 import java.net.URL
 
 /**
- * Layer corresponds to a distinct aspect of a project (Frontend, Backend, Middle, Testing, etc.
+ * Predefined set of ILayerType.
  */
-enum class LayerType(private val code: String, val order: Int = 0) : IDictionary {
+enum class LayerType(private val code: String, private val order: Int = 0) : ILayerType {
 
     App("app", 0),
     Backend("backend", 1),
@@ -21,14 +21,9 @@ enum class LayerType(private val code: String, val order: Int = 0) : IDictionary
     ;
 
     override fun getId(): String = code
-
-    override fun getIcon(): URL? =
-        ResourceUtils.get(this, "layer_type_${code}.svg")
-
-    override fun getTitle(): String? =
-        ResourceUtils.getAsString(this, "layer_type_${code}_title.md")
-
-    override fun getDescription(): String? =
-        ResourceUtils.getAsString(this, "layer_type_${code}_description.md")
+    override fun getOrder(): Int = order
+    override fun getIcon(): URL? = ResourceUtils.get(this, "layer_type_${code}.svg")
+    override fun getTitle(): String? = ResourceUtils.getAsString(this, "layer_type_${code}_title.md")
+    override fun getDescription(): String? = ResourceUtils.getAsString(this, "layer_type_${code}_description.md")
 
 }

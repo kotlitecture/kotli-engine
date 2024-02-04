@@ -9,6 +9,11 @@ import java.net.URL
 interface IDictionary {
 
     /**
+     * Order of this dictionary instance.
+     */
+    fun getOrder(): Int = -1
+
+    /**
      * Unique identifier of an instance to distinguish it among the others.
      */
     fun getId(): String

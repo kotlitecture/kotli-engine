@@ -38,7 +38,7 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
     }
 
     override fun getProviders(): List<IFeatureProvider> {
-        return providerList.filter { it.type != FeatureType.Transitive }
+        return providerList.filter { !it.type.isInternal() }
     }
 
     override fun getProcessor(type: Class<out IFeatureProcessor>): IFeatureProcessor {
@@ -124,7 +124,8 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
         processors: List<IFeatureProcessor>
     ) {
         logger.debug("proceedInstruction for provider:\n\t{}", provider.id)
-        val instruction = context.target.resolve("docs/integrations/${index + 1} - ${provider.id}.md")
+        val instruction =
+            context.target.resolve("docs/integrations/${index + 1} - ${provider.id}.md")
         instruction.parent.createDirectories()
         val textBuilder = StringBuilder()
         processors.forEach { processor ->

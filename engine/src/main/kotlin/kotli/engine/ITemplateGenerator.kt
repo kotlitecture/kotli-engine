@@ -7,7 +7,7 @@ interface ITemplateGenerator : IDictionary {
     /**
      * Type of the layer this generator is responsible for.
      */
-    val type: LayerType
+    val type: ILayerType
 
     /**
      * Returns URL on a public repository with source codes of the given template.
@@ -48,7 +48,7 @@ interface ITemplateGenerator : IDictionary {
         val App = object : AbstractTemplateGenerator() {
             override fun doRegister() = Unit
             override fun getId(): String = "app"
-            override val type: LayerType = LayerType.App
+            override val type: ILayerType = LayerType.App
             override fun doPrepare(context: TemplateContext) = Unit
             override fun createProviders(): List<IFeatureProvider> = emptyList()
         }

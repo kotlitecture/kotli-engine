@@ -1,7 +1,5 @@
 package kotli.engine
 
-import kotli.engine.model.FeatureType
-
 /**
  * Feature providers are used to group different implementations of the same functionality
  * by different vendors. Examples
@@ -23,7 +21,7 @@ interface IFeatureProvider : IFeature {
     /**
      * Logical type of the feature this provider is responsible for.
      */
-    val type: FeatureType
+    val type: IFeatureType
 
     /**
      * If true - it is technically possible to use multiple processors of this feature.
