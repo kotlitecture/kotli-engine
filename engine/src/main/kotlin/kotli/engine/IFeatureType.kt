@@ -12,6 +12,6 @@ interface IFeatureType : IDictionary {
      * It can be useful when you need to declare some type which is common for several others,
      * but is useless from user perspective and should not be available to choose.
      */
-    fun isInternal(): Boolean = false
+    val internal: Boolean
 
 }

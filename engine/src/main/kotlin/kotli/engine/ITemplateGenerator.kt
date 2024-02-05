@@ -46,9 +46,10 @@ interface ITemplateGenerator : IDictionary {
 
     companion object {
         val App = object : AbstractTemplateGenerator() {
-            override fun doRegister() = Unit
-            override fun getId(): String = "app"
+            override val order: Int = -1
+            override val id: String = "app"
             override val type: ILayerType = LayerType.App
+            override fun doRegister() = Unit
             override fun doPrepare(context: TemplateContext) = Unit
             override fun createProviders(): List<IFeatureProvider> = emptyList()
         }

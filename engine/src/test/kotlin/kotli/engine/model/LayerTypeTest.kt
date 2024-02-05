@@ -11,7 +11,7 @@ class LayerTypeTest {
             .filter { it.getTitle() != null }
             .also { Assertions.assertEquals(3, it.size) }
             .forEach { type ->
-                Assertions.assertNotNull(type.getTitle(), type.getId())
+                Assertions.assertNotNull(type.getTitle(), type.id)
             }
     }
 

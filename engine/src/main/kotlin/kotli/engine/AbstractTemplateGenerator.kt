@@ -1,6 +1,5 @@
 package kotli.engine
 
-import kotli.engine.model.FeatureType
 import kotli.engine.utils.PathUtils
 import org.slf4j.LoggerFactory
 import java.nio.file.Files
@@ -17,10 +16,13 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
     }
 
     protected val logger by lazy { LoggerFactory.getLogger(this::class.java) }
+
+    override val order: Int = -1
+
     protected abstract fun doPrepare(context: TemplateContext)
     protected abstract fun createProviders(): List<IFeatureProvider>
 
-    private val templatePath: String by lazy { "kotli/templates/${getId()}" }
+    private val templatePath: String by lazy { "kotli/templates/${id}" }
     private val providerById by lazy { providerList.associateBy { it.id } }
     private val providerList by lazy { createProviders() }
 
@@ -38,7 +40,7 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
     }
 
     override fun getProviders(): List<IFeatureProvider> {
-        return providerList.filter { !it.type.isInternal() }
+        return providerList.filter { !it.type.internal }
     }
 
     override fun getProcessor(type: Class<out IFeatureProcessor>): IFeatureProcessor {
@@ -130,7 +132,7 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
         val textBuilder = StringBuilder()
         processors.forEach { processor ->
             processor.getTitle(context)?.let { title ->
-                val prefix = provider.getTitle(context)?.takeIf { it != title }
+                val prefix = provider.getTitle()?.takeIf { it != title }
                 textBuilder.appendLine()
                 if (prefix == null) {
                     textBuilder.appendLine("# $title")

@@ -9,14 +9,14 @@ import java.net.URL
 interface IDictionary {
 
     /**
-     * Order of this dictionary instance.
-     */
-    fun getOrder(): Int = -1
-
-    /**
      * Unique identifier of an instance to distinguish it among the others.
      */
-    fun getId(): String
+    val id: String
+
+    /**
+     * Order of this dictionary instance.
+     */
+    val order: Int
 
     /**
      * Icon of an instance. Preferred format is SVG or any other image format of size at least 64px.
