@@ -73,7 +73,7 @@ class TemplateMaker(
         val newText = replacer()
         logger.debug("replaceText:\n\t{}\n\t{}", text, newText)
         lines.forEachIndexed { index, line ->
-            if (isMarked(marker, line)) {
+            if (isMarked(line, marker)) {
                 lines[index] = cleanup(line).replace(text, newText)
                 if (singleLine) return this
             }
@@ -92,7 +92,7 @@ class TemplateMaker(
         val indexOf = lines.indexOfFirst { isMarked(it, marker) }.takeIfIndex() ?: return this
         val newLine = replacer()
         lines.forEachIndexed { index, line ->
-            if (isMarked(marker, line)) {
+            if (isMarked(line, marker)) {
                 val startIndex = line.indexOfFirst { it != ' ' }.takeIfIndex() ?: 0
                 val updatedLine = "${line.substring(0, startIndex)}$newLine"
                 logger.debug("replaceLine:\n\t{}\n\t{}", line, updatedLine)
