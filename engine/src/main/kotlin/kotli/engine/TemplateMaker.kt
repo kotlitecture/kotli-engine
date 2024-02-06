@@ -200,7 +200,7 @@ class TemplateMaker(
     }
 
     private fun isMarked(line: String, marker: String): Boolean {
-        return line.contains(marker)
+        return line.contains(marker, ignoreCase = true)
     }
 
     private fun cleanup(line: String): String {
