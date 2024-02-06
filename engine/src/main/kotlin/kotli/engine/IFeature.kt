@@ -48,6 +48,15 @@ interface IFeature {
     fun getDescription(context: TemplateContext = TemplateContext.Empty): String? = ResourceUtils.getAsString(this, "description.md")
 
     /**
+     * Instruction how to use the feature in generated template properly.
+     *
+     * @param context is current runtime template context with user defined parameters.
+     *
+     * @return text (default value is value of usage.md, relative to the package declaration).
+     */
+    fun getUsage(context: TemplateContext = TemplateContext.Empty): String? = ResourceUtils.getAsString(this, "usage.md")
+
+    /**
      * Step-by-step instruction how to configure the feature in generated template so it can be used properly.
      *
      * @param context is current runtime template context with user defined parameters.
