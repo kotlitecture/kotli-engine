@@ -15,8 +15,8 @@ fun ITemplateGenerator.getAllFeatures(): List<Feature> {
             provider.getProcessors()
                 .map { processor ->
                     Feature(
-                        providerId = provider.id,
-                        processorId = processor.id
+                        providerId = provider.getId(),
+                        processorId = processor.getId()
                     )
                 }
         }

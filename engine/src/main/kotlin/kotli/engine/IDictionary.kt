@@ -11,12 +11,12 @@ interface IDictionary {
     /**
      * Unique identifier of an instance to distinguish it among the others.
      */
-    val id: String
+    fun getId(): String
 
     /**
      * Order of this dictionary instance.
      */
-    val order: Int
+    fun getOrder(): Int = -1
 
     /**
      * Icon of an instance. Preferred format is SVG or any other image format of size at least 64px.

@@ -17,13 +17,11 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
 
     protected val logger by lazy { LoggerFactory.getLogger(this::class.java) }
 
-    override val order: Int = -1
-
     protected abstract fun doPrepare(context: TemplateContext)
     protected abstract fun createProviders(): List<IFeatureProvider>
 
-    private val templatePath: String by lazy { "kotli/templates/${id}" }
-    private val providerById by lazy { providerList.associateBy { it.id } }
+    private val templatePath: String by lazy { "kotli/templates/${getId()}" }
+    private val providerById by lazy { providerList.associateBy { it.getId() } }
     private val providerList by lazy { createProviders() }
 
     private val processorByType by lazy {
@@ -40,7 +38,7 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
     }
 
     override fun getProviders(): List<IFeatureProvider> {
-        return providerList.filter { !it.type.internal }
+        return providerList.filter { !it.getType().isInternal() }
     }
 
     override fun getProcessor(type: Class<out IFeatureProcessor>): IFeatureProcessor {
@@ -125,9 +123,9 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
         provider: IFeatureProvider,
         processors: List<IFeatureProcessor>
     ) {
-        logger.debug("proceedInstruction for provider:\n\t{}", provider.id)
+        logger.debug("proceedInstruction for provider:\n\t{}", provider.getId())
         val instruction =
-            context.target.resolve("docs/integrations/${index + 1} - ${provider.id}.md")
+            context.target.resolve("docs/integrations/${index + 1} - ${provider.getId()}.md")
         instruction.parent.createDirectories()
         val textBuilder = StringBuilder()
         processors.forEach { processor ->

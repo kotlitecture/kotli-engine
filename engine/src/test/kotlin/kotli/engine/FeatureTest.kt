@@ -6,7 +6,7 @@ import kotlin.test.Test
 
 class FeatureTest : IFeature {
 
-    override val id: String = "feature-test"
+    override fun getId(): String = "feature-test"
 
     @Test
     fun `getResourceAsString points to existing file`() {

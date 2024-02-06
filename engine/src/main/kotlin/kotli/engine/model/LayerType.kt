@@ -8,8 +8,8 @@ import java.net.URL
  * Predefined set of ILayerType.
  */
 enum class LayerType(
-    override val id: String,
-    override val order: Int
+    private val id: String,
+    private val order: Int
 ) : ILayerType {
 
     App("app", 0),
@@ -23,6 +23,8 @@ enum class LayerType(
 
     ;
 
+    override fun getId(): String = id
+    override fun getOrder(): Int = order
     override fun getIcon(): URL? = ResourceUtils.get(this, "layer_type_${id}.svg")
     override fun getTitle(): String? = ResourceUtils.getAsString(this, "layer_type_${id}_title.md")
     override fun getDescription(): String? = ResourceUtils.getAsString(this, "layer_type_${id}_description.md")

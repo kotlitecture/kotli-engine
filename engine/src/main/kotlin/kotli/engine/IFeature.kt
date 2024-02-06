@@ -18,7 +18,7 @@ interface IFeature {
     /**
      * Unique identifier of the feature.
      */
-    val id: String
+    fun getId(): String
 
     /**
      * Icon of the feature. Preferred format is SVG or any other image format of size at least 64px.

@@ -17,8 +17,8 @@ object TemplateFactory {
      * @param generator - generator to register.
      */
     fun register(generator: ITemplateGenerator) {
-        logger.debug("register :: {} -> {}", generator.id, generator)
-        generators[generator.id] = generator
+        logger.debug("register :: {} -> {}", generator.getId(), generator)
+        generators[generator.getId()] = generator
     }
 
     /**

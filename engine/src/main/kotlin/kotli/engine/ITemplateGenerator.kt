@@ -7,12 +7,12 @@ interface ITemplateGenerator : IDictionary {
     /**
      * Type of the layer this generator is responsible for.
      */
-    val type: ILayerType
+    fun getType(): ILayerType
 
     /**
      * Returns URL on a public repository with source codes or official site of the given template.
      */
-    val webUrl: String?
+    fun getWebUrl(): String? = null
 
     /**
      * Returns current version of the generator.
@@ -46,11 +46,9 @@ interface ITemplateGenerator : IDictionary {
 
     companion object {
         val App = object : AbstractTemplateGenerator() {
-            override val order: Int = -1
-            override val id: String = "app"
-            override val webUrl: String? = null
-            override val type: ILayerType = LayerType.App
+            override fun getId(): String = "app"
             override fun doRegister() = Unit
+            override fun getType(): ILayerType = LayerType.App
             override fun doPrepare(context: TemplateContext) = Unit
             override fun createProviders(): List<IFeatureProvider> = emptyList()
         }

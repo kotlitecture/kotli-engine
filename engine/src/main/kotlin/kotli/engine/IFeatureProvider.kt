@@ -21,13 +21,13 @@ interface IFeatureProvider : IDictionary {
     /**
      * Logical type of the feature this provider is responsible for.
      */
-    val type: IFeatureType
+    fun getType(): IFeatureType
 
     /**
      * If true - it is technically possible to use multiple processors of this feature.
      * If false - only one processor can be applied to the template.
      */
-    val multiple: Boolean
+    fun isMultiple(): Boolean = true
 
     /**
      * Returns all available processors of the feature.
