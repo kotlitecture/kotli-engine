@@ -11,10 +11,12 @@ abstract class AbstractFeatureProcessor : IFeatureProcessor {
 
     final override fun apply(context: TemplateContext) {
         val generator = context.layer.generator
-        dependencies().forEach { dependency ->
-            val processor = generator.getProcessor(dependency)
-            processor.apply(context)
-        }
+        generator.getProvider(this::class.java).dependencies()
+            .map(generator::getProcessor)
+            .onEach { dependency -> dependency.apply(context) }
+        dependencies()
+            .map(generator::getProcessor)
+            .onEach { dependency -> dependency.apply(context) }
         if (context.applied.add(this)) {
             logger.debug("apply :: {} -> {}", context.layer.name, javaClass.simpleName)
             doApply(context)

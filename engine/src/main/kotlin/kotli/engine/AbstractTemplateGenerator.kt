@@ -92,9 +92,10 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
 
     private fun applyProcessors(context: TemplateContext) {
         context.layer.features.forEach { feature ->
-            val provider = getProvider(feature.providerId)
-            val processor = provider.getProcessor(feature.processorId)
-            processor.apply(context)
+            providerById[feature.providerId]?.let { provider ->
+                val processor = provider.getProcessor(feature.processorId)
+                processor.apply(context)
+            }
         }
     }
 
@@ -162,10 +163,6 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
         }
         val text = textBuilder.trim().toString()
         instruction.writeText(text)
-    }
-
-    private fun getProvider(id: String): IFeatureProvider {
-        return providerById[id] ?: throw IllegalStateException("provider not found :: $id")
     }
 
 }

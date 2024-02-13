@@ -30,6 +30,12 @@ interface IFeatureProvider : IDictionary {
     fun isMultiple(): Boolean = true
 
     /**
+     * Returns all dependencies of given provider.
+     * Dependencies must be known at runtime through providers registered in generator.
+     */
+    fun dependencies(): List<Class<out IFeatureProcessor>> = emptyList()
+
+    /**
      * Returns all available processors of the feature.
      */
     fun getProcessors(): List<IFeatureProcessor>
