@@ -11,16 +11,9 @@ import org.jetbrains.annotations.TestOnly
 @TestOnly
 fun ITemplateGenerator.getAllFeatures(): List<Feature> {
     return getProviders()
-        .map { provider ->
-            provider.getProcessors()
-                .map { processor ->
-                    Feature(
-                        providerId = provider.getId(),
-                        processorId = processor.getId()
-                    )
-                }
-        }
+        .map { it.getProcessors() }
         .flatten()
+        .map { Feature(id = it.getId()) }
 }
 
 /**

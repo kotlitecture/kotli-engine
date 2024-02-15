@@ -21,10 +21,9 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
     protected abstract fun createProviders(): List<IFeatureProvider>
 
     private val templatePath: String by lazy { "kotli/templates/${getId()}" }
-    private val providerById by lazy { providerList.associateBy { it.getId() } }
     private val providerList by lazy { createProviders() }
 
-    private val processorByType by lazy {
+    private val processorsByType by lazy {
         providerList
             .map { it.getProcessors() }
             .flatten()
@@ -37,12 +36,18 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
             .toMap()
     }
 
+    private val providersByProcessorId by lazy {
+        providerList.map { provider -> provider.getProcessors().map { it.getId() to provider } }
+            .flatten()
+            .toMap()
+    }
+
     override fun getProviders(): List<IFeatureProvider> {
         return providerList.filter { !it.getType().isInternal() }
     }
 
     override fun getProcessor(type: Class<out IFeatureProcessor>): IFeatureProcessor {
-        return processorByType[type] ?: throw IllegalStateException("no processor :: $type")
+        return processorsByType[type] ?: throw IllegalStateException("no processor :: $type")
     }
 
     override fun getProvider(type: Class<out IFeatureProcessor>): IFeatureProvider {
@@ -92,8 +97,8 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
 
     private fun applyProcessors(context: TemplateContext) {
         context.layer.features.forEach { feature ->
-            providerById[feature.providerId]?.let { provider ->
-                val processor = provider.getProcessor(feature.processorId)
+            providersByProcessorId[feature.id]?.let { provider ->
+                val processor = provider.getProcessor(feature.id)
                 processor.apply(context)
             }
         }
@@ -102,13 +107,13 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
     private fun removeProcessors(context: TemplateContext) {
         providerList.forEach { provider ->
             provider.getProcessors()
-                .filter { processor -> !context.applied.contains(processor) }
+                .filter { processor -> !context.isApplied(processor.getId()) }
                 .forEach { processor -> processor.remove(context) }
         }
     }
 
     private fun proceedInstructions(context: TemplateContext) {
-        context.applied
+        context.getApplied()
             .filter { it.getConfiguration(context) != null }
             .groupBy { getProvider(it::class.java) }
             .onEachIndexed { index, group ->

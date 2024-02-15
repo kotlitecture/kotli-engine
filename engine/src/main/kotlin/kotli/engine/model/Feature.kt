@@ -5,7 +5,6 @@ package kotli.engine.model
  * In terms of Kotli, every atomic integration, technical solution or business flow is a feature.
  */
 data class Feature(
-    val providerId: String,
-    val processorId: String,
+    val id: String,
     val attributes: Map<String, String> = emptyMap()
 )

@@ -17,7 +17,7 @@ abstract class AbstractFeatureProcessor : IFeatureProcessor {
         dependencies()
             .map(generator::getProcessor)
             .onEach { dependency -> dependency.apply(context) }
-        if (context.applied.add(this)) {
+        context.apply(this) {
             logger.debug("apply :: {} -> {}", context.layer.name, javaClass.simpleName)
             doApply(context)
         }

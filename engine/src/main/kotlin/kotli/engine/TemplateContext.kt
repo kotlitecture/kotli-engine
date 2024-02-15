@@ -13,7 +13,26 @@ data class TemplateContext(
     val target: Path
 ) {
 
-    internal val applied: MutableSet<IFeatureProcessor> = mutableSetOf()
+    private val applied: MutableMap<String, IFeatureProcessor> = mutableMapOf()
+
+    /**
+     * Checks if processor with given #id is applied to the context.
+     */
+    fun isApplied(id: String): Boolean = applied.containsKey(id)
+
+    /**
+     * Returns all applied processors.
+     */
+    fun getApplied(): Collection<IFeatureProcessor> = applied.values
+
+    /**
+     * Applies given processor to the context.
+     */
+    internal fun apply(processor: IFeatureProcessor, block: () -> Unit) {
+        if (applied.putIfAbsent(processor.getId(), processor) == null) {
+            block()
+        }
+    }
 
     /**
      * Applies template engine to the #contextPath relative to the root of the target folder.
