@@ -12,9 +12,9 @@ enum class FeatureType(
     private val order: Int
 ) : IFeatureType {
 
-    Build("build", 1),
-    DataSource("datasource", 2),
-    Workflow("workflow", 3),
+    DevOps("devops", 1),
+    DataFlow("dataflow", 2),
+    UserFlow("userflow", 3),
     Appearance("appearance", 4),
     UI("ui", 5),
     Quality("quality", 6),
