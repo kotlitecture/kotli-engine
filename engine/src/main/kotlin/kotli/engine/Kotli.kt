@@ -25,7 +25,7 @@ data class Kotli(
     fun generate() {
         if (generated.compareAndSet(false, true)) {
             val context = TemplateContext(layer, target)
-            layer.generator.generate(context)
+            context.generator.generate(context)
         }
     }
 

@@ -17,9 +17,6 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
 
     protected val logger by lazy { LoggerFactory.getLogger(this::class.java) }
 
-    protected abstract fun doPrepare(context: TemplateContext)
-    protected abstract fun createProviders(): List<IFeatureProvider>
-
     private val templatePath: String by lazy { "kotli/templates/${getId()}" }
     private val providerList by lazy { createProviders() }
 
@@ -30,14 +27,14 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
             .associateBy { it::class.java }
     }
 
-    private val providersByProcessorType by lazy {
-        providerList.map { provider -> provider.getProcessors().map { it::class.java to provider } }
+    private val processorsById by lazy {
+        providerList.map { provider -> provider.getProcessors() }
             .flatten()
-            .toMap()
+            .associateBy { it.getId() }
     }
 
-    private val providersByProcessorId by lazy {
-        providerList.map { provider -> provider.getProcessors().map { it.getId() to provider } }
+    private val providersByProcessorType by lazy {
+        providerList.map { provider -> provider.getProcessors().map { it::class.java to provider } }
             .flatten()
             .toMap()
     }
@@ -52,6 +49,10 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
 
     override fun getProvider(type: Class<out IFeatureProcessor>): IFeatureProvider {
         return providersByProcessorType[type] ?: throw IllegalStateException("no provider :: $type")
+    }
+
+    override fun getProcessor(id: String): IFeatureProcessor? {
+        return processorsById[id]
     }
 
     override fun generate(context: TemplateContext) {
@@ -97,10 +98,7 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
 
     private fun applyProcessors(context: TemplateContext) {
         context.layer.features.forEach { feature ->
-            providersByProcessorId[feature.id]?.let { provider ->
-                val processor = provider.getProcessor(feature.id)
-                processor.apply(context)
-            }
+            processorsById[feature.id]?.apply(context)
         }
     }
 
@@ -113,7 +111,8 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
     }
 
     private fun proceedInstructions(context: TemplateContext) {
-        context.getApplied()
+        processorsById.values
+            .filter { context.isApplied(it.getId()) }
             .filter { it.getConfiguration(context) != null }
             .groupBy { getProvider(it::class.java) }
             .onEachIndexed { index, group ->
@@ -169,5 +168,8 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
         val text = textBuilder.trim().toString()
         instruction.writeText(text)
     }
+
+    protected abstract fun doPrepare(context: TemplateContext)
+    protected abstract fun createProviders(): List<IFeatureProvider>
 
 }

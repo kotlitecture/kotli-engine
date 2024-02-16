@@ -45,8 +45,10 @@ object TemplateFactory {
     /**
      * Finds all registered generators.
      */
-    fun getAll(): List<ITemplateGenerator> {
-        return generators.values.toList()
+    fun getAvailable(): List<ITemplateGenerator> {
+        return generators.values
+            .filter { it !== ITemplateGenerator.App }
+            .sortedBy { it.getType().getOrder() }
     }
 
 }

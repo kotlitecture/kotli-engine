@@ -35,6 +35,11 @@ interface ITemplateGenerator : IDictionary {
     fun getProvider(type: Class<out IFeatureProcessor>): IFeatureProvider
 
     /**
+     * Returns processor by its id.
+     */
+    fun getProcessor(id: String): IFeatureProcessor?
+
+    /**
      * Returns all registered providers of the generator.
      */
     fun getProviders(): List<IFeatureProvider>
@@ -47,7 +52,6 @@ interface ITemplateGenerator : IDictionary {
     companion object {
         val App = object : AbstractTemplateGenerator() {
             override fun getId(): String = "app"
-            override fun doRegister() = Unit
             override fun getType(): ILayerType = LayerType.App
             override fun doPrepare(context: TemplateContext) = Unit
             override fun createProviders(): List<IFeatureProvider> = emptyList()

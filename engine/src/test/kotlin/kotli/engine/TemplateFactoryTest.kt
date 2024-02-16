@@ -22,4 +22,10 @@ class TemplateFactoryTest {
         }
     }
 
+    @Test
+    fun `internal template is not available in getAvailable`() {
+        Assertions.assertNotNull(TemplateFactory.get(ITemplateGenerator.App.getId()))
+        Assertions.assertFalse(TemplateFactory.getAvailable().contains(ITemplateGenerator.App))
+    }
+
 }

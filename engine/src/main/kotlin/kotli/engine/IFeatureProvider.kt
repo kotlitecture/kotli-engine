@@ -40,9 +40,4 @@ interface IFeatureProvider : IDictionary {
      */
     fun getProcessors(): List<IFeatureProcessor>
 
-    /**
-     * Returns processor by its id.
-     */
-    fun getProcessor(id: String): IFeatureProcessor
-
 }

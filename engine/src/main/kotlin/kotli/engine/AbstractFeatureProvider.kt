@@ -8,10 +8,8 @@ import org.slf4j.LoggerFactory
 abstract class AbstractFeatureProvider : IFeatureProvider {
 
     private val all by lazy { createProcessors() }
-    private val byId by lazy { all.associateBy { it.getId() } }
 
     override fun getProcessors(): List<IFeatureProcessor> = all
-    override fun getProcessor(id: String): IFeatureProcessor = byId[id] ?: UnknownProcessor(id)
 
     /**
      * Should return all available processors of the given feature provider.

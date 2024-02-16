@@ -1,5 +1,6 @@
 package kotli.engine
 
+import kotli.engine.model.Feature
 import kotli.engine.model.Layer
 import java.nio.file.Path
 
@@ -13,26 +14,20 @@ data class TemplateContext(
     val target: Path
 ) {
 
-    private val applied: MutableMap<String, IFeatureProcessor> = mutableMapOf()
+    internal val generator: ITemplateGenerator by lazy { TemplateFactory.get(layer.generatorId) }
+    internal val features = layer.features.associateBy { it.id }
+    internal val applied = mutableMapOf<String, Feature>()
+    internal val removed = mutableMapOf<String, Feature>()
+
+    /**
+     * Gets feature by its id or null if not found.
+     */
+    fun getFeature(id: String): Feature? = features[id]
 
     /**
      * Checks if processor with given #id is applied to the context.
      */
     fun isApplied(id: String): Boolean = applied.containsKey(id)
-
-    /**
-     * Returns all applied processors.
-     */
-    fun getApplied(): Collection<IFeatureProcessor> = applied.values
-
-    /**
-     * Applies given processor to the context.
-     */
-    internal fun apply(processor: IFeatureProcessor, block: () -> Unit) {
-        if (applied.putIfAbsent(processor.getId(), processor) == null) {
-            block()
-        }
-    }
 
     /**
      * Applies template engine to the #contextPath relative to the root of the target folder.
@@ -57,7 +52,7 @@ data class TemplateContext(
                 id = "<YOUR_LAYER_ID>",
                 name = "<YOUR_LAYER_NAME>",
                 namespace = "<YOUR_LAYER_NAMESPACE>",
-                generator = ITemplateGenerator.App
+                generatorId = ITemplateGenerator.App.getId()
             )
         )
     }
