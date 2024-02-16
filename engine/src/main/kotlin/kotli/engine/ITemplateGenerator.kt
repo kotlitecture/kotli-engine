@@ -35,11 +35,6 @@ interface ITemplateGenerator : IDictionary {
     fun getProvider(type: Class<out IFeatureProcessor>): IFeatureProvider
 
     /**
-     * Returns processor by its id.
-     */
-    fun getProcessor(id: String): IFeatureProcessor?
-
-    /**
      * Returns all registered providers of the generator.
      */
     fun getProviders(): List<IFeatureProvider>

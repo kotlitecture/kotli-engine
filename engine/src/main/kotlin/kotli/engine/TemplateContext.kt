@@ -6,8 +6,6 @@ import java.nio.file.Path
 
 /**
  * Execution context for one time generation of a template.
- *
- * Once this context is executed
  */
 data class TemplateContext(
     val layer: Layer,
@@ -36,13 +34,6 @@ data class TemplateContext(
         val maker = TemplateMaker(target.resolve(contextPath))
         maker.block()
         maker.apply()
-    }
-
-    /**
-     * Applies template engine to the 'gradle/libs.versions.toml' in the root of the target folder.
-     */
-    fun applyVersionCatalog(block: TemplateMaker.() -> Unit) {
-        apply("gradle/libs.versions.toml", block)
     }
 
     companion object {

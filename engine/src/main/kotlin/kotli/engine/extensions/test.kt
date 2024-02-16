@@ -1,4 +1,4 @@
-package kotli.engine.test
+package kotli.engine.extensions
 
 import kotli.engine.ITemplateGenerator
 import kotli.engine.Kotli
@@ -22,20 +22,7 @@ fun ITemplateGenerator.getAllFeatures(): List<Feature> {
 @TestOnly
 fun Kotli.generateAndExec(vararg commands: String) {
     generate()
-    val args = if (isWindows()) {
-        mutableListOf("cmd.exe", "/C")
-    } else {
-        mutableListOf()
-    }
-    args.addAll(commands.toList())
-    val dir = target
-    val process = ProcessBuilder()
-        .directory(dir.toFile())
-        .command(args)
-        .inheritIO()
-        .start()
-    val exitCode = process.waitFor()
-    if (exitCode != 0) throw IllegalStateException("wrong exit code $exitCode")
+    exec(target, *commands)
 }
 
 /**
@@ -43,11 +30,6 @@ fun Kotli.generateAndExec(vararg commands: String) {
  */
 @TestOnly
 fun Kotli.generateAndGradlew(vararg commands: String) {
-    if (!isWindows()) {
-        runCatching { generateAndExec("chmod", "-R", "777", "gradlew") }
-    }
+    if (!isWindows()) runCatching { generateAndExec("chmod", "-R", "777", "gradlew") }
     generateAndExec(gradlew(), *commands)
 }
-
-private fun isWindows(): Boolean = runCatching { System.getProperty("os.name").lowercase().startsWith("windows") }.getOrElse { false }
-private fun gradlew(): String = if (isWindows()) "gradlew" else "./gradlew"

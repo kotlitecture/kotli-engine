@@ -51,10 +51,6 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
         return providersByProcessorType[type] ?: throw IllegalStateException("no provider :: $type")
     }
 
-    override fun getProcessor(id: String): IFeatureProcessor? {
-        return processorsById[id]
-    }
-
     override fun generate(context: TemplateContext) {
         prepare(context)
         proceedChildren(context)

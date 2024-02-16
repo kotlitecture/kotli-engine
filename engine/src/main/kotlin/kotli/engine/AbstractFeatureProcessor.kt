@@ -49,7 +49,9 @@ abstract class AbstractFeatureProcessor : IFeatureProcessor {
         }
     }
 
-    protected open fun doApply(context: TemplateContext, feature: Feature) = Unit
-    protected open fun doRemove(context: TemplateContext, feature: Feature) = Unit
+    protected open fun doApply(context: TemplateContext, feature: Feature) = doApply(context)
+    protected open fun doRemove(context: TemplateContext, feature: Feature) = doRemove(context)
+    protected open fun doApply(context: TemplateContext) = Unit
+    protected open fun doRemove(context: TemplateContext) = Unit
 
 }
