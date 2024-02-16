@@ -47,6 +47,7 @@ object TemplateFactory {
      */
     fun getAvailable(): List<ITemplateGenerator> {
         return generators.values
+            .toList()
             .filter { it !== ITemplateGenerator.App }
             .sortedBy { it.getType().getOrder() }
     }
