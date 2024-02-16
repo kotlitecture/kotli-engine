@@ -2,6 +2,7 @@ package kotli.engine
 
 import kotli.engine.model.Feature
 import kotli.engine.model.Layer
+import kotli.engine.utils.PackageUtils
 import java.nio.file.Path
 
 /**
@@ -34,6 +35,13 @@ data class TemplateContext(
         val maker = TemplateMaker(target.resolve(contextPath))
         maker.block()
         maker.apply()
+    }
+
+    /**
+     * Renames given #oldPackage to #newPackage found in #contextPath.
+     */
+    fun rename(contextPath: String, oldPackage: String, newPackage: String) {
+        PackageUtils.rename(target.resolve(contextPath), oldPackage, newPackage)
     }
 
     companion object {
