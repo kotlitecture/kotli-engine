@@ -13,10 +13,14 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
+/**
+ * The entry point to generate output structure based on the metadata provided.
+ */
 data class Kotli(
     val layer: Layer,
     val target: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/")
 ) {
+
     private val generated = AtomicBoolean(false)
 
     /**
@@ -32,7 +36,7 @@ data class Kotli(
     /**
      * Generates template into the #stream provided.
      */
-    fun generateAndZip(stream: OutputStream) {
+    fun generate(stream: OutputStream) {
         generate()
         val zip = ZipOutputStream(stream)
         zip.use { zipOutput ->
@@ -46,6 +50,12 @@ data class Kotli(
                     return FileVisitResult.CONTINUE
                 }
             })
+        }
+    }
+
+    companion object {
+        fun register(generator: ITemplateGenerator) {
+            TemplateFactory.register(generator)
         }
     }
 }

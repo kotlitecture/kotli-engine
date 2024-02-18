@@ -33,7 +33,7 @@ class KotliTest {
                 generatorId = ITemplateGenerator.App.getId()
             )
         )
-        kotli.generateAndZip(out)
+        kotli.generate(out)
         Assertions.assertEquals(22, out.size())
         Assertions.assertEquals(1, Files.walk(kotli.target).toList().size)
     }
