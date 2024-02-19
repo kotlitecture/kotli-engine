@@ -11,10 +11,6 @@ import kotlin.io.path.writeText
  */
 abstract class AbstractTemplateGenerator : ITemplateGenerator {
 
-    init {
-        register()
-    }
-
     protected val logger by lazy { LoggerFactory.getLogger(this::class.java) }
 
     private val templatePath: String by lazy { "kotli/templates/${getId()}" }
@@ -22,25 +18,25 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
 
     private val processorsByType by lazy {
         providerList
-            .map { it.getProcessors() }
-            .flatten()
-            .associateBy { it::class.java }
+                .map { it.getProcessors() }
+                .flatten()
+                .associateBy { it::class.java }
     }
 
     private val processorsById by lazy {
         providerList.map { provider -> provider.getProcessors() }
-            .flatten()
-            .associateBy { it.getId() }
+                .flatten()
+                .associateBy { it.getId() }
     }
 
     private val providersByProcessorType by lazy {
         providerList.map { provider -> provider.getProcessors().map { it::class.java to provider } }
-            .flatten()
-            .toMap()
+                .flatten()
+                .toMap()
     }
 
     override fun getProviders(): List<IFeatureProvider> {
-        return providerList.filter { !it.getType().isInternal() }
+        return providerList
     }
 
     override fun getProcessor(type: Class<out IFeatureProcessor>): IFeatureProcessor {
@@ -60,14 +56,6 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
         cleanup(context)
     }
 
-    protected open fun doRegister() {
-        TemplateFactory.register(this)
-    }
-
-    private fun register() {
-        doRegister()
-    }
-
     private fun prepare(context: TemplateContext) {
         val from = PathUtils.getFromResource(templatePath) ?: return
         val to = context.target
@@ -77,19 +65,20 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
 
     private fun cleanup(context: TemplateContext) {
         Files.walk(context.target)
-            .filter(PathUtils::isEmptyDir)
-            .forEach(PathUtils::delete)
+                .filter(PathUtils::isEmptyDir)
+                .forEach(PathUtils::delete)
     }
 
     private fun proceedChildren(context: TemplateContext) {
         context.layer.layers
-            .map { childLayer ->
-                Kotli(
-                    target = context.target.resolve(childLayer.name),
-                    layer = childLayer
-                )
-            }
-            .forEach { it.generate() }
+                .map { childLayer ->
+                    Kotli(
+                            target = context.target.resolve(childLayer.name),
+                            registry = context.registry,
+                            layer = childLayer
+                    )
+                }
+                .forEach { it.generate() }
     }
 
     private fun applyProcessors(context: TemplateContext) {
@@ -101,32 +90,32 @@ abstract class AbstractTemplateGenerator : ITemplateGenerator {
     private fun removeProcessors(context: TemplateContext) {
         providerList.forEach { provider ->
             provider.getProcessors()
-                .filter { processor -> !context.isApplied(processor.getId()) }
-                .forEach { processor -> processor.remove(context) }
+                    .filter { processor -> !context.isApplied(processor.getId()) }
+                    .forEach { processor -> processor.remove(context) }
         }
     }
 
     private fun proceedInstructions(context: TemplateContext) {
         processorsById.values
-            .filter { context.isApplied(it.getId()) }
-            .filter { it.getConfiguration(context) != null }
-            .groupBy { getProvider(it::class.java) }
-            .onEachIndexed { index, group ->
-                val provider = group.key
-                val processors = group.value
-                proceedInstruction(index, context, provider, processors)
-            }
+                .filter { context.isApplied(it.getId()) }
+                .filter { it.getConfiguration(context) != null }
+                .groupBy { getProvider(it::class.java) }
+                .onEachIndexed { index, group ->
+                    val provider = group.key
+                    val processors = group.value
+                    proceedInstruction(index, context, provider, processors)
+                }
     }
 
     private fun proceedInstruction(
-        index: Int,
-        context: TemplateContext,
-        provider: IFeatureProvider,
-        processors: List<IFeatureProcessor>
+            index: Int,
+            context: TemplateContext,
+            provider: IFeatureProvider,
+            processors: List<IFeatureProcessor>
     ) {
         logger.debug("proceedInstruction for provider:\n\t{}", provider.getId())
         val instruction =
-            context.target.resolve("docs/integrations/${index + 1} - ${provider.getId()}.md")
+                context.target.resolve("docs/integrations/${index + 1} - ${provider.getId()}.md")
         instruction.parent.createDirectories()
         val textBuilder = StringBuilder()
         processors.forEach { processor ->

@@ -17,8 +17,9 @@ import java.util.zip.ZipOutputStream
  * The entry point to generate output structure based on the metadata provided.
  */
 data class Kotli(
-    val layer: Layer,
-    val target: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/")
+        val layer: Layer,
+        val registry: ITemplateRegistry,
+        val target: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/"),
 ) {
 
     private val generated = AtomicBoolean(false)
@@ -28,7 +29,7 @@ data class Kotli(
      */
     fun generate() {
         if (generated.compareAndSet(false, true)) {
-            val context = TemplateContext(layer, target)
+            val context = TemplateContext(layer, target, registry)
             context.generator.generate(context)
         }
     }
@@ -50,12 +51,6 @@ data class Kotli(
                     return FileVisitResult.CONTINUE
                 }
             })
-        }
-    }
-
-    companion object {
-        fun register(generator: ITemplateGenerator) {
-            TemplateFactory.register(generator)
         }
     }
 }

@@ -9,11 +9,12 @@ import java.nio.file.Path
  * Execution context for one time generation of a template.
  */
 data class TemplateContext(
-    val layer: Layer,
-    val target: Path
+        val layer: Layer,
+        val target: Path,
+        val registry: ITemplateRegistry
 ) {
 
-    internal val generator: ITemplateGenerator by lazy { TemplateFactory.get(layer.generatorId) }
+    internal val generator: ITemplateGenerator by lazy { registry.get(layer.generatorId)!! }
     internal val features = layer.features.associateBy { it.id }
     internal val applied = mutableMapOf<String, Feature>()
     internal val removed = mutableMapOf<String, Feature>()
@@ -46,13 +47,17 @@ data class TemplateContext(
 
     companion object {
         val Empty = TemplateContext(
-            target = Path.of("/"),
-            layer = Layer(
-                id = "<YOUR_LAYER_ID>",
-                name = "<YOUR_LAYER_NAME>",
-                namespace = "<YOUR_LAYER_NAMESPACE>",
-                generatorId = ITemplateGenerator.App.getId()
-            )
+                target = Path.of("/"),
+                layer = Layer(
+                        id = "<YOUR_LAYER_ID>",
+                        name = "<YOUR_LAYER_NAME>",
+                        namespace = "<YOUR_LAYER_NAMESPACE>",
+                        generatorId = ITemplateGenerator.App.getId(),
+                ),
+                registry = object : ITemplateRegistry {
+                    override fun getAll(): List<ITemplateGenerator> = emptyList()
+                    override fun get(id: String): ITemplateGenerator = ITemplateGenerator.App
+                }
         )
     }
 }
