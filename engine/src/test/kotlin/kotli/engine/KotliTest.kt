@@ -17,7 +17,7 @@ class KotliTest {
                         id = "my.app",
                         name = "test",
                         namespace = "test.app",
-                        generatorId = ITemplateGenerator.App.getId()
+                        generatorId = TemplateGenerator.App.getId()
                 )
         )
         kotli.generate()
@@ -34,7 +34,7 @@ class KotliTest {
                         id = "my.app",
                         name = "test",
                         namespace = "test.app",
-                        generatorId = ITemplateGenerator.App.getId()
+                        generatorId = TemplateGenerator.App.getId()
                 )
         )
         kotli.generate(out)

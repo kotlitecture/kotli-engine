@@ -4,6 +4,9 @@ import kotli.engine.utils.ResourceUtils
 import java.net.URL
 
 /**
+ * Feature processor is responsible for inclusion or exclusion of the feature it implements
+ * in the generated template.
+ *
  * Feature is any atomic integrations, technical solutions or business flows
  * which can be added to a layer during its configuration in Kotli.
  *
@@ -12,8 +15,10 @@ import java.net.URL
  *
  * The main advantage of a feature is to provide ready-to-use solution with a minimum configuration required
  * (zero configuration is a goal).
+ *
+ * By default, each template is pre-configured to include all features.
  */
-interface IFeature {
+interface FeatureProcessor : DependencyProvider<FeatureProcessor> {
 
     /**
      * Unique identifier of the feature.
@@ -111,5 +116,19 @@ interface IFeature {
      * @return web url or null.
      */
     fun getIntegrationUrl(context: TemplateContext = TemplateContext.Empty): String? = null
+
+    /**
+     * Applies given processor to the template generated.
+     *
+     * @param context is current runtime template context with user defined parameters.
+     */
+    fun apply(context: TemplateContext) = Unit
+
+    /**
+     * Removes given processor from the template generated.
+     *
+     * @param context is current runtime template context with user defined parameters.
+     */
+    fun remove(context: TemplateContext) = Unit
 
 }

@@ -4,7 +4,7 @@ import kotli.engine.utils.ResourceUtils
 import org.junit.jupiter.api.Assertions
 import kotlin.test.Test
 
-class FeatureTest : IFeature {
+class FeatureProcessorTest : FeatureProcessor {
 
     override fun getId(): String = "feature-test"
 

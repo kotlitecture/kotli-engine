@@ -5,7 +5,7 @@ package kotli.engine
  * It is intended to be used only on frontend to highlight similarity
  * or common aspects of some of the features.
  */
-interface IFeatureType : IDictionary {
+interface FeatureType : Dictionary {
 
     /**
      * If type is marked as internal, it will not be available through public config (UI).

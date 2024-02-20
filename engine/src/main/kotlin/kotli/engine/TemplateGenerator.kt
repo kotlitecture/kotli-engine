@@ -1,13 +1,13 @@
 package kotli.engine
 
-import kotli.engine.model.LayerType
+import kotli.engine.model.LayerTypes
 
-interface ITemplateGenerator : IDictionary {
+interface TemplateGenerator : Dictionary, DependencyProvider<FeatureProcessor> {
 
     /**
      * Type of the layer this generator is responsible for.
      */
-    fun getType(): ILayerType
+    fun getType(): LayerType
 
     /**
      * Returns URL on a public repository with source codes or official site of the given template.
@@ -21,23 +21,30 @@ interface ITemplateGenerator : IDictionary {
     fun getVersion(): String = javaClass.`package`.implementationVersion ?: "0.0.0"
 
     /**
+     * Finds a processor by its id.
+     *
+     * @throws IllegalStateException if a processor with given id is not associated with the generator.
+     */
+    fun getProcessor(id: String): FeatureProcessor
+
+    /**
      * Finds a processor by its type.
      *
      * @throws IllegalStateException if a processor with given type is not associated with the generator.
      */
-    fun getProcessor(type: Class<out IFeatureProcessor>): IFeatureProcessor
+    fun getProcessor(type: Class<out FeatureProcessor>): FeatureProcessor
 
     /**
      * Finds a provider by its type.
      *
      * @throws IllegalStateException if a provider with given type is not associated with the generator.
      */
-    fun getProvider(type: Class<out IFeatureProcessor>): IFeatureProvider
+    fun getProvider(type: Class<out FeatureProcessor>): FeatureProvider
 
     /**
      * Returns all registered providers of the generator.
      */
-    fun getProviders(): List<IFeatureProvider>
+    fun getProviders(): List<FeatureProvider>
 
     /**
      * Generates new template based on the context provided.
@@ -45,11 +52,11 @@ interface ITemplateGenerator : IDictionary {
     fun generate(context: TemplateContext)
 
     companion object {
-        val App = object : AbstractTemplateGenerator() {
+        val App = object : BaseTemplateGenerator() {
             override fun getId(): String = "app"
-            override fun getType(): ILayerType = LayerType.App
+            override fun getType(): LayerType = LayerTypes.App
             override fun doPrepare(context: TemplateContext) = Unit
-            override fun createProviders(): List<IFeatureProvider> = emptyList()
+            override fun createProviders(): List<FeatureProvider> = emptyList()
         }
     }
 

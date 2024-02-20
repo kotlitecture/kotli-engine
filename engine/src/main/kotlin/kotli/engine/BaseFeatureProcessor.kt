@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 /**
  * Basic implementation of any processor created.
  */
-abstract class AbstractFeatureProcessor : IFeatureProcessor {
+abstract class BaseFeatureProcessor : FeatureProcessor {
 
     protected val logger by lazy { LoggerFactory.getLogger(this::class.java) }
 

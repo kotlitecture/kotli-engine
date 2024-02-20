@@ -1,6 +1,6 @@
 package kotli.engine
 
-interface ITemplateRegistry {
+interface TemplateRegistry {
 
     /**
      * Finds generator by its id.
@@ -8,10 +8,10 @@ interface ITemplateRegistry {
      * @param id - generator id.
      * @return generator with given id or null.
      */
-    fun get(id: String): ITemplateGenerator?
+    fun get(id: String): TemplateGenerator?
 
     /**
      * Finds all registered generators.
      */
-    fun getAll(): List<ITemplateGenerator>
+    fun getAll(): List<TemplateGenerator>
 }

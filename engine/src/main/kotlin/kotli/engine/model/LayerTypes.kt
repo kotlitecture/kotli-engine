@@ -1,16 +1,16 @@
 package kotli.engine.model
 
-import kotli.engine.ILayerType
+import kotli.engine.LayerType
 import kotli.engine.utils.ResourceUtils
 import java.net.URL
 
 /**
  * Predefined set of ILayerType.
  */
-enum class LayerType(
+enum class LayerTypes(
     private val id: String,
     private val order: Int
-) : ILayerType {
+) : LayerType {
 
     App("app", 0),
     Backend("backend", 1),

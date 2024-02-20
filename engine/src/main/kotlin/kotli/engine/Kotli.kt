@@ -17,9 +17,9 @@ import java.util.zip.ZipOutputStream
  * The entry point to generate output structure based on the metadata provided.
  */
 data class Kotli(
-        val layer: Layer,
-        val registry: ITemplateRegistry,
-        val target: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/"),
+    val layer: Layer,
+    val registry: TemplateRegistry,
+    val target: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/"),
 ) {
 
     private val generated = AtomicBoolean(false)

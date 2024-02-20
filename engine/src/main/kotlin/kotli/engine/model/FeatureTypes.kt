@@ -1,16 +1,16 @@
 package kotli.engine.model
 
-import kotli.engine.IFeatureType
+import kotli.engine.FeatureType
 import kotli.engine.utils.ResourceUtils
 import java.net.URL
 
 /**
  * Predefined set of IFeatureType.
  */
-enum class FeatureType(
+enum class FeatureTypes(
     private val id: String,
     private val order: Int
-) : IFeatureType {
+) : FeatureType {
 
     DevOps("devops", 1),
     DataFlow("dataflow", 2),

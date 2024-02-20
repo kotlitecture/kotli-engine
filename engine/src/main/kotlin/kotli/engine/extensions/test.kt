@@ -1,6 +1,6 @@
 package kotli.engine.extensions
 
-import kotli.engine.ITemplateGenerator
+import kotli.engine.TemplateGenerator
 import kotli.engine.Kotli
 import kotli.engine.model.Feature
 import org.jetbrains.annotations.TestOnly
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.TestOnly
  * Creates list with all features.
  */
 @TestOnly
-fun ITemplateGenerator.getAllFeatures(): List<Feature> {
+fun TemplateGenerator.getAllFeatures(): List<Feature> {
     return getProviders()
         .map { it.getProcessors() }
         .flatten()

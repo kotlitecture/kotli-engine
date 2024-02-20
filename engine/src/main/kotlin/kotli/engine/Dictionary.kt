@@ -6,7 +6,7 @@ import java.net.URL
 /**
  * Just common attributes describing the instances of some object.
  */
-interface IDictionary {
+interface Dictionary {
 
     /**
      * Unique identifier of an instance to distinguish it among the others.

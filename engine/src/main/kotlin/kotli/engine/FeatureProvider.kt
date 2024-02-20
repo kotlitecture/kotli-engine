@@ -16,12 +16,12 @@ package kotli.engine
  * The main idea is to group multiple similar services, present them to user and generate all required artifacts
  * making it possible to operate with the services as with one.
  */
-interface IFeatureProvider : IDictionary {
+interface FeatureProvider : Dictionary, DependencyProvider<FeatureProcessor> {
 
     /**
      * Logical type of the feature this provider is responsible for.
      */
-    fun getType(): IFeatureType
+    fun getType(): FeatureType
 
     /**
      * If true - it is technically possible to use multiple processors of this feature.
@@ -30,14 +30,8 @@ interface IFeatureProvider : IDictionary {
     fun isMultiple(): Boolean = true
 
     /**
-     * Returns all dependencies of given provider.
-     * Dependencies must be known at runtime through providers registered in generator.
-     */
-    fun dependencies(): List<Class<out IFeatureProcessor>> = emptyList()
-
-    /**
      * Returns all available processors of the feature.
      */
-    fun getProcessors(): List<IFeatureProcessor>
+    fun getProcessors(): List<FeatureProcessor>
 
 }

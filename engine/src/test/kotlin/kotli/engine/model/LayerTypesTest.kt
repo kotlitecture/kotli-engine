@@ -3,11 +3,11 @@ package kotli.engine.model
 import org.junit.jupiter.api.Assertions
 import kotlin.test.Test
 
-class LayerTypeTest {
+class LayerTypesTest {
 
     @Test
     fun `layer types have icon, title and description`() {
-        LayerType.entries
+        LayerTypes.entries
             .filter { it.getTitle() != null }
             .also { Assertions.assertEquals(3, it.size) }
             .forEach { type ->

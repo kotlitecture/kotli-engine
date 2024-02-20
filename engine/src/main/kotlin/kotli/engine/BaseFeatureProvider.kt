@@ -5,19 +5,19 @@ import org.slf4j.LoggerFactory
 /**
  * Basic implementation of any provider created.
  */
-abstract class AbstractFeatureProvider : IFeatureProvider {
+abstract class BaseFeatureProvider : FeatureProvider {
 
     private val all by lazy { createProcessors() }
 
-    override fun getProcessors(): List<IFeatureProcessor> = all
+    override fun getProcessors(): List<FeatureProcessor> = all
 
     /**
      * Should return all available processors of the given feature provider.
      * Processor instances must be stateless.
      */
-    abstract fun createProcessors(): List<IFeatureProcessor>
+    abstract fun createProcessors(): List<FeatureProcessor>
 
-    class UnknownProcessor(private val id: String) : IFeatureProcessor {
+    class UnknownProcessor(private val id: String) : FeatureProcessor {
 
         private val logger = LoggerFactory.getLogger(UnknownProcessor::class.java)
 
