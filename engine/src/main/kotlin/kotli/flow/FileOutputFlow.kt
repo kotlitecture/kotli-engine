@@ -29,23 +29,31 @@ class FileOutputFlow(
 ) : TemplateFlow() {
 
     override fun proceed(): TemplateContext {
-        // prepare context
+        val context = prepare()
+        generate(context)
+        cleanup(context)
+        return context
+    }
+
+    private fun provideLayer(): Layer {
+        if (fatLayer) {
+            val generator = registry.get(layer.generatorId)!!
+            val features = generator.getProviders()
+                .map { it.getProcessors() }
+                .flatten()
+                .map { Feature(id = it.getId()) }
+            return layer.copy(features = features)
+        }
+        return layer
+    }
+
+    private fun prepare(): TemplateContext {
         val context = DefaultTemplateContext(
             layer = provideLayer(),
             registry = registry,
             layerPath = layerPath,
         )
         context.generator.prepare(context)
-
-        // generate structure
-        generate(context)
-
-        // cleanup structure
-        Files.walk(layerPath)
-            .filter(PathUtils::isEmptyDir)
-            .forEach(PathUtils::delete)
-
-        // return result
         return context
     }
 
@@ -68,16 +76,10 @@ class FileOutputFlow(
         context.getChildren().onEach(this::generate)
     }
 
-    private fun provideLayer(): Layer {
-        if (fatLayer) {
-            val generator = registry.get(layer.generatorId)!!
-            val features = generator.getProviders()
-                .map { it.getProcessors() }
-                .flatten()
-                .map { Feature(id = it.getId()) }
-            return layer.copy(features = features)
-        }
-        return layer
+    private fun cleanup(context: TemplateContext) {
+        Files.walk(context.layerPath)
+            .filter(PathUtils::isEmptyDir)
+            .forEach(PathUtils::delete)
     }
 
 }
