@@ -9,7 +9,7 @@ class SimpleTemplateRegistryTest {
     @Test
     fun `templated registered in factory`() {
         val templateIds = listOf("1", "2", "3")
-        val factory = templateIds
+        val registry = templateIds
                 .map { id ->
                     object : BaseTemplateGenerator() {
                         override fun doPrepare(context: TemplateContext) = Unit
@@ -19,14 +19,14 @@ class SimpleTemplateRegistryTest {
                     }
                 }
                 .let { SimpleTemplateRegistry(it) }
-        templateIds.forEach { id -> Assertions.assertNotNull(factory.get(id)) }
+        templateIds.forEach { id -> Assertions.assertNotNull(registry.get(id)) }
     }
 
     @Test
     fun `internal template is not available in getAll`() {
-        val factory: TemplateRegistry = SimpleTemplateRegistry(emptyList())
-        Assertions.assertSame(TemplateGenerator.App, factory.get(TemplateGenerator.App.getId()))
-        Assertions.assertFalse(factory.getAll().contains(TemplateGenerator.App))
+        val registry: TemplateRegistry = SimpleTemplateRegistry(emptyList())
+        Assertions.assertSame(TemplateGenerator.App, registry.get(TemplateGenerator.App.getId()))
+        Assertions.assertFalse(registry.getAll().contains(TemplateGenerator.App))
     }
 
 }

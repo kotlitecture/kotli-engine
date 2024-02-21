@@ -80,13 +80,13 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
     private fun proceedChildren(context: TemplateContext) {
         context.layer.layers
             .map { childLayer ->
-                Kotli(
+                TemplateContext(
                     target = context.target.resolve(childLayer.name),
                     registry = context.registry,
                     layer = childLayer
                 )
             }
-            .forEach { it.generate() }
+            .forEach { it.generator.generate(it) }
     }
 
     private fun applyProcessors(context: TemplateContext) {
