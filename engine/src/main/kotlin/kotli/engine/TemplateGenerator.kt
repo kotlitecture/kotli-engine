@@ -55,7 +55,7 @@ interface TemplateGenerator : Dictionary, DependencyProvider<FeatureProcessor> {
     fun getProviders(): List<FeatureProvider>
 
     /**
-     * Generates new template based on the context provided.
+     * Prepares the given context with all metadata required for further generation of output structure.
      */
     fun prepare(context: TemplateContext)
 

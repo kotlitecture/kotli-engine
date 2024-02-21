@@ -13,7 +13,6 @@ interface TemplateContext {
 
     val layer: Layer
     val layerPath: Path
-    val registry: TemplateRegistry
     val generator: TemplateGenerator
 
     /**
@@ -27,7 +26,7 @@ interface TemplateContext {
     fun getFeature(id: String): Feature?
 
     /**
-     * Returns all child contexts of the given one.
+     * Returns all children contexts of the given one.
      */
     fun getChildren(): List<TemplateContext>
 
@@ -62,7 +61,7 @@ interface TemplateContext {
     /**
      * Adds new child context.
      */
-    fun onAddChild(layer: Layer): TemplateContext
+    fun onAddChild(layer: Layer): TemplateContext?
 
     companion object {
         val Empty = object : TemplateContext {
@@ -76,12 +75,6 @@ interface TemplateContext {
             override fun onApplyRules(contextPath: String, vararg rules: TemplateRule) = Unit
             override fun getChildren(): List<TemplateContext> = emptyList()
             override fun getRules(): List<TemplateRules> = emptyList()
-
-            override val registry: TemplateRegistry = object : TemplateRegistry {
-                override fun getAll(): List<TemplateGenerator> = emptyList()
-                override fun get(id: String): TemplateGenerator = TemplateGenerator.App
-            }
-
             override val layer: Layer = Layer(
                 id = "<YOUR_LAYER_ID>",
                 name = "<YOUR_LAYER_NAME>",

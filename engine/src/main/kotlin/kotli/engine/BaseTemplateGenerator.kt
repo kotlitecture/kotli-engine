@@ -62,7 +62,7 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
 
     private fun proceedChildren(context: TemplateContext) {
         context.layer.layers
-            .map(context::onAddChild)
+            .mapNotNull(context::onAddChild)
             .forEach { it.generator.prepare(it) }
     }
 

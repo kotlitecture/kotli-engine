@@ -7,6 +7,7 @@ import kotli.engine.model.Feature
 import kotli.engine.model.Layer
 import kotli.engine.template.TemplateRule
 import kotli.engine.template.TemplateRules
+import org.slf4j.LoggerFactory
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
@@ -17,9 +18,12 @@ import java.util.concurrent.CopyOnWriteArrayList
 class DefaultTemplateContext(
     override val layer: Layer,
     override val layerPath: Path,
-    override val registry: TemplateRegistry,
-    override val generator: TemplateGenerator = registry.get(layer.generatorId)!!
+    private val registry: TemplateRegistry
 ) : TemplateContext {
+
+    private val logger = LoggerFactory.getLogger(DefaultTemplateContext::class.java)
+
+    override val generator: TemplateGenerator = registry.get(layer.generatorId)!!
 
     private val children = ConcurrentHashMap<String, TemplateContext>()
     private val features = layer.features.associateBy { it.id }
@@ -56,17 +60,21 @@ class DefaultTemplateContext(
         }
     }
 
-    override fun onAddChild(layer: Layer): TemplateContext {
-        val id = layer.id
-        if (children.containsKey(id)) {
-            throw IllegalStateException("multiple children found with given id $id")
+    override fun onAddChild(layer: Layer): TemplateContext? {
+        val name = layer.name
+        if (registry.get(layer.generatorId) == null) {
+            logger.warn("found layer with unknown generator id :: {}", layer.generatorId)
+            return null
+        }
+        if (children.containsKey(name)) {
+            throw IllegalStateException("multiple children found with the same id $name")
         }
         val child = DefaultTemplateContext(
             layerPath = layerPath.resolve(layer.name),
             registry = registry,
             layer = layer
         )
-        children[id] = child
+        children[name] = child
         return child
     }
 }
