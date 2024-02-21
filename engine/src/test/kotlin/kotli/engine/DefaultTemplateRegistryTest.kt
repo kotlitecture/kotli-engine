@@ -4,7 +4,7 @@ import kotli.engine.model.LayerTypes
 import org.junit.jupiter.api.Assertions
 import kotlin.test.Test
 
-class SimpleTemplateRegistryTest {
+class DefaultTemplateRegistryTest {
 
     @Test
     fun `templated registered in factory`() {
@@ -18,13 +18,13 @@ class SimpleTemplateRegistryTest {
                         override fun getId(): String = id
                     }
                 }
-                .let { SimpleTemplateRegistry(it) }
+                .let { DefaultTemplateRegistry(it) }
         templateIds.forEach { id -> Assertions.assertNotNull(registry.get(id)) }
     }
 
     @Test
     fun `internal template is not available in getAll`() {
-        val registry: TemplateRegistry = SimpleTemplateRegistry(emptyList())
+        val registry: TemplateRegistry = DefaultTemplateRegistry(emptyList())
         Assertions.assertSame(TemplateGenerator.App, registry.get(TemplateGenerator.App.getId()))
         Assertions.assertFalse(registry.getAll().contains(TemplateGenerator.App))
     }

@@ -4,7 +4,7 @@ package kotli.engine
  * The simplest version of generator factory, used to access
  * all available generators during processing the output structure.
  */
-class SimpleTemplateRegistry(private val generators: List<TemplateGenerator>) : TemplateRegistry {
+class DefaultTemplateRegistry(private val generators: List<TemplateGenerator>) : TemplateRegistry {
 
     private val generatorsMap = generators
             .plus(TemplateGenerator.App)

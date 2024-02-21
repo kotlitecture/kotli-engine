@@ -1,6 +1,6 @@
 package kotli.engine.flow
 
-import kotli.engine.SimpleTemplateRegistry
+import kotli.engine.DefaultTemplateRegistry
 import kotli.engine.TemplateGenerator
 import kotli.engine.model.Layer
 import kotli.flow.DefaultTemplateFlow
@@ -15,7 +15,7 @@ class ZipTemplateFlowTest {
     @Test
     fun `proceed without extra files inside`() {
         val output = ByteArrayOutputStream()
-        val registry = SimpleTemplateRegistry(emptyList())
+        val registry = DefaultTemplateRegistry(emptyList())
         val layer = Layer(
             id = "my.app",
             name = "test",
