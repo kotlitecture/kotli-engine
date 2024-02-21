@@ -21,7 +21,7 @@ class DefaultTemplateFlowTest {
         )
         val flow = DefaultTemplateFlow(layer, registry)
         val context = flow.proceed()
-        Assertions.assertEquals(1, Files.walk(context.target).toList().size)
+        Assertions.assertEquals(1, Files.walk(context.layerPath).toList().size)
     }
 
 }

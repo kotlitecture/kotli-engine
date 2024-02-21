@@ -10,6 +10,14 @@ interface TemplateGenerator : Dictionary, DependencyProvider<FeatureProcessor> {
     fun getType(): LayerType
 
     /**
+     * Returns path to the template directory.
+     *
+     * Default implementation is configured to take template structure relative
+     * to the resources directory of the jar-artefact storing the generator logic.
+     */
+    fun getTemplatePath(): String = "kotli/templates/${getId()}"
+
+    /**
      * Returns URL on a public repository with source codes or official site of the given template.
      */
     fun getWebUrl(): String? = null
@@ -49,7 +57,7 @@ interface TemplateGenerator : Dictionary, DependencyProvider<FeatureProcessor> {
     /**
      * Generates new template based on the context provided.
      */
-    fun generate(context: TemplateContext)
+    fun prepare(context: TemplateContext)
 
     companion object {
         val App = object : BaseTemplateGenerator() {

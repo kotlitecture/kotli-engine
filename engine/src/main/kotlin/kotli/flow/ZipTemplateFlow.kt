@@ -22,7 +22,7 @@ class ZipTemplateFlow(
         val context = flow.proceed()
         val zip = ZipOutputStream(output)
         zip.use { zipOutput ->
-            val target = context.target
+            val target = context.layerPath
             Files.walkFileTree(target, object : SimpleFileVisitor<Path>() {
                 override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
                     val relativePath: Path = target.relativize(file)

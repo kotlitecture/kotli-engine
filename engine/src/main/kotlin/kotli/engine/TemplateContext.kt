@@ -2,23 +2,39 @@ package kotli.engine
 
 import kotli.engine.model.Feature
 import kotli.engine.model.Layer
-import kotli.engine.utils.PackageUtils
+import kotli.engine.template.TemplateRule
+import kotli.engine.template.TemplateRules
 import java.nio.file.Path
 
 /**
- * Execution context for one time generation of a template.
+ * Execution context for template.
  */
 interface TemplateContext {
 
     val layer: Layer
-    val target: Path
+    val layerPath: Path
     val registry: TemplateRegistry
     val generator: TemplateGenerator
 
     /**
+     * Returns all available rules to be applied.
+     */
+    fun getRules(): List<TemplateRules>
+
+    /**
      * Finds feature by its id in the provided layer or null if not found.
      */
-    fun findFeature(id: String): Feature?
+    fun getFeature(id: String): Feature?
+
+    /**
+     * Returns all child contexts of the given one.
+     */
+    fun getChildren(): List<TemplateContext>
+
+    /**
+     * Adds rules to be applied for a given file #contextPath relative to the layer path.
+     */
+    fun onApplyRule(contextPath: String, vararg rules: TemplateRule)
 
     /**
      * Applies feature if it is not applied yet.
@@ -37,35 +53,22 @@ interface TemplateContext {
     fun onRemoveFeature(id: String, action: (feature: Feature) -> Unit)
 
     /**
-     * Creates new child context for the given layer.
+     * Adds new child context.
      */
-    fun createChildContext(layer: Layer): TemplateContext
-
-    /**
-     * Applies template engine to the #contextPath relative to the root of the target folder.
-     */
-    fun apply(contextPath: String, block: TemplateMaker.() -> Unit) {
-        val maker = TemplateMaker(target.resolve(contextPath))
-        maker.block()
-        maker.apply()
-    }
-
-    /**
-     * Renames given #oldPackage to #newPackage found in #contextPath.
-     */
-    fun rename(contextPath: String, oldPackage: String, newPackage: String) {
-        PackageUtils.rename(target.resolve(contextPath), oldPackage, newPackage)
-    }
+    fun onAddChild(layer: Layer): TemplateContext
 
     companion object {
         val Empty = object : TemplateContext {
 
-            override val target: Path = Path.of("/")
-            override fun findFeature(id: String): Feature? = null
+            override val layerPath: Path = Path.of("/")
+            override fun getFeature(id: String): Feature? = null
+            override fun onAddChild(layer: Layer): TemplateContext = this
             override val generator: TemplateGenerator = TemplateGenerator.App
-            override fun createChildContext(layer: Layer): TemplateContext = this
             override fun onApplyFeature(id: String, action: (feature: Feature) -> Unit) = Unit
             override fun onRemoveFeature(id: String, action: (feature: Feature) -> Unit) = Unit
+            override fun onApplyRule(contextPath: String, vararg rules: TemplateRule) = Unit
+            override fun getChildren(): List<TemplateContext> = emptyList()
+            override fun getRules(): List<TemplateRules> = emptyList()
 
             override val registry: TemplateRegistry = object : TemplateRegistry {
                 override fun getAll(): List<TemplateGenerator> = emptyList()

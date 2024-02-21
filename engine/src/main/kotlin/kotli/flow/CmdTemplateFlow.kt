@@ -13,7 +13,7 @@ class CmdTemplateFlow(
 
     override fun proceed(): TemplateContext {
         val context = flow.proceed()
-        exec(context.target, *commands)
+        exec(context.layerPath, *commands)
         return context
     }
 

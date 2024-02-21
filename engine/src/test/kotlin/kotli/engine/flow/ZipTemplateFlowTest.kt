@@ -26,7 +26,7 @@ class ZipTemplateFlowTest {
         val zipFlow = ZipTemplateFlow(defaultFlow, output)
         val context = zipFlow.proceed()
         Assertions.assertEquals(22, output.size())
-        Assertions.assertEquals(1, Files.walk(context.target).toList().size)
+        Assertions.assertEquals(1, Files.walk(context.layerPath).toList().size)
     }
 
 }

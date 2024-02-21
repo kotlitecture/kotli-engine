@@ -16,8 +16,8 @@ class GradleCmdTemplateFlow(
 
     override fun proceed(): TemplateContext {
         val context = flow.proceed()
-        runCatching { exec(context.target, "chmod", "-R", "777", "gradlew") }
-        exec(context.target, gradlew(), *commands)
+        runCatching { exec(context.layerPath, "chmod", "-R", "777", "gradlew") }
+        exec(context.layerPath, gradlew(), *commands)
         return context
     }
 

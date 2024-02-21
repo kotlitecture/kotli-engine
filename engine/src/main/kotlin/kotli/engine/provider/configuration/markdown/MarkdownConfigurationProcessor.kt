@@ -41,7 +41,7 @@ internal class MarkdownConfigurationProcessor : BaseFeatureProcessor() {
         processors: List<FeatureProcessor>
     ) {
         logger.debug("proceedInstruction for provider:\n\t{}", provider.getId())
-        val instruction = context.target.resolve("docs/integrations/${index + 1} - ${provider.getId()}.md")
+        val instruction = context.layerPath.resolve("docs/integrations/${index + 1} - ${provider.getId()}.md")
         instruction.parent.createDirectories()
         val textBuilder = StringBuilder()
         processors.forEach { processor ->

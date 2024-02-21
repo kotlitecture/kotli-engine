@@ -2,9 +2,7 @@ package kotli.engine
 
 import kotli.engine.provider.configuration.ConfigurationProvider
 import kotli.engine.provider.configuration.markdown.MarkdownConfigurationProcessor
-import kotli.engine.utils.PathUtils
 import org.slf4j.LoggerFactory
-import java.nio.file.Files
 
 /**
  * Basic implementation of any template generator.
@@ -13,7 +11,6 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
 
     protected val logger by lazy { LoggerFactory.getLogger(this::class.java) }
 
-    private val templatePath: String by lazy { "kotli/templates/${getId()}" }
     private val providerList by lazy { createProviders().plus(ConfigurationProvider()) }
 
     override fun dependencies(): List<Class<out FeatureProcessor>> = listOf(
@@ -55,32 +52,18 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
         return providersByProcessorType[type] ?: throw IllegalStateException("no provider :: $type")
     }
 
-    override fun generate(context: TemplateContext) {
-        prepare(context)
+    override fun prepare(context: TemplateContext) {
+        doPrepare(context)
         proceedChildren(context)
         applyProcessors(context)
         applyDependencies(context)
         removeProcessors(context)
-        cleanup(context)
-    }
-
-    private fun prepare(context: TemplateContext) {
-        val from = PathUtils.getFromResource(templatePath) ?: return
-        val to = context.target
-        PathUtils.copy(from, to)
-        doPrepare(context)
-    }
-
-    private fun cleanup(context: TemplateContext) {
-        Files.walk(context.target)
-            .filter(PathUtils::isEmptyDir)
-            .forEach(PathUtils::delete)
     }
 
     private fun proceedChildren(context: TemplateContext) {
         context.layer.layers
-            .map(context::createChildContext)
-            .forEach { it.generator.generate(it) }
+            .map(context::onAddChild)
+            .forEach { it.generator.prepare(it) }
     }
 
     private fun applyProcessors(context: TemplateContext) {
