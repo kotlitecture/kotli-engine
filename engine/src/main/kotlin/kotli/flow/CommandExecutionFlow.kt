@@ -6,7 +6,7 @@ import kotli.engine.extensions.exec
 /**
  * Proceeds with template generation and execution of some command line commands in the root directory of the output structure.
  */
-class CmdTemplateFlow(
+class CommandExecutionFlow(
     private val flow: TemplateFlow,
     private val commands: Array<String>
 ) : TemplateFlow() {

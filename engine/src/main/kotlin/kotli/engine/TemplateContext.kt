@@ -34,7 +34,14 @@ interface TemplateContext {
     /**
      * Adds rules to be applied for a given file #contextPath relative to the layer path.
      */
-    fun onApplyRule(contextPath: String, vararg rules: TemplateRule)
+    fun onApplyRules(contextPath: String, vararg rules: TemplateRule)
+
+    /**
+     * Adds rules to be applied for the 'gradle/libs.versions.toml' relative to the layer path.
+     */
+    fun onApplyVersionCatalogRules(vararg rules: TemplateRule) {
+        onApplyRules("gradle/libs.versions.toml", *rules)
+    }
 
     /**
      * Applies feature if it is not applied yet.
@@ -66,7 +73,7 @@ interface TemplateContext {
             override val generator: TemplateGenerator = TemplateGenerator.App
             override fun onApplyFeature(id: String, action: (feature: Feature) -> Unit) = Unit
             override fun onRemoveFeature(id: String, action: (feature: Feature) -> Unit) = Unit
-            override fun onApplyRule(contextPath: String, vararg rules: TemplateRule) = Unit
+            override fun onApplyRules(contextPath: String, vararg rules: TemplateRule) = Unit
             override fun getChildren(): List<TemplateContext> = emptyList()
             override fun getRules(): List<TemplateRules> = emptyList()
 

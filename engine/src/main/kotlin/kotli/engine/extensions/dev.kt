@@ -1,7 +1,5 @@
 package kotli.engine.extensions
 
-import kotli.engine.TemplateContext
-import kotli.engine.template.TemplateRule
 import java.nio.file.Path
 
 /**
@@ -36,15 +34,11 @@ fun exec(dir: Path, vararg commands: String) {
 }
 
 /**
- * Applies template engine to the 'gradle/libs.versions.toml' in the root of the target folder.
- */
-fun TemplateContext.onAddVersionCatalogRules(vararg rules: TemplateRule) {
-    onApplyRule("gradle/libs.versions.toml", *rules)
-}
-
-/**
  * Takes given Int value if it is positive and can be an index in array.
  */
 fun Int.takeIfIndex(): Int? = this.takeIf { it >= 0 }
 
+/**
+ * Constructs path from multiple tokens.
+ */
 fun path(vararg tokens: String): String = tokens.joinToString("/").replace("//", "/").trim()

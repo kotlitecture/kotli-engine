@@ -21,7 +21,7 @@ class DefaultTemplateContext(
     override val generator: TemplateGenerator = registry.get(layer.generatorId)!!
 ) : TemplateContext {
 
-    private val children = mutableMapOf<String, TemplateContext>()
+    private val children = ConcurrentHashMap<String, TemplateContext>()
     private val features = layer.features.associateBy { it.id }
     private val applied = ConcurrentHashMap<String, Feature>()
     private val removed = ConcurrentHashMap<String, Feature>()
@@ -33,7 +33,7 @@ class DefaultTemplateContext(
 
     override fun getChildren(): List<TemplateContext> = children.values.toList()
 
-    override fun onApplyRule(contextPath: String, vararg rules: TemplateRule) {
+    override fun onApplyRules(contextPath: String, vararg rules: TemplateRule) {
         val filePath = layerPath.resolve(contextPath)
         this.rules.add(TemplateRules(filePath, rules.toList()))
     }

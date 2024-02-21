@@ -9,7 +9,7 @@ import kotli.engine.extensions.gradlew
  *
  * The commands will be executed as arguments for the command './gradlew'.
  */
-class GradleCmdTemplateFlow(
+class GradleExecutionFlow(
     private val flow: TemplateFlow,
     private val commands: Array<String>
 ) : TemplateFlow() {

@@ -13,7 +13,7 @@ import java.util.zip.ZipOutputStream
 /**
  * Saves generated output structure into output stream as a zip archive.
  */
-class ZipTemplateFlow(
+class ZipOutputFlow(
     private val flow: TemplateFlow,
     private val output: OutputStream,
 ) : TemplateFlow() {
