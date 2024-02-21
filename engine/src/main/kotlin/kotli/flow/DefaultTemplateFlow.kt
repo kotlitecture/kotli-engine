@@ -17,7 +17,7 @@ class DefaultTemplateFlow(
 
     override fun proceed(): TemplateContext {
         val target: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/")
-        val context = TemplateContext(layer, target, registry)
+        val context = DefaultTemplateContext(layer, target, registry)
         context.generator.generate(context)
         return context
     }

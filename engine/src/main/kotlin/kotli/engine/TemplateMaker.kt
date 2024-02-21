@@ -91,7 +91,7 @@ class TemplateMaker(
     fun replaceLine(marker: String, singleLine: Boolean = false, replacer: () -> String): TemplateMaker {
         val indexOf = lines.indexOfFirst { isMarked(it, marker) }.takeIfIndex() ?: return this
         val newLine = replacer()
-        lines.forEachIndexed { index, line ->
+        lines.forEach { line ->
             if (isMarked(line, marker)) {
                 val startIndex = line.indexOfFirst { it != ' ' }.takeIfIndex() ?: 0
                 val updatedLine = "${line.substring(0, startIndex)}$newLine"

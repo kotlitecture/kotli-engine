@@ -8,26 +8,38 @@ import java.nio.file.Path
 /**
  * Execution context for one time generation of a template.
  */
-data class TemplateContext(
-    val layer: Layer,
-    val target: Path,
-    val registry: TemplateRegistry,
-    val generator: TemplateGenerator = registry.get(layer.generatorId)!!
-) {
+interface TemplateContext {
 
-    internal val features = layer.features.associateBy { it.id }
-    internal val applied = mutableMapOf<String, Feature>()
-    internal val removed = mutableMapOf<String, Feature>()
+    val layer: Layer
+    val target: Path
+    val registry: TemplateRegistry
+    val generator: TemplateGenerator
 
     /**
-     * Gets feature by its id or null if not found.
+     * Finds feature by its id in the provided layer or null if not found.
      */
-    fun getFeature(id: String): Feature? = features[id]
+    fun findFeature(id: String): Feature?
 
     /**
-     * Checks if processor with given #id is applied to the context.
+     * Applies feature if it is not applied yet.
+     *
+     * The implementation is responsible for checking if feature is already applied or not
+     * to keep the context in consistent taking into account that features can be applied in parallel.
      */
-    fun isApplied(id: String): Boolean = applied.containsKey(id)
+    fun onApplyFeature(id: String, action: (feature: Feature) -> Unit)
+
+    /**
+     * Removes feature if it is not removed yet.
+     *
+     * The implementation is responsible for checking if feature is already deleted or not
+     * to keep the context in consistent taking into account that features can be removed in parallel.
+     */
+    fun onRemoveFeature(id: String, action: (feature: Feature) -> Unit)
+
+    /**
+     * Creates new child context for the given layer.
+     */
+    fun createChildContext(layer: Layer): TemplateContext
 
     /**
      * Applies template engine to the #contextPath relative to the root of the target folder.
@@ -46,18 +58,26 @@ data class TemplateContext(
     }
 
     companion object {
-        val Empty = TemplateContext(
-            target = Path.of("/"),
-            layer = Layer(
+        val Empty = object : TemplateContext {
+
+            override val target: Path = Path.of("/")
+            override fun findFeature(id: String): Feature? = null
+            override val generator: TemplateGenerator = TemplateGenerator.App
+            override fun createChildContext(layer: Layer): TemplateContext = this
+            override fun onApplyFeature(id: String, action: (feature: Feature) -> Unit) = Unit
+            override fun onRemoveFeature(id: String, action: (feature: Feature) -> Unit) = Unit
+
+            override val registry: TemplateRegistry = object : TemplateRegistry {
+                override fun getAll(): List<TemplateGenerator> = emptyList()
+                override fun get(id: String): TemplateGenerator = TemplateGenerator.App
+            }
+
+            override val layer: Layer = Layer(
                 id = "<YOUR_LAYER_ID>",
                 name = "<YOUR_LAYER_NAME>",
                 namespace = "<YOUR_LAYER_NAMESPACE>",
                 generatorId = TemplateGenerator.App.getId(),
-            ),
-            registry = object : TemplateRegistry {
-                override fun getAll(): List<TemplateGenerator> = emptyList()
-                override fun get(id: String): TemplateGenerator = TemplateGenerator.App
-            }
-        )
+            )
+        }
     }
 }

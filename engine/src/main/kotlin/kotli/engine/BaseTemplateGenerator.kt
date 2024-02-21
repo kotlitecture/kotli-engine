@@ -79,13 +79,7 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
 
     private fun proceedChildren(context: TemplateContext) {
         context.layer.layers
-            .map { childLayer ->
-                TemplateContext(
-                    target = context.target.resolve(childLayer.name),
-                    registry = context.registry,
-                    layer = childLayer
-                )
-            }
+            .map(context::createChildContext)
             .forEach { it.generator.generate(it) }
     }
 
@@ -98,13 +92,12 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
     private fun applyDependencies(context: TemplateContext) {
         dependencies()
             .map(this::getProcessor)
-            .onEach { dependency -> dependency.apply(context) }
+            .onEach { processor -> processor.apply(context) }
     }
 
     private fun removeProcessors(context: TemplateContext) {
         providerList.forEach { provider ->
             provider.getProcessors()
-                .filter { processor -> !context.isApplied(processor.getId()) }
                 .forEach { processor -> processor.remove(context) }
         }
     }
