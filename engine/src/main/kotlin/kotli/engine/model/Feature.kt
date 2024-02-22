@@ -1,8 +1,11 @@
 package kotli.engine.model
 
 /**
- * Layers can be configured with predefined integrations, technical solutions and business flows.
- * In terms of Kotli, every atomic integration, technical solution or business flow is a feature.
+ * Represents a feature that can be configured within layers with predefined integrations,
+ * technical solutions, and business flows in Kotli.
+ *
+ * @param id The unique identifier of the feature.
+ * @param attributes The optional attributes associated with the feature.
  */
 data class Feature(
     val id: String,

@@ -4,11 +4,11 @@ import kotli.engine.template.TemplateRule
 import kotli.engine.template.TemplateFile
 
 /**
- * Cleanup all lines containing given #marker by removing the marker
+ * Cleans up all lines containing a given marker by removing the marker
  * and possible cleanup prefix (which can be set in the constructor).
  *
- * @param marker - text which must be presented in a line to consider it for modification.
- * @param singleLine - if true, only the first found line will be proceeded.
+ * @param marker The text that must be present in a line to consider it for modification.
+ * @param singleLine If true, only the first found line will be processed.
  */
 class CleanupMarkedLine(
     private val marker: String,

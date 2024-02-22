@@ -11,7 +11,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 /**
- * Saves generated output structure into output stream as a zip archive.
+ * Saves the generated output structure into the output stream as a zip archive.
  */
 class ZipOutputFlow(
     private val flow: TemplateFlow,

@@ -5,7 +5,7 @@ import kotli.engine.extensions.exec
 import kotli.engine.extensions.gradlew
 
 /**
- * Proceeds with template generation and execution of some command line commands in the root directory of the output structure.
+ * Proceeds with template generation and execution of some command-line commands in the root directory of the output structure.
  *
  * The commands will be executed as arguments for the command './gradlew'.
  */

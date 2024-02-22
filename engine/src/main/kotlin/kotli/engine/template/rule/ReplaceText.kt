@@ -4,10 +4,10 @@ import kotli.engine.template.TemplateRule
 import kotli.engine.template.TemplateFile
 
 /**
- * Replaces all occurrences of the given #text with provided #replacer text.
+ * Replaces all occurrences of the given #text with the provided #replacer text.
  *
- * @param text - text to be replaced.
- * @param replacer - text to be used.
+ * @param text The text to be replaced.
+ * @param replacer A function providing the text to be used as a replacement.
  */
 class ReplaceText(
     private val text: String,

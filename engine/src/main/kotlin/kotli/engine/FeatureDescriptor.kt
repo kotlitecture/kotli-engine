@@ -4,107 +4,105 @@ import kotli.engine.utils.ResourceUtils
 import java.net.URL
 
 /**
- * Each feature is self-describable so it can be presented to the user with icon, title, description, links
- * and any other metadata required to understand its value and purpose.
- *
- * FeatureDescriptor is responsible to provide all such metadata.
+ * Each feature is self-describable, providing metadata such as an icon, title, description, links, and other details
+ * required to understand its value and purpose. The FeatureDescriptor is responsible for providing this metadata.
  */
 interface FeatureDescriptor {
 
     /**
-     * Unique identifier of the feature.
+     * Gets the unique identifier of the feature.
      */
     fun getId(): String
 
     /**
-     * Icon of the feature. Preferred format is SVG or any other image format of size at least 64px.
+     * Gets the icon of the feature. Preferred format is SVG or any other image format of size at least 64px.
      *
-     * @param state is current runtime template state with user defined parameters.
+     * @param state Current runtime template state with user-defined parameters.
      *
-     * @return URL on the image resource (default value is icon.svg relative to the package declaration).
+     * @return URL to the image resource (default value is "icon.svg" relative to the package declaration).
      */
     fun getIcon(state: TemplateState = TemplateState.Empty): URL? = ResourceUtils.get(this, "icon.svg")
 
     /**
-     * Title of the feature. Short name. Used to display to the user and generate required documentation.
+     * Gets the title of the feature. Short name. Used to display to the user and generate required documentation.
      *
-     * @param state is current runtime template state with user defined parameters.
+     * @param state Current runtime template state with user-defined parameters.
      *
-     * @return text (default value is value of title.md, relative to the package declaration).
+     * @return Text (default value is the content of "title.md", relative to the package declaration).
      */
     fun getTitle(state: TemplateState = TemplateState.Empty): String? = ResourceUtils.getAsString(this, "title.md")
 
     /**
-     * Description of the feature. Detailed. Used to display to the user and generate required documentation.
+     * Gets the description of the feature. Detailed. Used to display to the user and generate required documentation.
      *
-     * @param state is current runtime template state with user defined parameters.
+     * @param state Current runtime template state with user-defined parameters.
      *
-     * @return text (default value is value of description.md, relative to the package declaration).
+     * @return Text (default value is the content of "description.md", relative to the package declaration).
      */
     fun getDescription(state: TemplateState = TemplateState.Empty): String? = ResourceUtils.getAsString(this, "description.md")
 
     /**
-     * Instruction how to use the feature in generated template properly.
+     * Gets the instruction on how to use the feature in the generated template properly.
      *
-     * @param state is current runtime template state with user defined parameters.
+     * @param state Current runtime template state with user-defined parameters.
      *
-     * @return text (default value is value of usage.md, relative to the package declaration).
+     * @return Text (default value is the content of "usage.md", relative to the package declaration).
      */
     fun getUsage(state: TemplateState = TemplateState.Empty): String? = ResourceUtils.getAsString(this, "usage.md")
 
     /**
-     * Step-by-step instruction how to configure the feature in generated template so it can be used properly.
+     * Gets the step-by-step instruction on how to configure the feature in the generated template so it can be used properly.
      *
-     * @param state is current runtime template state with user defined parameters.
+     * @param state Current runtime template state with user-defined parameters.
      *
-     * @return text (default value is value of configuration.md, relative to the package declaration).
+     * @return Text (default value is the content of "configuration.md", relative to the package declaration).
      */
     fun getConfiguration(state: TemplateState = TemplateState.Empty): String? = ResourceUtils.getAsString(this, "configuration.md")
 
     /**
-     * Approximate time estimate, required to configure the given feature by following available step-by-step instructions.
+     * Gets the approximate time estimate required to configure the given feature by following available step-by-step instructions.
      *
-     * @param state is current runtime template state with user defined parameters.
+     * @param state Current runtime template state with user-defined parameters.
      *
-     * @return value in milliseconds.
+     * @return Value in milliseconds.
      */
     fun getConfigurationEstimate(state: TemplateState = TemplateState.Empty): Long = 0L
 
     /**
-     * Approximate time estimate, required to integrate the given feature from scratch
-     * (kind of, how many time it takes to include the functionality into the app, as if it was done without template]).
+     * Gets the approximate time estimate required to integrate the given feature from scratch
+     * (kind of, how much time it takes to include the functionality into the app, as if it was done without the template).
      *
-     * @param state is current runtime template state with user defined parameters.
+     * @param state Current runtime template state with user-defined parameters.
      *
-     * @return value in milliseconds.
+     * @return Value in milliseconds.
      */
     fun getIntegrationEstimate(state: TemplateState = TemplateState.Empty): Long = 0L
 
     /**
-     * Approximate impact on the final size of the artifact (apk, jar, etc) when this feature is included.
-     * (the size must be measured in bytes and only as if artifact is built in release/production mode).
+     * Gets the approximate impact on the final size of the artifact (APK, JAR, etc.) when this feature is included.
+     * (The size must be measured in bytes and only as if the artifact is built in release/production mode).
      *
-     * @param state is current runtime template state with user defined parameters.
+     * @param state Current runtime template state with user-defined parameters.
      *
-     * @return value in bytes.
+     * @return Value in bytes.
      */
     fun getSizeImpact(state: TemplateState = TemplateState.Empty): Long = 0L
 
     /**
-     * If feature has an official site, it should be provided for possibility to overview it by user.
+     * If the feature has an official site, it should be provided for the possibility to overview it by the user.
      *
-     * @param state is current runtime template state with user defined parameters.
+     * @param state Current runtime template state with user-defined parameters.
      *
-     * @return web url or null.
+     * @return Web URL or null.
      */
     fun getWebUrl(state: TemplateState = TemplateState.Empty): String? = null
 
     /**
-     * If feature has an official integration instruction, it should be provided for possibility to overview it by user.
+     * If the feature has an official integration instruction, it should be provided for the possibility to overview it by the user.
      *
-     * @param state is current runtime template state with user defined parameters.
+     * @param state Current runtime template state with user-defined parameters.
      *
-     * @return web url or null.
+     * @return Web URL or null.
      */
     fun getIntegrationUrl(state: TemplateState = TemplateState.Empty): String? = null
 

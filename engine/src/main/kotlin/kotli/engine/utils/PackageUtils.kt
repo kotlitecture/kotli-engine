@@ -7,13 +7,17 @@ import kotlin.io.path.readLines
 import kotlin.io.path.writeText
 
 /**
- * Common utils useful for operations with packages.
+ * Common utilities for operations with packages.
  */
 object PackageUtils {
 
     /**
-     * Renames #oldPackageName to #newPackageName under the given root folder #rootDir.
-     * All subsequent files moved to the new package name accordingly.
+     * Renames the #oldPackageName to #newPackageName under the given root folder #rootDir.
+     * All subsequent files are moved to the new package name accordingly.
+     *
+     * @param rootDir The root directory where the package renaming operation will be performed.
+     * @param oldPackageName The old package name to be replaced.
+     * @param newPackageName The new package name to replace the old package name.
      */
     fun rename(rootDir: Path, oldPackageName: String, newPackageName: String) {
         val oldPackagePath = oldPackageName.replace('.', '/')

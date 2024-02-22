@@ -4,13 +4,13 @@ import kotli.engine.template.TemplateRule
 import kotli.engine.template.TemplateFile
 
 /**
- * Replaces all occurrences of the given #text with provided #replacer text
+ * Replaces all occurrences of the given #text with the provided #replacer text
  * but ONLY in lines containing #marker.
  *
- * @param marker - text which must be presented in a line to consider it for modification.
- * @param text - text to be replaced.
- * @param singleLine - if true, only the first found line will be proceeded.
- * @param replacer - text to be used.
+ * @param text The text to be replaced.
+ * @param marker The text that must be present in a line to consider it for modification.
+ * @param singleLine If true, only the first found line will be processed.
+ * @param replacer A function providing the text to be used as a replacement.
  */
 class ReplaceMarkedText(
     private val text: String,

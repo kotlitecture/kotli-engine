@@ -5,10 +5,10 @@ import kotli.engine.template.TemplateFile
 import kotli.engine.extensions.takeIfIndex
 
 /**
- * Removes all lines containing given #marker.
+ * Removes all lines containing a given marker.
  *
- * @param marker - text which must be presented in a line to consider it for modification.
- * @param singleLine - if true, only the first found line will be proceeded.
+ * @param marker The text that must be present in a line to consider it for modification.
+ * @param singleLine If true, only the first found line will be processed.
  */
 class RemoveMarkedLine(
     private val marker: String,

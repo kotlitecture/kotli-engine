@@ -5,7 +5,10 @@ import kotli.engine.template.TemplateRule
 import kotli.engine.utils.PackageUtils
 
 /**
- * Renames given #oldPackage to #newPackage found in #contextPath.
+ * Renames the given package from #oldPackage to #newPackage found in #contextPath.
+ *
+ * @param oldPackage The package to be renamed.
+ * @param newPackage The new name for the package.
  */
 class RenamePackage(
     private val oldPackage: String,

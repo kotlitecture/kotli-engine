@@ -5,7 +5,10 @@ import kotli.engine.utils.ResourceUtils
 import java.net.URL
 
 /**
- * Predefined set of IFeatureType.
+ * Represents a predefined set of feature types.
+ *
+ * @param id The unique identifier of the feature type.
+ * @param order The order in which the feature type should be processed.
  */
 enum class FeatureTypes(
     private val id: String,

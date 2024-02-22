@@ -5,9 +5,9 @@ import kotli.engine.template.TemplateFile
 import kotli.engine.extensions.takeIfIndex
 
 /**
- * Removes the entire block marked with #marker at front and #marker at the end of it.
+ * Removes the entire block marked with a specific marker at the beginning and end of it.
  *
- * @param marker - text which must be presented in two lines to be considered as a block.
+ * @param marker The text that must be presented in two lines to be considered as a block.
  */
 class RemoveMarkedBlock(
     private val marker: String

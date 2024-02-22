@@ -3,38 +3,38 @@ package kotli.engine
 import org.slf4j.LoggerFactory
 
 /**
- * Feature processor is responsible for inclusion or exclusion of the feature it implements
+ * The Feature processor is responsible for the inclusion or exclusion of the feature it implements
  * in the generated template.
  *
- * Feature is any atomic integrations, technical solutions or business flows
- * which can be added to a layer during its configuration in Kotli.
+ * A feature is any atomic integration, technical solution, or business flow
+ * that can be added to a layer during its configuration in Kotli.
  *
- * Each feature should be self-describable so it can be presented to the user with icon, title, description, links
+ * Each feature should be self-descriptive, allowing it to be presented to the user with an icon, title, description, links,
  * and any other metadata required to understand its value and purpose.
  *
- * The main advantage of a feature is to provide ready-to-use solution with a minimum configuration required
- * (zero configuration is a goal).
+ * The primary advantage of a feature is to provide a ready-to-use solution with minimal configuration required
+ * (zero configuration is the goal).
  *
  * By default, each template is pre-configured to include all features.
  */
 interface FeatureProcessor : DependencyProvider<FeatureProcessor>, FeatureDescriptor {
 
     /**
-     * Applies given processor to the template generated.
+     * Applies the given processor to the generated template.
      *
-     * @param context is current runtime template context with user defined parameters.
+     * @param context The current runtime template context with user-defined parameters.
      */
     fun apply(context: TemplateContext) = Unit
 
     /**
-     * Removes given processor from the template generated.
+     * Removes the given processor from the generated template.
      *
-     * @param context is current runtime template context with user defined parameters.
+     * @param context The current runtime template context with user-defined parameters.
      */
     fun remove(context: TemplateContext) = Unit
 
     /**
-     * Default implementation of processor which should be called in case if processor not found by some reasons.
+     * Default implementation of the processor to be called in case the processor is not found for some reason.
      */
     class UnknownProcessor(private val id: String) : FeatureProcessor {
 

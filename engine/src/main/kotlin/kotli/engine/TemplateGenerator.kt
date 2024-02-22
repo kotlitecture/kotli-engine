@@ -3,14 +3,16 @@ package kotli.engine
 import kotli.engine.model.LayerTypes
 
 /**
- * Template generator is responsible for fulfillment of the template context with data
- * required to get output structure. But it does not produce such structure,
- * only prepares the data required.
+ * The template generator is responsible for fulfilling the template context with data required
+ * to obtain the output structure. It does not produce the output structure itself; instead,
+ * it only prepares the data required for further usage by the [kotli.flow.TemplateFlow].
  */
 interface TemplateGenerator : TemplateDescriptor {
 
     /**
      * Prepares the given context with all metadata required for further generation of output structure.
+     *
+     * @param context The template context to be prepared.
      */
     suspend fun prepare(context: TemplateContext)
 

@@ -3,10 +3,18 @@ package kotli.engine.template
 import kotli.engine.extensions.takeIfIndex
 import org.slf4j.LoggerFactory
 
+/**
+ * Rule to be applied to a template #file during the generation of the output structure.
+ */
 abstract class TemplateRule {
 
     protected val logger = LoggerFactory.getLogger(this::class.java)
 
+    /**
+     * Applies this rule to the given template #file.
+     *
+     * @param file The template file to apply the rule to.
+     */
     fun apply(file: TemplateFile) {
         logger.debug("apply rule :: {} -> {}", javaClass.simpleName, file.path)
         doApply(file)

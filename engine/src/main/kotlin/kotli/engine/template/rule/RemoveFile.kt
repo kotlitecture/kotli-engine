@@ -7,6 +7,8 @@ import kotlin.io.path.deleteRecursively
 
 /**
  * Removes the entire file with all its siblings.
+ *
+ * Note: This rule uses experimental features from the `kotlin.io.path` package.
  */
 @OptIn(ExperimentalPathApi::class)
 class RemoveFile : TemplateRule() {

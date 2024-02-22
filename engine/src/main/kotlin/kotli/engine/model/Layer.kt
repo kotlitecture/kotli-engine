@@ -1,7 +1,15 @@
 package kotli.engine.model
 
 /**
- * Metadata of a specific layer with all configured features and attributes.
+ * Represents the metadata of a specific layer with all configured features and attributes.
+ *
+ * @param id The unique identifier of the layer.
+ * @param name The name representing the root folder of the generated layer.
+ * @param namespace The package name, bundle id, or application id, depending on the context.
+ * @param generatorId The id of the generator used to resolve in the template registry.
+ * @param description A brief description of the layer.
+ * @param layers The list of child layers, if applicable.
+ * @param features The list of features configured for the layer.
  */
 data class Layer(
     val id: String,

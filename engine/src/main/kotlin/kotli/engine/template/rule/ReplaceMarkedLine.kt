@@ -5,11 +5,11 @@ import kotli.engine.template.TemplateFile
 import kotli.engine.extensions.takeIfIndex
 
 /**
- * Replaces the entire lines marked with #marker.
+ * Replaces the entire lines marked with a specific marker.
  *
- * @param marker - text which must be presented in a line to consider it for modification.
- * @param singleLine - if true, only the first found line will be proceeded.
- * @param replacer - text to replace the found line.
+ * @param marker The text that must be present in a line to consider it for modification.
+ * @param singleLine If true, only the first found line will be processed.
+ * @param replacer A function providing the text to replace the found line.
  */
 class ReplaceMarkedLine(
     private val marker: String,

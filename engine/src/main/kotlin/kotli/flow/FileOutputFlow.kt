@@ -13,14 +13,14 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 /**
- * Generates output structure in the given folder #layerPath.
+ * Generates the output structure in the given folder #layerPath.
  *
- * By default the target folder is set as Jimfs (in-memory file structure implementation) root directory.
+ * By default, the target folder is set as the Jimfs (in-memory file structure implementation) root directory.
  *
- * @param layer layer to generate template for
- * @param registry registry with all known template generators
- * @param layerPath root folder where to generate the result structure
- * @param fatLayer - include or not all features ignoring the fact that layer can be preconfigured with some features
+ * @param layer layer to generate the template for.
+ * @param registry registry with all known template generators.
+ * @param layerPath root folder where to generate the result structure.
+ * @param fatLayer - include or not all features, ignoring the fact that the layer can be preconfigured with some features.
  */
 class FileOutputFlow(
     private val layer: Layer,

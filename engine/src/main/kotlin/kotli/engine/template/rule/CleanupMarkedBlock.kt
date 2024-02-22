@@ -4,9 +4,9 @@ import kotli.engine.template.TemplateRule
 import kotli.engine.template.TemplateFile
 
 /**
- * Cleanups the block marked with #marker at front and #marker at the end of it.
+ * Cleans up the block marked with a specific marker at the beginning and end of it.
  *
- * @param marker - text which must be presented in two lines to be considered as a block.
+ * @param marker The text that must be presented in two lines to be considered as a block.
  */
 class CleanupMarkedBlock(
     private val marker: String

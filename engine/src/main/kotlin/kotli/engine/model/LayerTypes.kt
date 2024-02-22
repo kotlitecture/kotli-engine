@@ -5,7 +5,10 @@ import kotli.engine.utils.ResourceUtils
 import java.net.URL
 
 /**
- * Predefined set of ILayerType.
+ * Represents a predefined set of layer types.
+ *
+ * @param id The unique identifier of the layer type.
+ * @param order The order in which the layer type should be processed.
  */
 enum class LayerTypes(
     private val id: String,
