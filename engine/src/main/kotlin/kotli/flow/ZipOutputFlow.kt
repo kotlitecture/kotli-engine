@@ -1,6 +1,6 @@
 package kotli.flow
 
-import kotli.engine.TemplateContext
+import kotli.engine.TemplateState
 import java.io.OutputStream
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -18,11 +18,11 @@ class ZipOutputFlow(
     private val output: OutputStream,
 ) : TemplateFlow() {
 
-    override fun proceed(): TemplateContext {
-        val context = flow.proceed()
+    override fun proceed(): TemplateState {
+        val state = flow.proceed()
         val zip = ZipOutputStream(output)
         zip.use { zipOutput ->
-            val target = context.layerPath
+            val target = state.layerPath
             Files.walkFileTree(target, object : SimpleFileVisitor<Path>() {
                 override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
                     val relativePath: Path = target.relativize(file)
@@ -34,7 +34,7 @@ class ZipOutputFlow(
                 }
             })
         }
-        return context
+        return state
     }
 
 }

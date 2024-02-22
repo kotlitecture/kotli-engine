@@ -29,9 +29,9 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
         }
     }
 
-    protected open fun doApply(context: TemplateContext, feature: Feature) = doApply(context)
-    protected open fun doRemove(context: TemplateContext, feature: Feature) = doRemove(context)
-    protected open fun doApply(context: TemplateContext) = Unit
-    protected open fun doRemove(context: TemplateContext) = Unit
+    protected open fun doApply(state: TemplateState, feature: Feature) = doApply(state)
+    protected open fun doRemove(state: TemplateState, feature: Feature) = doRemove(state)
+    protected open fun doApply(state: TemplateState) = Unit
+    protected open fun doRemove(state: TemplateState) = Unit
 
 }

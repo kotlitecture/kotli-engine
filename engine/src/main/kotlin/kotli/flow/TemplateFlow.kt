@@ -1,6 +1,6 @@
 package kotli.flow
 
-import kotli.engine.TemplateContext
+import kotli.engine.TemplateState
 import org.slf4j.LoggerFactory
 
 /**
@@ -12,6 +12,6 @@ abstract class TemplateFlow {
 
     protected val logger = LoggerFactory.getLogger(this::class.java)
 
-    abstract fun proceed(): TemplateContext
+    abstract fun proceed(): TemplateState
 
 }

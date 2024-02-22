@@ -1,6 +1,6 @@
 package kotli.flow
 
-import kotli.engine.TemplateContext
+import kotli.engine.TemplateState
 import kotli.engine.extensions.exec
 import kotli.engine.extensions.gradlew
 
@@ -14,11 +14,11 @@ class GradleExecutionFlow(
     private val commands: Array<String>
 ) : TemplateFlow() {
 
-    override fun proceed(): TemplateContext {
-        val context = flow.proceed()
-        runCatching { exec(context.layerPath, "chmod", "-R", "777", "gradlew") }
-        exec(context.layerPath, gradlew(), *commands)
-        return context
+    override fun proceed(): TemplateState {
+        val state = flow.proceed()
+        runCatching { exec(state.layerPath, "chmod", "-R", "777", "gradlew") }
+        exec(state.layerPath, gradlew(), *commands)
+        return state
     }
 
 }

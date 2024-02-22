@@ -2,8 +2,8 @@ package kotli.flow
 
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
-import kotli.engine.TemplateContext
 import kotli.engine.TemplateRegistry
+import kotli.engine.TemplateState
 import kotli.engine.model.Feature
 import kotli.engine.model.Layer
 import kotli.engine.template.TemplateFile
@@ -28,11 +28,11 @@ class FileOutputFlow(
     private val fatLayer: Boolean = false
 ) : TemplateFlow() {
 
-    override fun proceed(): TemplateContext {
-        val context = prepare()
-        generate(context)
-        cleanup(context)
-        return context
+    override fun proceed(): TemplateState {
+        val state = prepare()
+        generate(state)
+        cleanup(state)
+        return state
     }
 
     private fun provideLayer(): Layer {
@@ -47,7 +47,7 @@ class FileOutputFlow(
         return layer
     }
 
-    private fun prepare(): TemplateContext {
+    private fun prepare(): TemplateState {
         val context = DefaultTemplateContext(
             layer = provideLayer(),
             registry = registry,
@@ -57,7 +57,7 @@ class FileOutputFlow(
         return context
     }
 
-    private fun generate(context: TemplateContext) {
+    private fun generate(context: TemplateState) {
         val templatePath = context.generator.getTemplatePath()
         val from = PathUtils.getFromResource(templatePath) ?: return
         val to = context.layerPath
@@ -76,7 +76,7 @@ class FileOutputFlow(
         context.getChildren().onEach(this::generate)
     }
 
-    private fun cleanup(context: TemplateContext) {
+    private fun cleanup(context: TemplateState) {
         Files.walk(context.layerPath)
             .filter(PathUtils::isEmptyDir)
             .forEach(PathUtils::delete)

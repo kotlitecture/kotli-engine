@@ -1,6 +1,6 @@
 package kotli.flow
 
-import kotli.engine.TemplateContext
+import kotli.engine.TemplateState
 import kotli.engine.extensions.exec
 
 /**
@@ -11,10 +11,10 @@ class CommandExecutionFlow(
     private val commands: Array<String>
 ) : TemplateFlow() {
 
-    override fun proceed(): TemplateContext {
-        val context = flow.proceed()
-        exec(context.layerPath, *commands)
-        return context
+    override fun proceed(): TemplateState {
+        val state = flow.proceed()
+        exec(state.layerPath, *commands)
+        return state
     }
 
 }
