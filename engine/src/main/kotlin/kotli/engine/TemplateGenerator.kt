@@ -18,7 +18,7 @@ interface TemplateGenerator : TemplateDescriptor {
         val App = object : BaseTemplateGenerator() {
             override fun getId(): String = "app"
             override fun getType(): LayerType = LayerTypes.App
-            override fun doPrepare(context: TemplateContext) = Unit
+            override fun doPrepare(state: TemplateState) = Unit
             override fun createProviders(): List<FeatureProvider> = emptyList()
         }
     }

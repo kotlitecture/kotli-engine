@@ -91,7 +91,7 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
         }
     }
 
-    protected abstract fun doPrepare(context: TemplateContext)
+    protected abstract fun doPrepare(state: TemplateState)
     protected abstract fun createProviders(): List<FeatureProvider>
 
 }

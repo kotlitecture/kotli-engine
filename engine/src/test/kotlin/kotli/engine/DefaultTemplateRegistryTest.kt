@@ -10,15 +10,15 @@ class DefaultTemplateRegistryTest {
     fun `templated registered in factory`() {
         val templateIds = listOf("1", "2", "3")
         val registry = templateIds
-                .map { id ->
-                    object : BaseTemplateGenerator() {
-                        override fun doPrepare(context: TemplateContext) = Unit
-                        override fun createProviders(): List<FeatureProvider> = emptyList()
-                        override fun getType(): LayerType = LayerTypes.App
-                        override fun getId(): String = id
-                    }
+            .map { id ->
+                object : BaseTemplateGenerator() {
+                    override fun doPrepare(state: TemplateState) = Unit
+                    override fun createProviders(): List<FeatureProvider> = emptyList()
+                    override fun getType(): LayerType = LayerTypes.App
+                    override fun getId(): String = id
                 }
-                .let { DefaultTemplateRegistry(it) }
+            }
+            .let { DefaultTemplateRegistry(it) }
         templateIds.forEach { id -> Assertions.assertNotNull(registry.get(id)) }
     }
 
