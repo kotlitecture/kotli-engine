@@ -11,12 +11,8 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
     protected val logger by lazy { LoggerFactory.getLogger(this::class.java) }
 
     final override fun apply(context: TemplateContext) {
-        val generator = context.generator
-        generator.getProvider(this::class.java).dependencies()
-            .map(generator::getProcessor)
-            .onEach { dependency -> dependency.apply(context) }
-        dependencies()
-            .map(generator::getProcessor)
+        withDependencies(context, this)
+            .minus(this)
             .onEach { dependency -> dependency.apply(context) }
         context.onApplyFeature(getId()) { feature ->
             doApply(context, feature)
@@ -27,6 +23,19 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
         context.onRemoveFeature(getId()) { feature ->
             doRemove(context, feature)
         }
+    }
+
+    protected fun withDependencies(state: TemplateState, processor: FeatureProcessor): List<FeatureProcessor> {
+        val generator = state.generator
+        val processors = mutableSetOf<FeatureProcessor>()
+        generator.getProvider(processor::class.java).dependencies()
+            .map(generator::getProcessor)
+            .onEach { processors.addAll(withDependencies(state, it)) }
+        processor.dependencies()
+            .map(generator::getProcessor)
+            .onEach { processors.addAll(withDependencies(state, it)) }
+        processors.add(processor)
+        return processors.toList()
     }
 
     protected open fun doApply(state: TemplateState, feature: Feature) = doApply(state)

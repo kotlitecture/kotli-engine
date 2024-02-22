@@ -20,7 +20,7 @@ enum class FeatureTypes(
     Quality("quality", 6),
     Testing("testing", 7),
     Documentation("documentation", 8),
-    Transitive("transitive", Int.MAX_VALUE) {
+    Transitive("transitive", Int.MIN_VALUE) {
         override fun isInternal(): Boolean = true
     },
 

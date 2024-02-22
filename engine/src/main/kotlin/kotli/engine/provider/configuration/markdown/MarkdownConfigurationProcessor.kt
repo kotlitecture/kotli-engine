@@ -13,22 +13,14 @@ internal class MarkdownConfigurationProcessor : BaseFeatureProcessor() {
 
     override fun doApply(state: TemplateState) {
         val generator = state.generator
-        val processors = mutableSetOf<FeatureProcessor>()
         state.layer.features
+            .asSequence()
             .map { it.id }
             .map(generator::getProcessor)
-            .onEach { processor ->
-                generator.getProvider(this::class.java).dependencies()
-                    .map(generator::getProcessor)
-                    .onEach(processors::add)
-                dependencies()
-                    .map(generator::getProcessor)
-                    .onEach(processors::add)
-                processors.add(processor)
-            }
-        logger.debug("found processors :: {}", processors.size)
-        processors
-            .filter { it !== this }
+            .map { withDependencies(state, it) }
+            .flatten()
+            .distinct()
+            .toList()
             .filter { it.getConfiguration(state) != null }
             .groupBy { generator.getProvider(it::class.java) }
             .onEachIndexed { i, group -> proceedInstruction(i, state, group.key, group.value) }
