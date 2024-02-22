@@ -20,7 +20,7 @@ class DefaultTemplateContext(
 
     private val logger = LoggerFactory.getLogger(DefaultTemplateContext::class.java)
 
-    override val generator: TemplateGenerator = registry.get(layer.generatorId)!!
+    override val processor: TemplateProcessor = registry.get(layer.processorId)!!
 
     private val children = ConcurrentHashMap<String, TemplateContext>()
     private val features = layer.features.associateBy { it.id }
@@ -59,8 +59,8 @@ class DefaultTemplateContext(
 
     override fun onAddChild(layer: Layer): TemplateContext? {
         val name = layer.name
-        if (registry.get(layer.generatorId) == null) {
-            logger.warn("found layer with unknown generator id :: {}", layer.generatorId)
+        if (registry.get(layer.processorId) == null) {
+            logger.warn("found layer with unknown processor id :: {}", layer.processorId)
             return null
         }
         if (children.containsKey(name)) {

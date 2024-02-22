@@ -1,8 +1,9 @@
-package kotli.flow
+package kotli.engine.generator
 
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
 import kotli.engine.DefaultTemplateContext
+import kotli.engine.TemplateGenerator
 import kotli.engine.TemplateRegistry
 import kotli.engine.TemplateState
 import kotli.engine.model.Feature
@@ -13,33 +14,34 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 /**
- * Generates the output structure in the given folder #layerPath.
+ * Generates the output structure in the given folder.
  *
- * By default, the target folder is set as the Jimfs (in-memory file structure implementation) root directory.
+ * By default, the target folder is set as the root directory in an in-memory file structure implementation.
  *
- * @param layer layer to generate the template for.
- * @param registry registry with all known template generators.
- * @param layerPath root folder where to generate the result structure.
- * @param fatLayer - include or not all features, ignoring the fact that the layer can be preconfigured with some features.
+ * @param output The root folder where to generate the result structure.
+ * @param registry Registry containing all known template generators.
+ * @param fat Whether to include all features or not, ignoring the fact that the layer can be preconfigured with some features.
  */
-class FileOutputFlow(
-    private val layer: Layer,
+class PathOutputGenerator(
+    private val output: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/"),
     private val registry: TemplateRegistry,
-    private val layerPath: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/"),
-    private val fatLayer: Boolean = false
-) : TemplateFlow() {
+    private val fat: Boolean = false
+) : TemplateGenerator() {
 
-    override suspend fun proceed(): TemplateState {
-        val state = prepare()
+    override suspend fun generate(layer: Layer): TemplateState {
+        val state = prepare(adjustLayer(layer))
         generate(state)
         cleanup(state)
         return state
     }
 
-    private fun provideLayer(): Layer {
-        if (fatLayer) {
-            val generator = registry.get(layer.generatorId)!!
-            val features = generator.getProviders()
+    /**
+     * Adjusts the layer based on the fat flag, including additional features if necessary.
+     */
+    private fun adjustLayer(layer: Layer): Layer {
+        if (fat) {
+            val processor = registry.get(layer.processorId)!!
+            val features = processor.getProviders()
                 .map { it.getProcessors() }
                 .flatten()
                 .map { Feature(id = it.getId()) }
@@ -48,18 +50,24 @@ class FileOutputFlow(
         return layer
     }
 
-    private suspend fun prepare(): TemplateState {
+    /**
+     * Prepares the template generation context.
+     */
+    private suspend fun prepare(layer: Layer): TemplateState {
         val context = DefaultTemplateContext(
-            layer = provideLayer(),
             registry = registry,
-            layerPath = layerPath,
+            layerPath = output,
+            layer = layer
         )
-        context.generator.prepare(context)
+        context.processor.process(context)
         return context
     }
 
+    /**
+     * Generates the template based on the provided context.
+     */
     private fun generate(context: TemplateState) {
-        val templatePath = context.generator.getTemplatePath()
+        val templatePath = context.processor.getTemplatePath()
         val from = PathUtils.getFromResource(templatePath) ?: return
         val to = context.layerPath
         PathUtils.copy(from, to)
@@ -77,6 +85,9 @@ class FileOutputFlow(
         context.getChildren().onEach(this::generate)
     }
 
+    /**
+     * Cleans up any generated files or directories that are empty.
+     */
     private fun cleanup(context: TemplateState) {
         Files.walk(context.layerPath)
             .filter(PathUtils::isEmptyDir)

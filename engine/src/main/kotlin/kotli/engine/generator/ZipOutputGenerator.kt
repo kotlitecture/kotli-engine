@@ -1,6 +1,8 @@
-package kotli.flow
+package kotli.engine.generator
 
+import kotli.engine.TemplateGenerator
 import kotli.engine.TemplateState
+import kotli.engine.model.Layer
 import java.io.OutputStream
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -12,14 +14,17 @@ import java.util.zip.ZipOutputStream
 
 /**
  * Saves the generated output structure into the output stream as a zip archive.
+ *
+ * @param generator The template generator responsible for generating the output structure to be zipped.
+ * @param output The output stream where the zip archive will be written.
  */
-class ZipOutputFlow(
-    private val flow: TemplateFlow,
+class ZipOutputGenerator(
+    private val generator: TemplateGenerator,
     private val output: OutputStream,
-) : TemplateFlow() {
+) : TemplateGenerator() {
 
-    override suspend fun proceed(): TemplateState {
-        val state = flow.proceed()
+    override suspend fun generate(layer: Layer): TemplateState {
+        val state = generator.generate(layer)
         val zip = ZipOutputStream(output)
         zip.use { zipOutput ->
             val target = state.layerPath

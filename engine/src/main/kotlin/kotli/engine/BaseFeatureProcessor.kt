@@ -44,18 +44,21 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
     /**
      * Retrieves a list of feature processors including the dependencies of the given processor.
      *
-     * @param state The template state containing the generator and other relevant information.
+     * @param state The template state containing the processor and other relevant information.
      * @param processor The feature processor for which dependencies are retrieved.
      * @return A list of feature processors, including dependencies.
      */
-    protected fun withDependencies(state: TemplateState, processor: FeatureProcessor): List<FeatureProcessor> {
-        val generator = state.generator
+    protected fun withDependencies(
+        state: TemplateState,
+        processor: FeatureProcessor
+    ): List<FeatureProcessor> {
+        val templateProcessor = state.processor
         val processors = mutableSetOf<FeatureProcessor>()
-        generator.getProvider(processor::class.java).dependencies()
-            .map(generator::getProcessor)
+        templateProcessor.getProvider(processor::class.java).dependencies()
+            .map(templateProcessor::getProcessor)
             .onEach { processors.addAll(withDependencies(state, it)) }
         processor.dependencies()
-            .map(generator::getProcessor)
+            .map(templateProcessor::getProcessor)
             .onEach { processors.addAll(withDependencies(state, it)) }
         processors.add(processor)
         return processors.toList()

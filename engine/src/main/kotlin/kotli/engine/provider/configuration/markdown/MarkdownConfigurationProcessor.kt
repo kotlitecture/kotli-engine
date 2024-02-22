@@ -12,17 +12,17 @@ internal class MarkdownConfigurationProcessor : BaseFeatureProcessor() {
     override fun getId(): String = "configuration.markdown_configuration"
 
     override fun doApply(state: TemplateState) {
-        val generator = state.generator
+        val processor = state.processor
         state.layer.features
             .asSequence()
             .map { it.id }
-            .map(generator::getProcessor)
+            .map(processor::getProcessor)
             .map { withDependencies(state, it) }
             .flatten()
             .distinct()
             .toList()
             .filter { it.getConfiguration(state) != null }
-            .groupBy { generator.getProvider(it::class.java) }
+            .groupBy { processor.getProvider(it::class.java) }
             .onEachIndexed { i, group -> proceedInstruction(i, state, group.key, group.value) }
     }
 

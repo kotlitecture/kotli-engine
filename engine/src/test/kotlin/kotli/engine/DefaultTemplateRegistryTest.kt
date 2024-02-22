@@ -11,7 +11,7 @@ class DefaultTemplateRegistryTest {
         val templateIds = listOf("1", "2", "3")
         val registry = templateIds
             .map { id ->
-                object : BaseTemplateGenerator() {
+                object : BaseTemplateProcessor() {
                     override fun doPrepare(state: TemplateState) = Unit
                     override fun createProviders(): List<FeatureProvider> = emptyList()
                     override fun getType(): LayerType = LayerTypes.App
@@ -25,8 +25,8 @@ class DefaultTemplateRegistryTest {
     @Test
     fun `internal template is not available in getAll`() {
         val registry: TemplateRegistry = DefaultTemplateRegistry(emptyList())
-        Assertions.assertSame(TemplateGenerator.App, registry.get(TemplateGenerator.App.getId()))
-        Assertions.assertFalse(registry.getAll().contains(TemplateGenerator.App))
+        Assertions.assertSame(TemplateProcessor.App, registry.get(TemplateProcessor.App.getId()))
+        Assertions.assertFalse(registry.getAll().contains(TemplateProcessor.App))
     }
 
 }

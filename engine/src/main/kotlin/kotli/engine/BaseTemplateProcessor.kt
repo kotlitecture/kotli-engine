@@ -8,12 +8,12 @@ import kotlinx.coroutines.coroutineScope
 import org.slf4j.LoggerFactory
 
 /**
- * Basic implementation of any template generator.
+ * Basic implementation of any template processor.
  *
- * This class provides a base for implementing template generators and includes methods
+ * This class provides a base for implementing template processors and includes methods
  * for managing feature processors, providers, and preparing the template context.
  */
-abstract class BaseTemplateGenerator : TemplateGenerator {
+abstract class BaseTemplateProcessor : TemplateProcessor {
 
     /**
      * Lazily initialized logger for logging within this class.
@@ -21,7 +21,7 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
     protected val logger by lazy { LoggerFactory.getLogger(this::class.java) }
 
     /**
-     * Lazily initialized list of providers associated with the generator.
+     * Lazily initialized list of providers associated with the processor.
      * Includes default providers like ConfigurationProvider.
      */
     private val providerList by lazy { createProviders().plus(ConfigurationProvider()) }
@@ -59,7 +59,7 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
     )
 
     /**
-     * Returns a list of all providers associated with the generator.
+     * Returns a list of all providers associated with the processor.
      *
      * @return A list of feature providers.
      */
@@ -110,7 +110,7 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
      *
      * @param context The template context.
      */
-    override suspend fun prepare(context: TemplateContext) {
+    override suspend fun process(context: TemplateContext) {
         doPrepare(context)
         proceedChildren(context)
         applyProcessors(context)
@@ -127,7 +127,7 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
         coroutineScope {
             context.layer.layers
                     .mapNotNull(context::onAddChild)
-                    .map { child -> async { child.generator.prepare(child) } }
+                    .map { child -> async { child.processor.process(child) } }
                     .awaitAll()
         }
     }
@@ -144,7 +144,7 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
     }
 
     /**
-     * Applies dependencies specified in the generator's `dependencies` method.
+     * Applies dependencies specified in the processor's `dependencies` method.
      *
      * @param context The template context.
      */
@@ -155,7 +155,7 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
     }
 
     /**
-     * Removes processors associated with the generator.
+     * Removes processors associated with the processor.
      *
      * @param context The template context.
      */
@@ -167,7 +167,7 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
     }
 
     /**
-     * Abstract method to be implemented by subclasses for performing generator-specific preparations.
+     * Abstract method to be implemented by subclasses for performing processor-specific preparations.
      *
      * @param state The template state.
      */

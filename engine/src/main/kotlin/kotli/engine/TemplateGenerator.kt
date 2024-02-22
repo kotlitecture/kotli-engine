@@ -1,28 +1,21 @@
 package kotli.engine
 
-import kotli.engine.model.LayerTypes
+import kotli.engine.model.Layer
+import org.slf4j.LoggerFactory
 
 /**
- * The template generator is responsible for fulfilling the template context with data required
- * to obtain the output structure. It does not produce the output structure itself; instead,
- * it only prepares the data required for further usage by the [kotli.flow.TemplateFlow].
+ * TemplateGenerator is an abstract class responsible for generating templates to an output stream.
  */
-interface TemplateGenerator : TemplateDescriptor {
+abstract class TemplateGenerator {
+
+    protected val logger = LoggerFactory.getLogger(this::class.java)
 
     /**
-     * Prepares the given context with all metadata required for further generation of output structure.
+     * Proceeds with the template generation and returns the resulting state.
      *
-     * @param context The template context to be prepared.
+     * @param layer The layer information for generating the template.
+     * @return The state of the template generation process.
      */
-    suspend fun prepare(context: TemplateContext)
-
-    companion object {
-        val App = object : BaseTemplateGenerator() {
-            override fun getId(): String = "app"
-            override fun getType(): LayerType = LayerTypes.App
-            override fun doPrepare(state: TemplateState) = Unit
-            override fun createProviders(): List<FeatureProvider> = emptyList()
-        }
-    }
+    abstract suspend fun generate(layer: Layer): TemplateState
 
 }

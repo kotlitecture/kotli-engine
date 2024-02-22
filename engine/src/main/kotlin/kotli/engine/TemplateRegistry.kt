@@ -1,22 +1,22 @@
 package kotli.engine
 
 /**
- * Registry interface for accessing template generators.
+ * Registry interface for accessing template processors.
  */
 interface TemplateRegistry {
 
     /**
-     * Retrieves a generator by its ID.
+     * Retrieves a processor by its ID.
      *
-     * @param id The ID of the generator.
-     * @return The corresponding generator or null if not found.
+     * @param id The ID of the processor.
+     * @return The corresponding processor or null if not found.
      */
-    fun get(id: String): TemplateGenerator?
+    fun get(id: String): TemplateProcessor?
 
     /**
-     * Retrieves all registered generators.
+     * Retrieves all registered processors.
      *
-     * @return A list of all available generators.
+     * @return A list of all available processors.
      */
-    fun getAll(): List<TemplateGenerator>
+    fun getAll(): List<TemplateProcessor>
 }

@@ -1,89 +1,87 @@
-package kotli.engine.flow
+package kotli.engine.generator
 
 import kotli.engine.DefaultTemplateRegistry
-import kotli.engine.TemplateGenerator
+import kotli.engine.TemplateProcessor
 import kotli.engine.model.Layer
-import kotli.flow.FileOutputFlow
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import java.nio.file.Files
 import kotlin.test.Test
 
-class FileOutputFlowTest {
+class PathOutputGeneratorTest {
+
+    val registry = DefaultTemplateRegistry(emptyList())
 
     @Test
-    fun `proceed without extra files inside`() = runBlocking {
-        val registry = DefaultTemplateRegistry(emptyList())
+    fun `generate without extra files inside`() = runBlocking {
         val layer = Layer(
             id = "my.app",
             name = "test",
             namespace = "test.app",
-            generatorId = TemplateGenerator.App.getId()
+            processorId = TemplateProcessor.App.getId()
         )
-        val flow = FileOutputFlow(layer, registry)
-        val context = flow.proceed()
-        Assertions.assertEquals(1, Files.walk(context.layerPath).toList().size)
+        val generator = PathOutputGenerator(registry = registry)
+        val state = generator.generate(layer)
+        Assertions.assertEquals(1, Files.walk(state.layerPath).toList().size)
     }
 
     @Test
-    fun `proceed with unknown child layer`() = runBlocking {
-        val registry = DefaultTemplateRegistry(emptyList())
+    fun `generate with unknown child layer`() = runBlocking {
         val child1 = Layer(
             id = "child-1",
             name = "child-1",
             namespace = "child1",
-            generatorId = TemplateGenerator.App.getId()
+            processorId = TemplateProcessor.App.getId()
         )
         val child2 = Layer(
             id = "child-2",
             name = "child-2",
             namespace = "child2",
-            generatorId = "unknown"
+            processorId = "unknown"
         )
         val layer = Layer(
             id = "my.app",
             name = "test",
             namespace = "test.app",
-            generatorId = TemplateGenerator.App.getId(),
+            processorId = TemplateProcessor.App.getId(),
             layers = listOf(
                 child1,
                 child2
             )
         )
-        val flow = FileOutputFlow(layer, registry)
-        val context = flow.proceed()
-        Assertions.assertEquals(1, context.getChildren().size)
-        Assertions.assertEquals(child1, context.getChildren().first().layer)
+        val generator = PathOutputGenerator(registry = registry)
+        val state = generator.generate(layer)
+        Assertions.assertEquals(1, state.getChildren().size)
+        Assertions.assertEquals(child1, state.getChildren().first().layer)
     }
 
     @Test
-    fun `proceed with duplicate child layer`() = runBlocking {
-        val registry = DefaultTemplateRegistry(emptyList())
+    fun `generate with duplicate child layer`() = runBlocking {
         val child1 = Layer(
             id = "child-1",
             name = "child-1",
             namespace = "child1",
-            generatorId = TemplateGenerator.App.getId()
+            processorId = TemplateProcessor.App.getId()
         )
         val child2 = Layer(
             id = "child-2",
             name = child1.name,
             namespace = "child2",
-            generatorId = TemplateGenerator.App.getId()
+            processorId = TemplateProcessor.App.getId()
         )
         val layer = Layer(
             id = "my.app",
             name = "test",
             namespace = "test.app",
-            generatorId = TemplateGenerator.App.getId(),
+            processorId = TemplateProcessor.App.getId(),
             layers = listOf(
                 child1,
                 child2
             )
         )
-        val flow = FileOutputFlow(layer, registry)
+        val generator = PathOutputGenerator(registry = registry)
         try {
-            flow.proceed()
+            generator.generate(layer)
             Assertions.fail()
         } catch (e: IllegalStateException) {
             e.printStackTrace()

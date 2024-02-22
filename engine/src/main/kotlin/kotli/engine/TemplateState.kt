@@ -22,9 +22,9 @@ interface TemplateState {
     val layerPath: Path
 
     /**
-     * The template generator responsible for this state.
+     * The template processor responsible for this state.
      */
-    val generator: TemplateGenerator
+    val processor: TemplateProcessor
 
     /**
      * Returns all available rules to be applied.
@@ -72,7 +72,7 @@ interface TemplateState {
         val Empty = object : TemplateState {
             override fun onApplyRules(contextPath: String, vararg rules: TemplateRule) = Unit
             override fun onApplyVersionCatalogRules(vararg rules: TemplateRule) = Unit
-            override val generator: TemplateGenerator = TemplateGenerator.App
+            override val processor: TemplateProcessor = TemplateProcessor.App
             override fun getChildren(): List<TemplateState> = emptyList()
             override fun getRules(): List<TemplateRules> = emptyList()
             override fun getFeature(id: String): Feature? = null
@@ -81,7 +81,7 @@ interface TemplateState {
                 id = "<YOUR_LAYER_ID>",
                 name = "<YOUR_LAYER_NAME>",
                 namespace = "<YOUR_LAYER_NAMESPACE>",
-                generatorId = TemplateGenerator.App.getId(),
+                processorId = TemplateProcessor.App.getId(),
             )
         }
     }

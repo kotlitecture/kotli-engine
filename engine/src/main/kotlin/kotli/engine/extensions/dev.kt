@@ -41,6 +41,16 @@ fun exec(dir: Path, vararg commands: String) {
 }
 
 /**
+ * Executes the given set of commands in the specified directory silently (without any errors thrown).
+ *
+ * @param dir The directory in which to execute the commands.
+ * @param commands The list of commands to execute.
+ */
+fun execSilently(dir: Path, vararg commands: String) {
+    runCatching { exec(dir, *commands) }
+}
+
+/**
  * Takes the given Int value if it is positive and can be used as an index in an array.
  *
  * @return The Int value if positive and a valid index, otherwise null.
