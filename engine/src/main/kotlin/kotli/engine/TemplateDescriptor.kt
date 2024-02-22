@@ -34,25 +34,25 @@ interface TemplateDescriptor : Dictionary, DependencyProvider<FeatureProcessor> 
      *
      * @throws IllegalStateException if a processor with the given id is not found.
      */
-    fun getProcessor(id: String): FeatureProcessor
+    fun getFeatureProcessor(id: String): FeatureProcessor
 
     /**
      * Finds a processor by its type.
      *
      * @throws IllegalStateException if a processor with the given type is not found.
      */
-    fun getProcessor(type: Class<out FeatureProcessor>): FeatureProcessor
+    fun getFeatureProcessor(type: Class<out FeatureProcessor>): FeatureProcessor
 
     /**
      * Finds a provider by its type.
      *
      * @throws IllegalStateException if a provider with the given type is not found.
      */
-    fun getProvider(type: Class<out FeatureProcessor>): FeatureProvider
+    fun getFeatureProvider(type: Class<out FeatureProcessor>): FeatureProvider
 
     /**
      * Returns all registered providers.
      */
-    fun getProviders(): List<FeatureProvider>
+    fun getFeatureProviders(): List<FeatureProvider>
 
 }

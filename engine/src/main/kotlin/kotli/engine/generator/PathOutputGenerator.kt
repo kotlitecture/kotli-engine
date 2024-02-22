@@ -41,7 +41,7 @@ class PathOutputGenerator(
     private fun adjustLayer(layer: Layer): Layer {
         if (fat) {
             val processor = registry.get(layer.processorId)!!
-            val features = processor.getProviders()
+            val features = processor.getFeatureProviders()
                 .map { it.getProcessors() }
                 .flatten()
                 .map { Feature(id = it.getId()) }

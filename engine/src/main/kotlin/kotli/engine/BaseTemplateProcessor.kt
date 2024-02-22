@@ -63,7 +63,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      *
      * @return A list of feature providers.
      */
-    override fun getProviders(): List<FeatureProvider> {
+    override fun getFeatureProviders(): List<FeatureProvider> {
         return providerList
     }
 
@@ -74,7 +74,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      * @return The feature processor.
      * @throws IllegalStateException if no processor with the given id is found.
      */
-    override fun getProcessor(id: String): FeatureProcessor {
+    override fun getFeatureProcessor(id: String): FeatureProcessor {
         return processorsById[id] ?: throw IllegalStateException("no processor :: $id")
     }
 
@@ -85,7 +85,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      * @return The feature processor.
      * @throws IllegalStateException if no processor with the given type is found.
      */
-    override fun getProcessor(type: Class<out FeatureProcessor>): FeatureProcessor {
+    override fun getFeatureProcessor(type: Class<out FeatureProcessor>): FeatureProcessor {
         return processorsByType[type] ?: throw IllegalStateException("no processor :: $type")
     }
 
@@ -96,7 +96,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      * @return The feature provider.
      * @throws IllegalStateException if no provider is found for the given processor type.
      */
-    override fun getProvider(type: Class<out FeatureProcessor>): FeatureProvider {
+    override fun getFeatureProvider(type: Class<out FeatureProcessor>): FeatureProvider {
         return providersByProcessorType[type] ?: throw IllegalStateException("no provider :: $type")
     }
 
@@ -150,7 +150,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      */
     private fun applyDependencies(context: TemplateContext) {
         dependencies()
-                .map(this::getProcessor)
+                .map(this::getFeatureProcessor)
                 .onEach { processor -> processor.apply(context) }
     }
 

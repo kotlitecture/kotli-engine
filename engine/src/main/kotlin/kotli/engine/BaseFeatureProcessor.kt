@@ -2,6 +2,8 @@ package kotli.engine
 
 import kotli.engine.model.Feature
 import org.slf4j.LoggerFactory
+import java.util.Deque
+import java.util.LinkedList
 
 /**
  * Basic implementation of any processor created.
@@ -21,7 +23,7 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
      * @param context The template context in which the processor is applied.
      */
     final override fun apply(context: TemplateContext) {
-        withDependencies(context, this)
+        getDependencies(context, this)
             .minus(this)
             .onEach { dependency -> dependency.apply(context) }
         context.onApplyFeature(getId()) { feature ->
@@ -48,19 +50,12 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
      * @param processor The feature processor for which dependencies are retrieved.
      * @return A list of feature processors, including dependencies.
      */
-    protected fun withDependencies(
+    protected fun getDependencies(
         state: TemplateState,
         processor: FeatureProcessor
     ): List<FeatureProcessor> {
-        val templateProcessor = state.processor
-        val processors = mutableSetOf<FeatureProcessor>()
-        templateProcessor.getProvider(processor::class.java).dependencies()
-            .map(templateProcessor::getProcessor)
-            .onEach { processors.addAll(withDependencies(state, it)) }
-        processor.dependencies()
-            .map(templateProcessor::getProcessor)
-            .onEach { processors.addAll(withDependencies(state, it)) }
-        processors.add(processor)
+        val processors = LinkedList<FeatureProcessor>()
+        fillDependencies(state, processor, processors)
         return processors.toList()
     }
 
@@ -93,5 +88,26 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
      * @param state The template state in which the processor is removed.
      */
     protected open fun doRemove(state: TemplateState) = Unit
+
+    private fun fillDependencies(
+        state: TemplateState,
+        processor: FeatureProcessor,
+        processors: Deque<FeatureProcessor>,
+        front: Boolean = false
+    ) {
+        if (processors.contains(processor)) return
+        if (front) {
+            processors.addFirst(processor)
+        } else {
+            processors.addLast(processor)
+        }
+        val templateProcessor = state.processor
+        templateProcessor.getFeatureProvider(processor::class.java).dependencies()
+            .map(templateProcessor::getFeatureProcessor)
+            .onEach { fillDependencies(state, it, processors, true) }
+        processor.dependencies()
+            .map(templateProcessor::getFeatureProcessor)
+            .onEach { fillDependencies(state, it, processors, true) }
+    }
 
 }
