@@ -2,6 +2,7 @@ package kotli.flow
 
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
+import kotli.engine.DefaultTemplateContext
 import kotli.engine.TemplateRegistry
 import kotli.engine.TemplateState
 import kotli.engine.model.Feature
@@ -28,7 +29,7 @@ class FileOutputFlow(
     private val fatLayer: Boolean = false
 ) : TemplateFlow() {
 
-    override fun proceed(): TemplateState {
+    override suspend fun proceed(): TemplateState {
         val state = prepare()
         generate(state)
         cleanup(state)
@@ -47,7 +48,7 @@ class FileOutputFlow(
         return layer
     }
 
-    private fun prepare(): TemplateState {
+    private suspend fun prepare(): TemplateState {
         val context = DefaultTemplateContext(
             layer = provideLayer(),
             registry = registry,

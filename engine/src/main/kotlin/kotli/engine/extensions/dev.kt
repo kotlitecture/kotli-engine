@@ -6,9 +6,8 @@ import java.nio.file.Path
  * Checks if current system is windows or not.
  */
 fun isWindows(): Boolean {
-    return runCatching {
-        System.getProperty("os.name").lowercase().startsWith("windows")
-    }.getOrElse { false }
+    return runCatching { System.getProperty("os.name").lowercase().startsWith("windows") }
+        .getOrElse { false }
 }
 
 /**
@@ -36,9 +35,13 @@ fun exec(dir: Path, vararg commands: String) {
 /**
  * Takes given Int value if it is positive and can be an index in array.
  */
-fun Int.takeIfIndex(): Int? = this.takeIf { it >= 0 }
+fun Int.takeIfIndex(): Int? {
+    return takeIf { it >= 0 }
+}
 
 /**
  * Constructs path from multiple tokens.
  */
-fun path(vararg tokens: String): String = tokens.joinToString("/").replace("//", "/").trim()
+fun path(vararg tokens: String): String {
+    return tokens.joinToString("/").replace("//", "/").trim()
+}

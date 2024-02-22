@@ -12,6 +12,6 @@ abstract class TemplateFlow {
 
     protected val logger = LoggerFactory.getLogger(this::class.java)
 
-    abstract fun proceed(): TemplateState
+    abstract suspend fun proceed(): TemplateState
 
 }

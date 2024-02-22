@@ -12,7 +12,7 @@ interface TemplateGenerator : TemplateDescriptor {
     /**
      * Prepares the given context with all metadata required for further generation of output structure.
      */
-    fun prepare(context: TemplateContext)
+    suspend fun prepare(context: TemplateContext)
 
     companion object {
         val App = object : BaseTemplateGenerator() {

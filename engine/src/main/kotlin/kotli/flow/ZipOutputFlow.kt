@@ -18,7 +18,7 @@ class ZipOutputFlow(
     private val output: OutputStream,
 ) : TemplateFlow() {
 
-    override fun proceed(): TemplateState {
+    override suspend fun proceed(): TemplateState {
         val state = flow.proceed()
         val zip = ZipOutputStream(output)
         zip.use { zipOutput ->

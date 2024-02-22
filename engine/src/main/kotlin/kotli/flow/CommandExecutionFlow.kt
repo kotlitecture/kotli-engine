@@ -11,7 +11,7 @@ class CommandExecutionFlow(
     private val commands: Array<String>
 ) : TemplateFlow() {
 
-    override fun proceed(): TemplateState {
+    override suspend fun proceed(): TemplateState {
         val state = flow.proceed()
         exec(state.layerPath, *commands)
         return state

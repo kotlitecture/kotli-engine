@@ -5,6 +5,7 @@ import kotli.engine.TemplateGenerator
 import kotli.engine.model.Layer
 import kotli.flow.FileOutputFlow
 import kotli.flow.ZipOutputFlow
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import java.io.ByteArrayOutputStream
 import java.nio.file.Files
@@ -13,7 +14,7 @@ import kotlin.test.Test
 class ZipOutputFlowTest {
 
     @Test
-    fun `proceed without extra files inside`() {
+    fun `proceed without extra files inside`() = runBlocking {
         val output = ByteArrayOutputStream()
         val registry = DefaultTemplateRegistry(emptyList())
         val layer = Layer(

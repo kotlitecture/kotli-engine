@@ -4,6 +4,7 @@ import kotli.engine.DefaultTemplateRegistry
 import kotli.engine.TemplateGenerator
 import kotli.engine.model.Layer
 import kotli.flow.FileOutputFlow
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import java.nio.file.Files
 import kotlin.test.Test
@@ -11,7 +12,7 @@ import kotlin.test.Test
 class FileOutputFlowTest {
 
     @Test
-    fun `proceed without extra files inside`() {
+    fun `proceed without extra files inside`() = runBlocking {
         val registry = DefaultTemplateRegistry(emptyList())
         val layer = Layer(
             id = "my.app",
@@ -25,7 +26,7 @@ class FileOutputFlowTest {
     }
 
     @Test
-    fun `proceed with unknown child layer`() {
+    fun `proceed with unknown child layer`() = runBlocking {
         val registry = DefaultTemplateRegistry(emptyList())
         val child1 = Layer(
             id = "child-1",
@@ -56,7 +57,7 @@ class FileOutputFlowTest {
     }
 
     @Test
-    fun `proceed with duplicate child layer`() {
+    fun `proceed with duplicate child layer`() = runBlocking {
         val registry = DefaultTemplateRegistry(emptyList())
         val child1 = Layer(
             id = "child-1",

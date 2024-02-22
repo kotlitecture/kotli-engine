@@ -4,5 +4,6 @@ group = 'com.kotlitecture.kotli'
 version = '0.0.29'
 
 dependencies {
+    implementation libs.kotlin.coroutines.core
     implementation libs.jimfs
 }

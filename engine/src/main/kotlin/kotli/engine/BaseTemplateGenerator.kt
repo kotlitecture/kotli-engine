@@ -2,6 +2,9 @@ package kotli.engine
 
 import kotli.engine.provider.configuration.ConfigurationProvider
 import kotli.engine.provider.configuration.markdown.MarkdownConfigurationProcessor
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.slf4j.LoggerFactory
 
 /**
@@ -52,7 +55,7 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
         return providersByProcessorType[type] ?: throw IllegalStateException("no provider :: $type")
     }
 
-    override fun prepare(context: TemplateContext) {
+    override suspend fun prepare(context: TemplateContext) {
         doPrepare(context)
         proceedChildren(context)
         applyProcessors(context)
@@ -60,10 +63,13 @@ abstract class BaseTemplateGenerator : TemplateGenerator {
         removeProcessors(context)
     }
 
-    private fun proceedChildren(context: TemplateContext) {
-        context.layer.layers
-            .mapNotNull(context::onAddChild)
-            .forEach { it.generator.prepare(it) }
+    private suspend fun proceedChildren(context: TemplateContext) {
+        coroutineScope {
+            context.layer.layers
+                .mapNotNull(context::onAddChild)
+                .map { child -> async { child.generator.prepare(child) } }
+                .awaitAll()
+        }
     }
 
     private fun applyProcessors(context: TemplateContext) {

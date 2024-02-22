@@ -14,7 +14,7 @@ class GradleExecutionFlow(
     private val commands: Array<String>
 ) : TemplateFlow() {
 
-    override fun proceed(): TemplateState {
+    override suspend fun proceed(): TemplateState {
         val state = flow.proceed()
         runCatching { exec(state.layerPath, "chmod", "-R", "777", "gradlew") }
         exec(state.layerPath, gradlew(), *commands)
