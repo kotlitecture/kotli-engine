@@ -9,7 +9,7 @@ import kotli.engine.provider.configuration.markdown.MarkdownConfigurationProcess
 internal class ConfigurationProvider : BaseFeatureProvider() {
 
     override fun getId(): String = "configuration"
-    override fun getType(): FeatureType = FeatureTypes.Documentation
+    override fun getType(): FeatureType = FeatureTypes.Transitive
 
     override fun createProcessors(): List<FeatureProcessor> = listOf(
         MarkdownConfigurationProcessor()
