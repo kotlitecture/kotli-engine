@@ -1,6 +1,6 @@
 package kotli.engine.template.rule
 
-import kotli.engine.template.TemplateRule
+import kotli.engine.template.FileRule
 import kotli.engine.template.TemplateFile
 import kotli.engine.extensions.takeIfIndex
 
@@ -13,7 +13,7 @@ import kotli.engine.extensions.takeIfIndex
 class ReplaceMarkedBlock(
     private val marker: String,
     private val replacer: () -> String
-) : TemplateRule() {
+) : FileRule() {
 
     override fun doApply(file: TemplateFile) {
         val lines = file.lines

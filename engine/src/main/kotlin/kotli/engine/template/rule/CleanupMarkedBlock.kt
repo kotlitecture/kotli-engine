@@ -1,6 +1,6 @@
 package kotli.engine.template.rule
 
-import kotli.engine.template.TemplateRule
+import kotli.engine.template.FileRule
 import kotli.engine.template.TemplateFile
 
 /**
@@ -10,7 +10,7 @@ import kotli.engine.template.TemplateFile
  */
 class CleanupMarkedBlock(
     private val marker: String
-) : TemplateRule() {
+) : FileRule() {
 
     override fun doApply(file: TemplateFile) {
         val lines = file.lines

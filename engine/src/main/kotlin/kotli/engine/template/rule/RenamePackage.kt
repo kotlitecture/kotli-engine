@@ -1,7 +1,7 @@
 package kotli.engine.template.rule
 
 import kotli.engine.template.TemplateFile
-import kotli.engine.template.TemplateRule
+import kotli.engine.template.FileRule
 import kotli.engine.utils.PackageUtils
 
 /**
@@ -13,7 +13,7 @@ import kotli.engine.utils.PackageUtils
 class RenamePackage(
     private val oldPackage: String,
     private val newPackage: String
-) : TemplateRule() {
+) : FileRule() {
 
     override fun doApply(file: TemplateFile) {
         PackageUtils.rename(file.path, oldPackage, newPackage)

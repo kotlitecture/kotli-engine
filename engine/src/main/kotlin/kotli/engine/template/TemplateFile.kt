@@ -1,21 +1,17 @@
 package kotli.engine.template
 
 import java.nio.file.Path
-import kotlin.io.path.deleteIfExists
-import kotlin.io.path.exists
-import kotlin.io.path.isDirectory
-import kotlin.io.path.readLines
-import kotlin.io.path.writeLines
+import kotlin.io.path.*
 
 /**
  * Describes any file of the template.
  *
  * @param path The path to the file relative to the template root context.
- * @param markers Markers used to mark lines or blocks for their usage by [kotli.engine.template.TemplateRule].
+ * @param markerSeparators Separators used to separate markers from logical blocks so the markers can be extracted and removed properly from output text.
  */
 data class TemplateFile(
-    val path: Path,
-    val markers: List<String> = MARKERS
+        val path: Path,
+        val markerSeparators: List<String>
 ) {
     val lines by lazy {
         if (path.exists()) {
@@ -33,9 +29,5 @@ data class TemplateFile(
         } else {
             path.deleteIfExists()
         }
-    }
-
-    companion object {
-        val MARKERS = listOf("//", "#")
     }
 }

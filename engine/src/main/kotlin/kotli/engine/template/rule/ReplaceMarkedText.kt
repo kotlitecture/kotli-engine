@@ -1,6 +1,6 @@
 package kotli.engine.template.rule
 
-import kotli.engine.template.TemplateRule
+import kotli.engine.template.FileRule
 import kotli.engine.template.TemplateFile
 
 /**
@@ -17,7 +17,7 @@ class ReplaceMarkedText(
     private val marker: String,
     private val singleLine: Boolean = false,
     private val replacer: () -> String
-) : TemplateRule() {
+) : FileRule() {
 
     override fun doApply(file: TemplateFile) {
         val lines = file.lines

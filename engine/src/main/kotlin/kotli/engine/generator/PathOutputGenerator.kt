@@ -23,9 +23,9 @@ import java.nio.file.Path
  * @param fat Whether to include all features or not, ignoring the fact that the layer can be preconfigured with some features.
  */
 class PathOutputGenerator(
-    private val output: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/"),
-    private val registry: TemplateRegistry,
-    private val fat: Boolean = false
+        private val output: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/"),
+        private val registry: TemplateRegistry,
+        private val fat: Boolean = false
 ) : TemplateGenerator() {
 
     override suspend fun generate(layer: Layer): TemplateState {
@@ -42,9 +42,9 @@ class PathOutputGenerator(
         if (fat) {
             val processor = registry.get(layer.processorId)!!
             val features = processor.getFeatureProviders()
-                .map { it.getProcessors() }
-                .flatten()
-                .map { Feature(id = it.getId()) }
+                    .map { it.getProcessors() }
+                    .flatten()
+                    .map { Feature(id = it.getId()) }
             return layer.copy(features = features)
         }
         return layer
@@ -55,9 +55,9 @@ class PathOutputGenerator(
      */
     private suspend fun prepare(layer: Layer): TemplateState {
         val context = DefaultTemplateContext(
-            registry = registry,
-            layerPath = output,
-            layer = layer
+                registry = registry,
+                layerPath = output,
+                layer = layer
         )
         context.processor.process(context)
         return context
@@ -72,16 +72,22 @@ class PathOutputGenerator(
         val to = context.layerPath
         PathUtils.copy(from, to)
         context.getRules()
-            .groupBy { it.filePath }
-            .forEach { group ->
-                val templateFile = TemplateFile(group.key)
-                group.value
-                    .map { it.rules }
-                    .flatten()
-                    .forEach { rule -> rule.apply(templateFile) }
-                logger.debug("update file :: {}", templateFile.path)
-                templateFile.write()
-            }
+                .groupBy { it.contextPath }
+                .forEach { group ->
+                    val templateFile = TemplateFile(
+                            path = to.resolve(group.key),
+                            markerSeparators = group.value
+                                    .map { it.markerSeparators }
+                                    .flatten()
+                                    .distinct()
+                    )
+                    group.value
+                            .map { it.rules }
+                            .flatten()
+                            .forEach { rule -> rule.apply(templateFile) }
+                    logger.debug("update file :: {}", templateFile.path)
+                    templateFile.write()
+                }
         context.getChildren().onEach(this::generate)
     }
 
@@ -90,8 +96,8 @@ class PathOutputGenerator(
      */
     private fun cleanup(context: TemplateState) {
         Files.walk(context.layerPath)
-            .filter(PathUtils::isEmptyDir)
-            .forEach(PathUtils::delete)
+                .filter(PathUtils::isEmptyDir)
+                .forEach(PathUtils::delete)
     }
 
 }

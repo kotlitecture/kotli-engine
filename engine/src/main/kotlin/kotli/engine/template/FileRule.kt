@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 /**
  * Rule to be applied to a template #file during the generation of the output structure.
  */
-abstract class TemplateRule {
+abstract class FileRule {
 
     protected val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -25,7 +25,7 @@ abstract class TemplateRule {
     }
 
     protected fun cleanup(file: TemplateFile, line: String): String {
-        val startIndex = line.indexOfAny(file.markers).takeIfIndex() ?: return line
+        val startIndex = line.indexOfAny(file.markerSeparators).takeIfIndex() ?: return line
         val newLine = line.substring(0, startIndex).trimEnd()
         logger.debug("cleanup:\n\t{}\n\t{}", line, newLine)
         return newLine

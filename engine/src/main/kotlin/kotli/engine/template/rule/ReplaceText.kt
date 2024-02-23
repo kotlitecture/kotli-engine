@@ -1,6 +1,6 @@
 package kotli.engine.template.rule
 
-import kotli.engine.template.TemplateRule
+import kotli.engine.template.FileRule
 import kotli.engine.template.TemplateFile
 
 /**
@@ -12,7 +12,7 @@ import kotli.engine.template.TemplateFile
 class ReplaceText(
     private val text: String,
     private val replacer: () -> String
-) : TemplateRule() {
+) : FileRule() {
 
     override fun doApply(file: TemplateFile) {
         val newText = replacer()

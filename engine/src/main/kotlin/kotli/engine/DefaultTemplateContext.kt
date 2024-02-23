@@ -2,8 +2,8 @@ package kotli.engine
 
 import kotli.engine.model.Feature
 import kotli.engine.model.Layer
-import kotli.engine.template.TemplateRule
-import kotli.engine.template.TemplateRules
+import kotli.engine.template.FileRule
+import kotli.engine.template.FileRules
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
@@ -13,9 +13,9 @@ import java.util.concurrent.CopyOnWriteArrayList
  * Default execution context.
  */
 class DefaultTemplateContext(
-    override val layer: Layer,
-    override val layerPath: Path,
-    private val registry: TemplateRegistry
+        override val layer: Layer,
+        override val layerPath: Path,
+        private val registry: TemplateRegistry
 ) : TemplateContext {
 
     private val logger = LoggerFactory.getLogger(DefaultTemplateContext::class.java)
@@ -26,17 +26,20 @@ class DefaultTemplateContext(
     private val features = layer.features.associateBy { it.id }
     private val applied = ConcurrentHashMap<String, Feature>()
     private val removed = ConcurrentHashMap<String, Feature>()
-    private val rules = CopyOnWriteArrayList<TemplateRules>()
+    private val rules = CopyOnWriteArrayList<FileRules>()
 
-    override fun getRules(): List<TemplateRules> = rules
+    override fun getRules(): List<FileRules> = rules
 
     override fun getFeature(id: String): Feature? = features[id]
 
     override fun getChildren(): List<TemplateContext> = children.values.toList()
 
-    override fun onApplyRules(contextPath: String, vararg rules: TemplateRule) {
-        val filePath = layerPath.resolve(contextPath)
-        this.rules.add(TemplateRules(filePath, rules.toList()))
+    override fun onApplyRules(contextPath: String, vararg rules: FileRule) {
+        onApplyRules(FileRules(contextPath, rules.toList()))
+    }
+
+    override fun onApplyRules(rules: FileRules) {
+        this.rules.add(rules)
     }
 
     override fun onApplyFeature(id: String, action: (feature: Feature) -> Unit) {
@@ -67,9 +70,9 @@ class DefaultTemplateContext(
             throw IllegalStateException("multiple children found with the same id $name")
         }
         val child = DefaultTemplateContext(
-            layerPath = layerPath.resolve(layer.name),
-            registry = registry,
-            layer = layer
+                layerPath = layerPath.resolve(layer.name),
+                registry = registry,
+                layer = layer
         )
         children[name] = child
         return child

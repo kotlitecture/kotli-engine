@@ -1,6 +1,6 @@
 package kotli.engine.template.rule
 
-import kotli.engine.template.TemplateRule
+import kotli.engine.template.FileRule
 import kotli.engine.template.TemplateFile
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.deleteRecursively
@@ -11,7 +11,7 @@ import kotlin.io.path.deleteRecursively
  * Note: This rule uses experimental features from the `kotlin.io.path` package.
  */
 @OptIn(ExperimentalPathApi::class)
-class RemoveFile : TemplateRule() {
+class RemoveFile : FileRule() {
 
     override fun doApply(file: TemplateFile) {
         file.path.deleteRecursively()
