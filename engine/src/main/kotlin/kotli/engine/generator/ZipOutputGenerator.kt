@@ -19,8 +19,8 @@ import java.util.zip.ZipOutputStream
  * @param output The output stream where the zip archive will be written.
  */
 class ZipOutputGenerator(
-    private val generator: TemplateGenerator,
     private val output: OutputStream,
+    private val generator: TemplateGenerator,
 ) : TemplateGenerator() {
 
     override suspend fun generate(layer: Layer): TemplateState {

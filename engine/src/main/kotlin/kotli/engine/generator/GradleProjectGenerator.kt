@@ -17,8 +17,8 @@ import kotli.engine.model.Layer
  * @param commands An array of command-line commands to be executed in the root directory of the output structure.
  */
 class GradleProjectGenerator(
-    private val generator: TemplateGenerator,
-    private val commands: Array<String>
+        private val commands: Array<String>,
+        private val generator: TemplateGenerator,
 ) : TemplateGenerator() {
 
     override suspend fun generate(layer: Layer): TemplateState {
