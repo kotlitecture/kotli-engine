@@ -22,12 +22,12 @@ The entire operation is driven by the Layer data model, representing the metadat
 
 ```mermaid
 graph LR
-    L(Layer)
-    TG(TemplateGenerator)
-    OS(Output Structure)
+   L(Layer)
+   TG(TemplateGenerator)
+   OS(Output Structure)
 
-    L --> TG
-    TG --> OS
+   L --> TG
+   TG --> OS
 ```
 
 - **Layer** - Represents the metadata of a specific layer.
@@ -42,23 +42,23 @@ This is because, in general, and in the future, it can be part of a more complex
 
  ```mermaid
  classDiagram
-     direction LR
-     class Layer {
-         +id: String
-         +name: String 
-         +namespace: String
-         +generatorId: String
-         +description: String?
-         +layers: List~Layer~
-         +features: List~Feature~
-     }
- 
-     class Feature {
-         +id: String
-         +attributes: Map~String, String~
-     }
- 
-     Layer --|> Feature : contains
+   direction LR
+   class Layer {
+      +id: String
+      +name: String
+      +namespace: String
+      +generatorId: String
+      +description: String?
+      +layers: List~Layer~
+      +features: List~Feature~
+   }
+
+   class Feature {
+      +id: String
+      +attributes: Map~String, String~
+   }
+
+   Layer --|> Feature : contains
  ```
 
 Layer attributes:
@@ -78,18 +78,18 @@ Feature attributes:
 
 ```mermaid
 graph TD
-    class TemplateGenerator abstract
-    class TemplateProcessor abstract
-    class FeatureProcessor abstract
-    class FeatureProvider abstract
-    class TemplateContext abstract
-    class Layer abstract
+   class TemplateGenerator abstract
+   class TemplateProcessor abstract
+   class FeatureProcessor abstract
+   class FeatureProvider abstract
+   class TemplateContext abstract
+   class Layer abstract
 
-    TemplateGenerator --> |creates|TemplateContext
-    TemplateGenerator --> |process|TemplateProcessor
-    TemplateProcessor --> |getProcessors|FeatureProvider
-    TemplateProcessor --> |apply/remove|FeatureProcessor
-    TemplateContext --> |uses|Layer
+   TemplateGenerator --> |creates|TemplateContext
+   TemplateGenerator --> |process|TemplateProcessor
+   TemplateProcessor --> |getProcessors|FeatureProvider
+   TemplateProcessor --> |apply/remove|FeatureProcessor
+   TemplateContext --> |uses|Layer
 ```
 
 The high level relationships:
@@ -141,10 +141,10 @@ It utilizes the provided TemplateRegistry to access template processors.
 ```mermaid
 classDiagram
    class PathOutputGenerator {
-       +PathOutputGenerator(output: Path, registry: TemplateRegistry)
-       -registry: TemplateRegistry
-       -output: Path
-     }
+      +PathOutputGenerator(output: Path, registry: TemplateRegistry)
+      -registry: TemplateRegistry
+      -output: Path
+   }
 ```
 
 ### ZipOutputGenerator
@@ -154,10 +154,10 @@ This implementation consumes the output structure from the underlying generator 
 ```mermaid
 classDiagram
    class ZipOutputGenerator {
-       +ZipOutputGenerator(output: OutputStream, generator: TemplateGenerator)
-       -output: OutputStream
-       -generator: TemplateGenerator
-     }
+      +ZipOutputGenerator(output: OutputStream, generator: TemplateGenerator)
+      -output: OutputStream
+      -generator: TemplateGenerator
+   }
 ```
 
 ### GradleProjectGenerator
@@ -169,8 +169,8 @@ The generation process will only be considered complete after the successful exe
 ```mermaid
 classDiagram
    class GradleProjectGenerator {
-       +GradleProjectGenerator(commands: Array~String~, generator: TemplateGenerator)
-       -commands: Array~String~
-       -generator: TemplateGenerator
-     }
+      +GradleProjectGenerator(commands: Array~String~, generator: TemplateGenerator)
+      -commands: Array~String~
+      -generator: TemplateGenerator
+   }
 ```
