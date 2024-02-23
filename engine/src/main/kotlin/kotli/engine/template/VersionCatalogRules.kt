@@ -1,3 +1,5 @@
 package kotli.engine.template
 
-data class VersionCatalogRules(override val rules: List<FileRule>) : FileRules("gradle/libs.versions.toml", rules)
+data class VersionCatalogRules(override val rules: List<FileRule>) : FileRules("gradle/libs.versions.toml", rules) {
+    constructor(rule: FileRule) : this(listOf(rule))
+}
