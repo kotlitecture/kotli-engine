@@ -1,8 +1,8 @@
 package kotli.engine.template.rule
 
+import kotli.engine.extensions.takeIfIndex
 import kotli.engine.template.FileRule
 import kotli.engine.template.TemplateFile
-import kotli.engine.extensions.takeIfIndex
 
 /**
  * Replaces the entire block marked with a specific marker at the beginning and end of it.
@@ -12,7 +12,7 @@ import kotli.engine.extensions.takeIfIndex
  */
 class ReplaceMarkedBlock(
     private val marker: String,
-    private val replacer: () -> String
+    private val replacer: String
 ) : FileRule() {
 
     override fun doApply(file: TemplateFile) {
@@ -22,7 +22,7 @@ class ReplaceMarkedBlock(
         if (indexOfFirst == indexOfLast) return
         val firstLine = lines[indexOfFirst]
         val tab = firstLine.substring(0, firstLine.indexOfFirst { it != ' ' }.takeIfIndex() ?: 0)
-        val newBlock = replacer()
+        val newBlock = replacer
         repeat(indexOfLast - indexOfFirst + 1) {
             lines.removeAt(indexOfFirst)
         }

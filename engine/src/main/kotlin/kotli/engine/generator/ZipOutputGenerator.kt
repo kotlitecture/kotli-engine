@@ -20,14 +20,14 @@ import java.util.zip.ZipOutputStream
  */
 class ZipOutputGenerator(
     private val output: OutputStream,
-    private val generator: TemplateGenerator,
+    private val generator: PathOutputGenerator,
 ) : TemplateGenerator() {
 
     override suspend fun generate(layer: Layer): TemplateState {
         val state = generator.generate(layer)
         val zip = ZipOutputStream(output)
         zip.use { zipOutput ->
-            val target = state.layerPath
+            val target = generator.output
             Files.walkFileTree(target, object : SimpleFileVisitor<Path>() {
                 override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
                     val relativePath: Path = target.relativize(file)

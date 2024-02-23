@@ -11,11 +11,11 @@ import kotli.engine.template.TemplateFile
  */
 class ReplaceText(
     private val text: String,
-    private val replacer: () -> String
+    private val replacer: String
 ) : FileRule() {
 
     override fun doApply(file: TemplateFile) {
-        val newText = replacer()
+        val newText = replacer
         logger.debug("replaceText:\n\t{}\n\t{}", text, newText)
         file.lines.forEachIndexed { index, line ->
             file.lines[index] = line.replace(text, newText)

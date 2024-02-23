@@ -4,8 +4,7 @@ import kotli.engine.BaseFeatureProcessor
 import kotli.engine.FeatureProcessor
 import kotli.engine.FeatureProvider
 import kotli.engine.TemplateState
-import kotlin.io.path.createDirectories
-import kotlin.io.path.writeText
+import kotli.engine.template.rule.WriteText
 
 internal class MarkdownConfigurationProcessor : BaseFeatureProcessor() {
 
@@ -33,8 +32,6 @@ internal class MarkdownConfigurationProcessor : BaseFeatureProcessor() {
         processors: List<FeatureProcessor>
     ) {
         logger.debug("proceedInstruction for provider:\n\t{}", provider.getId())
-        val instruction = state.layerPath.resolve("docs/integrations/${index + 1} - ${provider.getId()}.md")
-        instruction.parent.createDirectories()
         val textBuilder = StringBuilder()
         processors.forEach { processor ->
             processor.getTitle(state)?.let { title ->
@@ -68,7 +65,9 @@ internal class MarkdownConfigurationProcessor : BaseFeatureProcessor() {
                 textBuilder.appendLine(instruction)
             }
         }
-        val text = textBuilder.trim().toString()
-        instruction.writeText(text)
+        state.onApplyRules(
+            "docs/integrations/${index + 1} - ${provider.getId()}.md",
+            WriteText(textBuilder.trim().toString())
+        )
     }
 }

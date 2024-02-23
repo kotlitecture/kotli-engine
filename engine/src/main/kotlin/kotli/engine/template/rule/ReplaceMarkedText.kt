@@ -15,13 +15,13 @@ import kotli.engine.template.TemplateFile
 class ReplaceMarkedText(
     private val text: String,
     private val marker: String,
+    private val replacer: String,
     private val singleLine: Boolean = false,
-    private val replacer: () -> String
 ) : FileRule() {
 
     override fun doApply(file: TemplateFile) {
         val lines = file.lines
-        val newText = replacer()
+        val newText = replacer
         logger.debug("replaceText:\n\t{}\n\t{}", text, newText)
         lines.forEachIndexed { index, line ->
             if (isMarked(file, line, marker)) {

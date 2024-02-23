@@ -16,17 +16,18 @@ class ZipOutputGeneratorTest {
     @Test
     fun `generate without extra files inside`() = runBlocking {
         val layer = Layer(
-                id = "my.app",
-                name = "test",
-                namespace = "test.app",
-                processorId = TemplateProcessor.App.getId()
+            id = "my.app",
+            name = "test",
+            namespace = "test.app",
+            processorId = TemplateProcessor.App.getId()
         )
         val output = ByteArrayOutputStream()
         val pathGenerator = PathOutputGenerator(registry = registry)
         val zipGenerator = ZipOutputGenerator(output, pathGenerator)
         val state = zipGenerator.generate(layer)
         Assertions.assertEquals(22, output.size())
-        Assertions.assertEquals(1, Files.walk(state.layerPath).toList().size)
+        Assertions.assertTrue(state.getChildren().isEmpty())
+        Assertions.assertEquals(1, Files.walk(pathGenerator.output).toList().size)
     }
 
 }

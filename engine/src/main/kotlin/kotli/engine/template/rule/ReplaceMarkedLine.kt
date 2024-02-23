@@ -1,8 +1,8 @@
 package kotli.engine.template.rule
 
+import kotli.engine.extensions.takeIfIndex
 import kotli.engine.template.FileRule
 import kotli.engine.template.TemplateFile
-import kotli.engine.extensions.takeIfIndex
 
 /**
  * Replaces the entire lines marked with a specific marker.
@@ -13,14 +13,14 @@ import kotli.engine.extensions.takeIfIndex
  */
 class ReplaceMarkedLine(
     private val marker: String,
+    private val replacer: String,
     private val singleLine: Boolean = false,
-    private val replacer: () -> String
 ) : FileRule() {
 
     override fun doApply(file: TemplateFile) {
         val lines = file.lines
         val indexOf = lines.indexOfFirst { isMarked(file, it, marker) }.takeIfIndex() ?: return
-        val newLine = replacer()
+        val newLine = replacer
         lines.forEach { line ->
             if (isMarked(file, line, marker)) {
                 val startIndex = line.indexOfFirst { it != ' ' }.takeIfIndex() ?: 0

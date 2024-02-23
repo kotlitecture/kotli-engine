@@ -17,14 +17,14 @@ import kotli.engine.model.Layer
  * @param commands An array of command-line commands to be executed in the root directory of the output structure.
  */
 class GradleProjectGenerator(
-        private val commands: Array<String>,
-        private val generator: TemplateGenerator,
+    private val commands: Array<String>,
+    private val generator: PathOutputGenerator,
 ) : TemplateGenerator() {
 
     override suspend fun generate(layer: Layer): TemplateState {
         val state = generator.generate(layer)
-        if (!isWindows()) execSilently(state.layerPath, "chmod", "-R", "777", "gradlew")
-        exec(state.layerPath, gradlew(), *commands)
+        if (!isWindows()) execSilently(generator.output, "chmod", "-R", "777", "gradlew")
+        exec(generator.output, gradlew(), *commands)
         return state
     }
 

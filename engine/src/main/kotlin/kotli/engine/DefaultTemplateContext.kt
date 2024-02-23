@@ -1,11 +1,11 @@
 package kotli.engine
 
+import kotli.engine.extensions.path
 import kotli.engine.model.Feature
 import kotli.engine.model.Layer
 import kotli.engine.template.FileRule
 import kotli.engine.template.FileRules
 import org.slf4j.LoggerFactory
-import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -13,9 +13,9 @@ import java.util.concurrent.CopyOnWriteArrayList
  * Default execution context.
  */
 class DefaultTemplateContext(
-        override val layer: Layer,
-        override val layerPath: Path,
-        private val registry: TemplateRegistry
+    override val layer: Layer,
+    override val contextPath: String,
+    private val registry: TemplateRegistry
 ) : TemplateContext {
 
     private val logger = LoggerFactory.getLogger(DefaultTemplateContext::class.java)
@@ -70,9 +70,9 @@ class DefaultTemplateContext(
             throw IllegalStateException("multiple children found with the same id $name")
         }
         val child = DefaultTemplateContext(
-                layerPath = layerPath.resolve(layer.name),
-                registry = registry,
-                layer = layer
+            contextPath = path(contextPath, layer.name),
+            registry = registry,
+            layer = layer
         )
         children[name] = child
         return child

@@ -4,7 +4,6 @@ import kotli.engine.model.Feature
 import kotli.engine.model.Layer
 import kotli.engine.template.FileRule
 import kotli.engine.template.FileRules
-import java.nio.file.Path
 
 /**
  * Read-only state of execution context during template generation.
@@ -17,9 +16,9 @@ interface TemplateState {
     val layer: Layer
 
     /**
-     * The path to the layer in the file system.
+     * The path to the layer in the relative structure.
      */
-    val layerPath: Path
+    val contextPath: String
 
     /**
      * The template processor responsible for this state.
@@ -75,12 +74,12 @@ interface TemplateState {
             override fun getRules(): List<FileRules> = emptyList()
             override fun getFeature(id: String): Feature? = null
             override fun onApplyRules(rules: FileRules) = Unit
-            override val layerPath: Path = Path.of("/")
+            override val contextPath: String = "/"
             override val layer: Layer = Layer(
-                    id = "<YOUR_LAYER_ID>",
-                    name = "<YOUR_LAYER_NAME>",
-                    namespace = "<YOUR_LAYER_NAMESPACE>",
-                    processorId = TemplateProcessor.App.getId(),
+                id = "<YOUR_LAYER_ID>",
+                name = "<YOUR_LAYER_NAME>",
+                namespace = "<YOUR_LAYER_NAMESPACE>",
+                processorId = TemplateProcessor.App.getId(),
             )
         }
     }
