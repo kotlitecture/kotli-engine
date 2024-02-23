@@ -49,13 +49,13 @@ This is because, in general, and in the future, it can be part of a more complex
       +namespace: String
       +generatorId: String
       +description: String?
-      +layers: List~Layer~
-      +features: List~Feature~
+      +layers: List<Layer>
+      +features: List<Feature>
    }
 
    class Feature {
       +id: String
-      +attributes: Map~String, String~
+      +attributes: Map<String, String>
    }
 
    Layer --|> Feature : contains
