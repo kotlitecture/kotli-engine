@@ -32,8 +32,8 @@ data class TemplateFile(
             lines.isNotEmpty() -> {
                 if (!path.parent.exists()) {
                     path.parent.createDirectories()
-                    path.writeLines(lines)
                 }
+                path.writeLines(lines)
             }
 
             else -> path.deleteIfExists()
