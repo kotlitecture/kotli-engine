@@ -3,9 +3,10 @@ Kotli engine is a Kotlin library designed to generate project structures based o
 It provides a simplified framework to describe a template as a set of functional blocks. Prepared templates are self-sufficient, containing all the metadata necessary for presentation and facilitating the multi-step process of generating an output structure.
 
  ```
- The cool part about this library is that you can just snag any project with any structure and roll with it as your input template.
- It's all about that 'take what you need, toss what you don't' vibe.
- No need to waste time learning some new syntax—just whip up a regular project structure and make it layer-able.
+ This library's fundamental concept centers around the flexibility to seamlessly integrate any project, irrespective of its structure, as an input template.
+ The key philosophy is to adopt a 'take what you need, discard what you don't' approach.
+ This approach lets to focus on the solution architecture of the template, without worrying about the syntax of the generator.
+ Simply layer your regular project structure.
  ```
 
 The online service [Kotli](https://kotlitecture.com) utilizes this framework and the templates based on it as part of its project builder interface.
@@ -17,21 +18,24 @@ The online service [Kotli](https://kotlitecture.com) utilizes this framework and
 # Technical Concept
 
 The template generation process involves creating output structures based on a specified layer and associated features.
-This process is orchestrated by the TemplateGenerator class, which is responsible for producing templates to an output stream.
-The entire operation is driven by the Layer data model, representing the metadata of a specific layer with configured features and attributes.
+This process is orchestrated by the `TemplateGenerator` class, which is responsible for producing templates to an output stream.
+The entire operation is driven by the `Layer` data model, representing the metadata of a specific layer with configured features and attributes.
 
 ```mermaid
 graph LR
    L(Layer)
+   TP(TemplateProcessor)
    TG(TemplateGenerator)
    OS(Output Structure)
 
-   L --> TG
+   L --> TP
+   TP --> TG
    TG --> OS
 ```
 
 - **Layer** - Represents the metadata of a specific layer.
-- **TemplateGenerator** - Responsible for generating templates. It contains the logic for generating the required output structure based on the specified layer.
+- **TemplateProcessor** - Prepares the template structure from the passed metadata.
+- **TemplateGenerator** - Generates the template to the specified output stream.
 - **Output Structure** - The resulting template streamed to the chosen output destination (File, Zip, Database, etc.).
 
 ## Layer
@@ -47,7 +51,7 @@ This is because, in general, and in the future, it can be part of a more complex
       +id: String
       +name: String
       +namespace: String
-      +generatorId: String
+      +processorId: String
       +description: String?
       +layers: List<Layer>
       +features: List<Feature>
@@ -65,7 +69,7 @@ Layer attributes:
 - **id** - a unique identifier to distinct this layer from others.
 - **name** - represents the root folder of the generated layer.
 - **namespace** - the package name, bundle id, or application id, depending on the context.
-- **generatorId** - the id of the generator used to resolve in the template registry.
+- **processorId** - the id of the processor used to resolve in the template registry.
 - **description** - a brief description of the layer.
 - **layers** - child layers, if applicable.
 - **features** - features to be included in the layer.
@@ -74,38 +78,74 @@ Feature attributes:
 - **id** - a feature identifier used to find a processor responsible for including or excluding this feature.
 - **attributes** - input attributes to be used by the processor to customize the feature.
 
-## Template Generator
+## TemplateProcessor
+
+This class is responsible for transforming an input `Layer` into a set of rules not bound to any specific output structure.
+The created set of rules is utilized by `TemplateGenerator` to construct an output structure from the given template, including only the required functionality.
+Each template is associated with its own `TemplateProcessor`, and each `TemplateProcessor` **operates** exclusively with a **single template**.
 
 ```mermaid
 graph TD
-   class TemplateGenerator abstract
    class TemplateProcessor abstract
    class FeatureProcessor abstract
    class FeatureProvider abstract
    class TemplateContext abstract
-   class Layer abstract
+   subgraph TemplateProcessor
+       direction TB
+       FP1["Feature Provider 1"]
+       FPN["Feature Provider N"]
+       P1["Feature Processor 1"]
+       P2["Feature Processor 2"]
+       P3["Feature Processor 3"]
+       PN["Feature Processor N"]
+       FP1 --> P1
+       FP1 --> P2
+       FPN --> P3
+       FPN --> PN
+   end
 
-   TemplateGenerator --> |creates|TemplateContext
-   TemplateGenerator --> |process|TemplateProcessor
-   TemplateProcessor --> |getProcessors|FeatureProvider
-   TemplateProcessor --> |apply/remove|FeatureProcessor
-   TemplateContext --> |uses|Layer
+   TemplateContext --> TemplateProcessor
 ```
 
 The high level relationships:
-1. TemplateGenerator: Responsible for template generation. It is associated with:
-    - Creation of a TemplateContext.
-    - Processing using a TemplateProcessor.
-2. TemplateProcessor: Responsible for processing templates. It has relationships with:
-    - Retrieving feature providers through getProcessors from a FeatureProvider.
-    - Applying or removing features through a FeatureProcessor.
-3. FeatureProcessor: Responsible for including or excluding features in the generated template.
-4. FeatureProvider: Represents a registry of feature processors. It has relationships with:
-   - Providing feature processors to a TemplateProcessor.
-5. TemplateContext: Represents the execution context for a template. It is associated with:
-   - Applying and removing features through a FeatureProcessor.
-   - Using a Layer in its operations.
-6. Layer: Represents a layer information used in template generation.
+1. **TemplateContext**: Represents the execution context for a template.
+   It retains the passed `Layer` object and accumulates a set of rules to manipulate the initial template structure.
+2. **TemplateProcessor**: Responsible for processing template.
+3. **FeatureProvider**: Represents a registry of feature processors with common behavior.
+4. **FeatureProcessor**: Responsible for creating rules in TemplateContext to apply or remove a given feature in the generated structure.
+
+## TemplateGenerator
+
+The Template generator is utilized to generate the necessary output structure, such as a File, Zip, Database, etc.
+It depends on both the `Layer` and `FeatureProcessor`.
+Usually, there's no need to create other implementations of this class.
+However, the solution is designed to be flexible, allowing the creation of any other type of output structure if necessary.
+
+```mermaid
+graph TD
+   class Layer abstract
+   class TemplateRegistry abstract
+   subgraph TemplateGenerator
+       direction TB
+       TemplateContext
+       TP1["Template Processor 1"]
+       TPN["Template Processor N"]
+       TemplateContext --> TP1
+       TemplateContext --> TPN
+   end
+
+   Layer --> TemplateGenerator
+   TemplateRegistry --> TemplateGenerator
+```
+
+The high level relationships:
+1. **Layer**: Represents layer information used in template generation.
+2. **TemplateRegistry**: Provides `TemplateGenerator` with all required template processors.
+3. **TemplateGenerator**: Responsible for producing an output stream from passed metadata. It is associated with:
+    - Creation of a `TemplateContext` from the passed `Layer`.
+    - Processing metadata using set of required `TemplateProcessor`.
+4. **TemplateContext**: Represents the execution context for a template.
+5. **TemplateProcessor**: Responsible for processing templates.
 
 In general, the whole template generation flow looks like this:
 
@@ -154,9 +194,9 @@ This implementation consumes the output structure from the underlying generator 
 ```mermaid
 classDiagram
    class ZipOutputGenerator {
-      +ZipOutputGenerator(output: OutputStream, generator: TemplateGenerator)
+      +ZipOutputGenerator(output: OutputStream, generator: PathOutputGenerator)
       -output: OutputStream
-      -generator: TemplateGenerator
+      -generator: PathOutputGenerator
    }
 ```
 
@@ -166,11 +206,14 @@ This implementation consumes the output structure and proceeds with the executio
 treating the generated structure as a Gradle project. It executes a given set of commands as arguments for the gradlew command.
 The generation process will only be considered complete after the successful execution of the provided Gradle commands.
 
+Keep in mind that the provided generator should produce a file structure on physical storage,
+ensuring that commands can be executed properly.
+
 ```mermaid
 classDiagram
    class GradleProjectGenerator {
-      +GradleProjectGenerator(commands: Array~String~, generator: TemplateGenerator)
+      +GradleProjectGenerator(commands: Array~String~, generator: PathOutputGenerator)
       -commands: Array~String~
-      -generator: TemplateGenerator
+      -generator: PathOutputGenerator
    }
 ```

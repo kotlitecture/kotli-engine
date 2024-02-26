@@ -2,17 +2,14 @@ package kotli.engine.generator
 
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
-import kotli.engine.DefaultTemplateContext
-import kotli.engine.TemplateContext
-import kotli.engine.TemplateGenerator
-import kotli.engine.TemplateRegistry
-import kotli.engine.TemplateState
+import kotli.engine.*
 import kotli.engine.model.Feature
 import kotli.engine.model.Layer
 import kotli.engine.template.TemplateFile
 import kotli.engine.utils.PathUtils
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.*
 
 /**
  * Generates the output structure in the given folder.
@@ -24,9 +21,9 @@ import java.nio.file.Path
  * @param fat Whether to include all features or not, ignoring the fact that the layer can be preconfigured with some features.
  */
 open class PathOutputGenerator(
-    val output: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/"),
-    private val registry: TemplateRegistry,
-    private val fat: Boolean = false
+        val output: Path = Jimfs.newFileSystem(Configuration.unix()).getPath("/"),
+        private val registry: TemplateRegistry,
+        private val fat: Boolean = false
 ) : TemplateGenerator() {
 
     override suspend fun generate(layer: Layer): TemplateState {
@@ -38,9 +35,9 @@ open class PathOutputGenerator(
 
     protected open fun createContext(layer: Layer): TemplateContext {
         return DefaultTemplateContext(
-            registry = registry,
-            contextPath = "",
-            layer = layer
+                registry = registry,
+                contextPath = "",
+                layer = layer
         )
     }
 
@@ -51,9 +48,9 @@ open class PathOutputGenerator(
         if (fat) {
             val processor = registry.get(layer.processorId)!!
             val features = processor.getFeatureProviders()
-                .map { it.getProcessors() }
-                .flatten()
-                .map { Feature(id = it.getId()) }
+                    .map { it.getProcessors() }
+                    .flatten()
+                    .map { Feature(id = it.getId()) }
             return layer.copy(features = features)
         }
         return layer
@@ -77,23 +74,37 @@ open class PathOutputGenerator(
         val to = output
         PathUtils.copy(from, to)
         context.getRules()
-            .groupBy { it.contextPath }
-            .forEach { group ->
-                val templateFile = TemplateFile(
-                    path = to.resolve(group.key),
-                    markerSeparators = group.value
-                        .map { it.markerSeparators }
-                        .flatten()
-                        .distinct()
-                )
-                group.value
-                    .map { it.rules }
-                    .flatten()
-                    .forEach { rule -> rule.apply(templateFile) }
-                logger.debug("update file :: {}", templateFile.path)
-                templateFile.write()
-            }
+                .groupBy { it.contextPath }
+                .forEach { group ->
+                    val templateFile = TemplateFile(
+                            path = to.resolve(group.key),
+                            markerSeparators = group.value
+                                    .map { it.markerSeparators }
+                                    .flatten()
+                                    .distinct()
+                    )
+                    group.value
+                            .map { it.rules }
+                            .flatten()
+                            .forEach { rule -> rule.apply(templateFile) }
+                    logger.debug("update file :: {}", templateFile.path)
+                    write(templateFile)
+                }
         context.getChildren().onEach(this::generate)
+    }
+
+    private fun write(file: TemplateFile) {
+        when {
+            file.path.isDirectory() -> return
+            file.lines.isNotEmpty() -> {
+                if (!file.path.parent.exists()) {
+                    file.path.parent.createDirectories()
+                }
+                file.path.writeLines(file.lines)
+            }
+
+            else -> file.path.deleteIfExists()
+        }
     }
 
     /**
@@ -101,8 +112,8 @@ open class PathOutputGenerator(
      */
     private fun cleanup() {
         Files.walk(output)
-            .filter(PathUtils::isEmptyDir)
-            .forEach(PathUtils::delete)
+                .filter(PathUtils::isEmptyDir)
+                .forEach(PathUtils::delete)
     }
 
 }
