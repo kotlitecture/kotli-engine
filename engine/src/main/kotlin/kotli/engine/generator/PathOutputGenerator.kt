@@ -68,14 +68,15 @@ open class PathOutputGenerator(
     /**
      * Generates the template based on the provided context.
      */
-    private fun generate(context: TemplateState) {
-        val templatePath = context.processor.getTemplatePath()
-        PathUtils.getFromResource(templatePath)?.let { PathUtils.copy(it, output) }
-        context.getRules()
+    private fun generate(state: TemplateState) {
+        val to = output.resolve(state.contextPath)
+        val templatePath = state.processor.getTemplatePath()
+        PathUtils.getFromResource(templatePath)?.let { PathUtils.copy(it, to) }
+        state.getRules()
             .groupBy { it.contextPath }
             .forEach { group ->
                 val templateFile = TemplateFile(
-                    path = output.resolve(group.key),
+                    path = to.resolve(group.key),
                     markerSeparators = group.value
                         .map { it.markerSeparators }
                         .flatten()
@@ -88,7 +89,7 @@ open class PathOutputGenerator(
                 logger.debug("update file :: {}", templateFile.path)
                 write(templateFile)
             }
-        context.getChildren().onEach(this::generate)
+        state.getChildren().onEach(this::generate)
     }
 
     private fun write(file: TemplateFile) {
