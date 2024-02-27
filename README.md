@@ -116,7 +116,7 @@ The high level relationships:
 
 ## TemplateGenerator
 
-The Template generator is utilized to generate the necessary output structure, such as a File, Zip, Database, etc.
+The template generator is utilized to generate the necessary output structure, such as a File, Zip, Database, etc.
 It depends on both the `Layer` and `FeatureProcessor`.
 Usually, there's no need to create other implementations of this class.
 However, the solution is designed to be flexible, allowing the creation of any other type of output structure if necessary.
