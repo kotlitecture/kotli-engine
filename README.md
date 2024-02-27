@@ -3,16 +3,16 @@ Kotli engine is a Kotlin library designed to generate project structures based o
 It provides a simplified framework to describe a template as a set of functional blocks.
 Prepared templates are self-sufficient, containing all the metadata necessary for presentation and facilitating the multi-step process of generating an output structure.
 
-```
-This library's fundamental concept centers around the flexibility to seamlessly integrate any project as an input template, irrespective of its structure.
-The key philosophy is to adopt a 'take what you need, discard what you don't' approach.
+The online service [Kotli](https://kotlitecture.com) utilizes this framework and the templates based on it as part of its project builder interface.
+
+# Fundamental Concept
+
+The library centers around the flexibility to seamlessly integrate any project as an input template, irrespective of its structure.
+The key philosophy is to adopt a `take what you need, discard what you don't` approach.
 This approach lets to:
 - Focus on the solution architecture of the template without worrying about the syntax of the engine or its limitations.
 - Assess how new functionality impacts the entire project when it is built in 'fat' mode.
-- Utilize the same source structures to extend templates and empower them with AI capabilities. 
-```
- 
-The online service [Kotli](https://kotlitecture.com) utilizes this framework and the templates based on it as part of its project builder interface.
+- Utilize the same source structures to extend templates and empower them with AI capabilities.
 
 # Getting Started
 
