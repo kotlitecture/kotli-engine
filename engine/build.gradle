@@ -1,7 +1,7 @@
 apply from: "${project.rootDir}/gradle/kotlin/library.gradle"
 
 group = 'com.kotlitecture.kotli'
-version = '0.0.43'
+version = '0.0.44'
 
 dependencies {
     implementation libs.kotlin.coroutines.core
