@@ -1,0 +1,1 @@
+This feature set is designed to offer ready-to-use user flow scenarios, implementing pre-defined use-cases.

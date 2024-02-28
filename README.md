@@ -18,7 +18,7 @@ This approach lets to:
 
 // TODO
 
-# Technical Concept
+# Technical Guide
 
 The template generation process involves creating output structures based on a specified layer and associated features.
 This process is orchestrated by the `TemplateGenerator` class, which is responsible for producing templates to an output stream.

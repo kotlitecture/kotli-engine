@@ -18,7 +18,7 @@ enum class FeatureTypes(
     DevOps("devops", 1),
     DataFlow("dataflow", 2),
     UserFlow("userflow", 3),
-    Appearance("appearance", 4),
+    Design("design", 4),
     UI("ui", 5),
     Quality("quality", 6),
     Testing("testing", 7),
