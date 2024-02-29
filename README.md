@@ -12,11 +12,28 @@ The key philosophy is to adopt a `take what you need, discard what you don't` ap
 This approach lets to:
 - Focus on the solution architecture of the template without worrying about the syntax of the engine or its limitations.
 - Assess how new functionality impacts the entire project when it is built in 'fat' mode.
-- Utilize the same source structures to extend templates and empower them with AI capabilities.
+- Keep the engine simple and not tied to any structure.
 
 # Getting Started
 
 // TODO
+
+```kotlin
+    val androidProcessor = AndroidComposeTemplateGenerator() // some android app template processor
+    val backendProcessor = SpringBootTemplateGenerator() // some backend template processor
+    val templateRegistry = DefaultTemplateRegistry(
+        androidProcessor,
+        backendProcessor
+    )
+    val templateGenerator = PathOutputGenerator(registry = templateRegistry)
+    val androidAppLayer = Layer(
+        processorId = androidProcessor.getId(),
+        name = "my-android-app",
+        namespace = "my.app",
+        features = listOf() // add some features
+    )
+    templateGenerator.generate(androidAppLayer)
+```
 
 # Technical Guide
 
@@ -101,10 +118,24 @@ graph TD
        P2["Feature Processor 2"]
        P3["Feature Processor 3"]
        PN["Feature Processor N"]
+       R1["Rule 1"]
+       R2["Rule 2"]
+       R3["Rule 3"]
+       R4["Rule 4"]
+       R5["Rule 5"]
+       R6["Rule 6"]
+       RN["Rule N"]
        FP1 --> P1
        FP1 --> P2
        FPN --> P3
        FPN --> PN
+       P1 --> R1
+       P1 --> R2
+       P2 --> R3
+       P3 --> R4
+       PN --> R5
+       PN --> R6
+       PN --> RN
    end
 
    TemplateContext --> TemplateProcessor
@@ -115,7 +146,15 @@ The high level relationships:
    It retains the passed `Layer` object and accumulates a set of rules to manipulate the initial template structure.
 2. **TemplateProcessor**: Responsible for processing template.
 3. **FeatureProvider**: Represents a registry of feature processors with common behavior.
-4. **FeatureProcessor**: Responsible for creating rules in TemplateContext to apply or remove a given feature in the generated structure.
+4. **FeatureProcessor**: Responsible for creating rules in `TemplateContext` to apply or remove a given feature in the generated structure.
+5. **Rule**: Responsible for modifying some specific file in the template.
+
+### Rule
+
+It is an essential part of every template processor. Each rule is responsible for making specific changes to a particular file in the template.
+However, it is not tied to any file it modifies. The engine implements some common rules for file manipulation,
+and it is possible to create new ones with any logic to operate with template generation more powerfully.
+
 
 ## TemplateGenerator
 
@@ -220,3 +259,8 @@ classDiagram
       -generator: PathOutputGenerator
    }
 ```
+
+# Contribution Guide
+
+Not ready yet:(
+However fill free to ping me on Discord in case you have something.

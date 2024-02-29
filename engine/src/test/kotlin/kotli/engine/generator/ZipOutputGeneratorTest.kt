@@ -11,7 +11,7 @@ import kotlin.test.Test
 
 class ZipOutputGeneratorTest {
 
-    val registry = DefaultTemplateRegistry(emptyList())
+    private val registry = DefaultTemplateRegistry()
 
     @Test
     fun `generate without extra files inside`() = runBlocking {

@@ -18,13 +18,13 @@ class DefaultTemplateRegistryTest {
                     override fun getId(): String = id
                 }
             }
-            .let { DefaultTemplateRegistry(it) }
+            .let { DefaultTemplateRegistry(*it.toTypedArray()) }
         templateIds.forEach { id -> Assertions.assertNotNull(registry.get(id)) }
     }
 
     @Test
     fun `internal template is not available in getAll`() {
-        val registry: TemplateRegistry = DefaultTemplateRegistry(emptyList())
+        val registry: TemplateRegistry = DefaultTemplateRegistry()
         Assertions.assertSame(TemplateProcessor.App, registry.get(TemplateProcessor.App.getId()))
         Assertions.assertFalse(registry.getAll().contains(TemplateProcessor.App))
     }
