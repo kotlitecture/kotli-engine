@@ -18,7 +18,7 @@ class DefaultTemplateRegistryTest {
                     override fun getId(): String = id
                 }
             }
-            .let { DefaultTemplateRegistry(*it.toTypedArray()) }
+            .let { DefaultTemplateRegistry(it) }
         templateIds.forEach { id -> Assertions.assertNotNull(registry.get(id)) }
     }
 

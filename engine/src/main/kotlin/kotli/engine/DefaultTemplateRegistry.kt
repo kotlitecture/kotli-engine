@@ -4,9 +4,11 @@ package kotli.engine
  * Simple processor factory implementation providing access to all available processors
  * during the processing of the output structure.
  */
-class DefaultTemplateRegistry(vararg processors: TemplateProcessor) : TemplateRegistry {
+class DefaultTemplateRegistry(processors: List<TemplateProcessor>) : TemplateRegistry {
 
-    private val processorList = processors.toList().sortedBy { it.getType().getOrder() }
+    constructor(vararg processors: TemplateProcessor) : this(processors.toList())
+
+    private val processorList = processors.sortedBy { it.getType().getOrder() }
 
     private val processorsMap = processorList
         .plus(TemplateProcessor.App)
