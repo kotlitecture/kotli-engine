@@ -1,2 +1,1 @@
-These practices help catch and fix potential problems in code early on,
-ensuring the code meets the standards and constantly gets better.
+Identify and fix issues early, meet coding standards, and ensure continuous enhancement.

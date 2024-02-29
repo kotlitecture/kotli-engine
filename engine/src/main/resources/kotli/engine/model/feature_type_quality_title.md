@@ -1,1 +1,1 @@
-Code Quality
+Quality

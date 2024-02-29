@@ -1,4 +1,2 @@
-This feature set is dedicated to comprehensive layer documentation,
-encompassing various aspects such as code comments, API documentation, and overall project documentation.
-It ensures that developers and other stakeholders have clear, accessible,
-and up-to-date information about the layer's structure, functionality, and usage.
+Empower your team with comprehensive layer documentation. Covering code comments, API details, and project insights,
+these features provide clear, accessible, and up-to-date information for seamless collaboration and understanding.
