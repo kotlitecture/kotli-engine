@@ -2,14 +2,22 @@ package kotli.engine.generator
 
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
-import kotli.engine.*
+import kotli.engine.DefaultTemplateContext
+import kotli.engine.TemplateContext
+import kotli.engine.TemplateGenerator
+import kotli.engine.TemplateRegistry
+import kotli.engine.TemplateState
 import kotli.engine.model.Feature
 import kotli.engine.model.Layer
 import kotli.engine.template.TemplateFile
 import kotli.engine.utils.PathUtils
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.io.path.*
+import kotlin.io.path.createDirectories
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
+import kotlin.io.path.writeLines
 
 /**
  * Generates the output structure in the given folder.
@@ -35,8 +43,8 @@ open class PathOutputGenerator(
 
     protected open fun createContext(layer: Layer): TemplateContext {
         return DefaultTemplateContext(
+            contextPath = layer.name,
             registry = registry,
-            contextPath = "",
             layer = layer
         )
     }

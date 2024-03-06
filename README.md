@@ -5,6 +5,8 @@ Prepared templates are self-sufficient, containing all the metadata necessary fo
 
 The online service [Kotli](https://kotlitecture.com) utilizes this framework and the templates based on it as part of its project builder interface.
 
+All documentation about **Kotli** can be found [here](https://kotlitecture.github.io).
+
 # Fundamental Concept
 
 The library centers around the flexibility to seamlessly integrate any project as an input template, irrespective of its structure.
