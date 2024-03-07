@@ -8,7 +8,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.copyToRecursively
-import kotlin.io.path.deleteIfExists
+import kotlin.io.path.createDirectories
 import kotlin.io.path.deleteRecursively
 import kotlin.io.path.isDirectory
 import kotlin.io.path.pathString
@@ -49,6 +49,7 @@ object PathUtils {
     fun copy(from: Path, to: Path) {
         logger.debug("copy :: {} -> {}", from, to)
         val followLinks = true
+        to.createDirectories()
         from.copyToRecursively(
             to,
             followLinks = followLinks,
