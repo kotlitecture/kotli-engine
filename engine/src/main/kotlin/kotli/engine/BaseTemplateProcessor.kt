@@ -111,7 +111,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      * @param context The template context.
      */
     override suspend fun process(context: TemplateContext) {
-        doPrepare(context)
+        prepare(context)
         proceedChildren(context)
         applyProcessors(context)
         applyDependencies(context)
@@ -171,7 +171,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      *
      * @param state The template state.
      */
-    protected abstract fun doPrepare(state: TemplateState)
+    protected abstract fun prepare(state: TemplateState)
 
     /**
      * Abstract method to be implemented by subclasses for creating a list of feature providers.

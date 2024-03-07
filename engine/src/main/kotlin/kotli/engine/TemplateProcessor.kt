@@ -20,7 +20,7 @@ interface TemplateProcessor : TemplateDescriptor {
         val App = object : BaseTemplateProcessor() {
             override fun getId(): String = "app"
             override fun getType(): LayerType = LayerTypes.App
-            override fun doPrepare(state: TemplateState) = Unit
+            override fun prepare(state: TemplateState) = Unit
             override fun createProviders(): List<FeatureProvider> = emptyList()
         }
     }
