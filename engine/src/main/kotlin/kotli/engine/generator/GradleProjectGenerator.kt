@@ -23,8 +23,9 @@ class GradleProjectGenerator(
 
     override suspend fun generate(layer: Layer): TemplateState {
         val state = generator.generate(layer)
-        if (!isWindows()) execSilently(generator.output, "chmod", "-R", "777", "gradlew")
-        exec(generator.output, gradlew(), *commands)
+        val output = generator.output.resolve(state.contextPath)
+        if (!isWindows()) execSilently(output, "chmod", "-R", "777", "gradlew")
+        exec(output, gradlew(), *commands)
         return state
     }
 
