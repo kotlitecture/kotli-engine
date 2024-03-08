@@ -31,9 +31,9 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      */
     private val processorsByType by lazy {
         providerList
-                .map { it.getProcessors() }
-                .flatten()
-                .associateBy { it::class.java }
+            .map { it.getProcessors() }
+            .flatten()
+            .associateBy { it::class.java }
     }
 
     /**
@@ -41,8 +41,18 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      */
     private val processorsById by lazy {
         providerList.map { provider -> provider.getProcessors() }
-                .flatten()
-                .associateBy { it.getId() }
+            .flatten()
+            .associateBy { it.getId() }
+    }
+
+    /**
+     * Lazily initialized map of processors indexes in the order of their registration.
+     */
+    private val processorsOrderById by lazy {
+        providerList.map { provider -> provider.getProcessors() }
+            .flatten()
+            .mapIndexed { index, featureProcessor -> featureProcessor.getId() to index }
+            .toMap()
     }
 
     /**
@@ -50,52 +60,30 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      */
     private val providersByProcessorType by lazy {
         providerList.map { provider -> provider.getProcessors().map { it::class.java to provider } }
-                .flatten()
-                .toMap()
+            .flatten()
+            .toMap()
     }
 
     override fun dependencies(): List<Class<out FeatureProcessor>> = listOf(
-            MarkdownConfigurationProcessor::class.java
+        MarkdownConfigurationProcessor::class.java
     )
 
-    /**
-     * Returns a list of all providers associated with the processor.
-     *
-     * @return A list of feature providers.
-     */
     override fun getFeatureProviders(): List<FeatureProvider> {
         return providerList
     }
 
-    /**
-     * Retrieves a feature processor by its unique identifier.
-     *
-     * @param id Unique identifier of the processor.
-     * @return The feature processor.
-     * @throws IllegalStateException if no processor with the given id is found.
-     */
     override fun getFeatureProcessor(id: String): FeatureProcessor {
-        return processorsById[id] ?: throw IllegalStateException("no processor :: $id")
+        return processorsById[id] ?: FeatureProcessor.Unknown(id)
     }
 
-    /**
-     * Retrieves a feature processor by its class type.
-     *
-     * @param type Class type of the processor.
-     * @return The feature processor.
-     * @throws IllegalStateException if no processor with the given type is found.
-     */
+    override fun getFeatureProcessorOrder(id: String): Int {
+        return processorsOrderById[id] ?: -1
+    }
+
     override fun getFeatureProcessor(type: Class<out FeatureProcessor>): FeatureProcessor {
         return processorsByType[type] ?: throw IllegalStateException("no processor :: $type")
     }
 
-    /**
-     * Retrieves the feature provider associated with the given processor type.
-     *
-     * @param type Class type of the processor.
-     * @return The feature provider.
-     * @throws IllegalStateException if no provider is found for the given processor type.
-     */
     override fun getFeatureProvider(type: Class<out FeatureProcessor>): FeatureProvider {
         return providersByProcessorType[type] ?: throw IllegalStateException("no provider :: $type")
     }
@@ -126,9 +114,9 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
     private suspend fun proceedChildren(context: TemplateContext) {
         coroutineScope {
             context.layer.layers
-                    .mapNotNull(context::onAddChild)
-                    .map { child -> async { child.processor.process(child) } }
-                    .awaitAll()
+                .mapNotNull(context::onAddChild)
+                .map { child -> async { child.processor.process(child) } }
+                .awaitAll()
         }
     }
 
@@ -138,9 +126,9 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      * @param context The template context.
      */
     private fun applyProcessors(context: TemplateContext) {
-        context.layer.features.forEach { feature ->
-            processorsById[feature.id]?.apply(context)
-        }
+        context.layer.features
+            .sortedBy { getFeatureProcessorOrder(it.id) }
+            .forEach { feature -> processorsById[feature.id]?.apply(context) }
     }
 
     /**
@@ -150,8 +138,8 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      */
     private fun applyDependencies(context: TemplateContext) {
         dependencies()
-                .map(this::getFeatureProcessor)
-                .onEach { processor -> processor.apply(context) }
+            .map(this::getFeatureProcessor)
+            .onEach { processor -> processor.apply(context) }
     }
 
     /**
@@ -162,7 +150,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
     private fun removeProcessors(context: TemplateContext) {
         providerList.forEach { provider ->
             provider.getProcessors()
-                    .forEach { processor -> processor.remove(context) }
+                .forEach { processor -> processor.remove(context) }
         }
     }
 

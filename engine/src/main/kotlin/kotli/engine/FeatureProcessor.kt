@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory
  * The primary advantage of a feature is to provide a ready-to-use solution with minimal configuration required
  * (zero configuration is the goal).
  *
- * By default, each template is pre-configured to include all features.
+ * By default, each blueprint template should be pre-configured to include all features.
  */
 interface FeatureProcessor : DependencyProvider<FeatureProcessor>, FeatureDescriptor {
 
@@ -36,9 +36,9 @@ interface FeatureProcessor : DependencyProvider<FeatureProcessor>, FeatureDescri
     /**
      * Default implementation of the processor to be called in case the processor is not found for some reason.
      */
-    class UnknownProcessor(private val id: String) : FeatureProcessor {
+    class Unknown(private val id: String) : FeatureProcessor {
 
-        private val logger = LoggerFactory.getLogger(UnknownProcessor::class.java)
+        private val logger = LoggerFactory.getLogger(Unknown::class.java)
 
         override fun getId(): String = id
 

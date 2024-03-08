@@ -16,6 +16,7 @@ internal class MarkdownConfigurationProcessor : BaseFeatureProcessor() {
             .asSequence()
             .map { it.id }
             .map(templateProcessor::getFeatureProcessor)
+            .sortedBy { templateProcessor.getFeatureProcessorOrder(it.getId()) }
             .map { getDependencies(state, it) }
             .flatten()
             .distinct()

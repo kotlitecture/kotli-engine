@@ -31,10 +31,13 @@ interface TemplateDescriptor : Dictionary, DependencyProvider<FeatureProcessor> 
 
     /**
      * Finds a processor by its id.
-     *
-     * @throws IllegalStateException if a processor with the given id is not found.
      */
     fun getFeatureProcessor(id: String): FeatureProcessor
+
+    /**
+     * Finds a processor order by its id.
+     */
+    fun getFeatureProcessorOrder(id: String): Int
 
     /**
      * Finds a processor by its type.
