@@ -9,7 +9,7 @@ import kotli.engine.template.TemplateFile
  * @param text The text to be replaced.
  * @param replacer A function providing the text to be used as a replacement.
  */
-class ReplaceText(
+data class ReplaceText(
     private val text: String,
     private val replacer: String
 ) : FileRule() {

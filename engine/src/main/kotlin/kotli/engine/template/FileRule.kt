@@ -16,7 +16,7 @@ abstract class FileRule {
      * @param file The template file to apply the rule to.
      */
     fun apply(file: TemplateFile) {
-        logger.debug("apply rule :: {} -> {}", javaClass.simpleName, file.path)
+        logger.debug("apply rule :: {} -> {}", this, file.path)
         doApply(file)
     }
 

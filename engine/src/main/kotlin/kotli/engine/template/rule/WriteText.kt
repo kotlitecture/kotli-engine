@@ -8,7 +8,7 @@ import kotli.engine.template.TemplateFile
  *
  * @param text the text to be written to the file
  */
-class WriteText(
+data class WriteText(
         private val text: String
 ) : FileRule() {
 

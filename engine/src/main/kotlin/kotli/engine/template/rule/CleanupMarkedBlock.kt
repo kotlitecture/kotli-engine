@@ -8,7 +8,7 @@ import kotli.engine.template.TemplateFile
  *
  * @param marker The text that must be presented in two lines to be considered as a block.
  */
-class CleanupMarkedBlock(
+data class CleanupMarkedBlock(
     private val marker: String
 ) : FileRule() {
 

@@ -12,7 +12,7 @@ import kotli.engine.template.TemplateFile
  * @param singleLine If true, only the first found line will be processed.
  * @param replacer A function providing the text to be used as a replacement.
  */
-class ReplaceMarkedText(
+data class ReplaceMarkedText(
     private val text: String,
     private val marker: String,
     private val replacer: String,

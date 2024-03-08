@@ -9,7 +9,7 @@ import kotli.engine.extensions.takeIfIndex
  *
  * @param marker The text that must be presented in two lines to be considered as a block.
  */
-class RemoveMarkedBlock(
+data class RemoveMarkedBlock(
     private val marker: String
 ) : FileRule() {
 

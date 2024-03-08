@@ -10,7 +10,7 @@ import kotli.engine.template.TemplateFile
  * @param marker The text that must be present in a line to consider it for modification.
  * @param singleLine If true, only the first found line will be processed.
  */
-class CleanupMarkedLine(
+data class CleanupMarkedLine(
     private val marker: String,
     private val singleLine: Boolean = false
 ) : FileRule() {

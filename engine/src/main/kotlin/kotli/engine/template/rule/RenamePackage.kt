@@ -10,7 +10,7 @@ import kotli.engine.utils.PackageUtils
  * @param oldPackage The package to be renamed.
  * @param newPackage The new name for the package.
  */
-class RenamePackage(
+data class RenamePackage(
     private val oldPackage: String,
     private val newPackage: String
 ) : FileRule() {

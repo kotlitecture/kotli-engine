@@ -10,7 +10,7 @@ import kotli.engine.template.TemplateFile
  * @param marker The text that must be presented in two lines to be considered as a block.
  * @param replacer A function providing the text to replace the found block.
  */
-class ReplaceMarkedBlock(
+data class ReplaceMarkedBlock(
     private val marker: String,
     private val replacer: String
 ) : FileRule() {
