@@ -1,8 +1,8 @@
 package kotli.engine.template.rule
 
+import kotli.engine.extensions.takeIfIndex
 import kotli.engine.template.FileRule
 import kotli.engine.template.TemplateFile
-import kotli.engine.extensions.takeIfIndex
 
 /**
  * Removes all lines containing a given marker.
@@ -17,7 +17,6 @@ data class RemoveMarkedLine(
 
     override fun doApply(file: TemplateFile) {
         val lines = file.lines
-        logger.debug("removeLine:\n\t{}", marker)
         if (singleLine) {
             val index = lines.indexOfFirst { isMarked(file, it, marker) }.takeIfIndex() ?: return
             lines.removeAt(index)

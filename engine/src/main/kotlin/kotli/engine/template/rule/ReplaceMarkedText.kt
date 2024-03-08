@@ -22,7 +22,6 @@ data class ReplaceMarkedText(
     override fun doApply(file: TemplateFile) {
         val lines = file.lines
         val newText = replacer
-        logger.debug("replaceText:\n\t{}\n\t{}", text, newText)
         lines.forEachIndexed { index, line ->
             if (isMarked(file, line, marker)) {
                 lines[index] = cleanup(file, line).replace(text, newText)

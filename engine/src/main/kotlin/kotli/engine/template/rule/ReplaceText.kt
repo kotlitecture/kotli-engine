@@ -16,7 +16,6 @@ data class ReplaceText(
 
     override fun doApply(file: TemplateFile) {
         val newText = replacer
-        logger.debug("replaceText:\n\t{}\n\t{}", text, newText)
         file.lines.forEachIndexed { index, line ->
             file.lines[index] = line.replace(text, newText)
         }

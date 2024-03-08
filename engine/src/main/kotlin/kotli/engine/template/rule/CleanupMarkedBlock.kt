@@ -14,7 +14,6 @@ data class CleanupMarkedBlock(
 
     override fun doApply(file: TemplateFile) {
         val lines = file.lines
-        logger.debug("cleanupBlock:\n\t{}", marker)
         lines.removeIf { isMarked(file, it, marker) }
     }
 

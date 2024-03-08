@@ -27,7 +27,6 @@ abstract class FileRule {
     protected fun cleanup(file: TemplateFile, line: String): String {
         val startIndex = line.indexOfAny(file.markerSeparators).takeIfIndex() ?: return line
         val newLine = line.substring(0, startIndex).trimEnd()
-        logger.debug("cleanup:\n\t{}\n\t{}", line, newLine)
         return newLine
     }
 

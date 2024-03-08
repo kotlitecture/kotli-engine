@@ -26,7 +26,6 @@ data class ReplaceMarkedBlock(
         repeat(indexOfLast - indexOfFirst + 1) {
             lines.removeAt(indexOfFirst)
         }
-        logger.debug("replaceBlock:\n\t{}\n\t{}", firstLine, newBlock)
         val newBlockLines = newBlock.lines().map { tab + it }
         lines.addAll(indexOfFirst, newBlockLines)
     }

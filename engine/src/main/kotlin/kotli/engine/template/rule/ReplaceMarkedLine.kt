@@ -25,7 +25,6 @@ data class ReplaceMarkedLine(
             if (isMarked(file, line, marker)) {
                 val startIndex = line.indexOfFirst { it != ' ' }.takeIfIndex() ?: 0
                 val updatedLine = "${line.substring(0, startIndex)}$newLine"
-                logger.debug("replaceLine:\n\t{}\n\t{}", line, updatedLine)
                 lines[indexOf] = updatedLine
                 if (singleLine) return
             }
