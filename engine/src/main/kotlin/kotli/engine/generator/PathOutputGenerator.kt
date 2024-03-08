@@ -93,6 +93,7 @@ open class PathOutputGenerator(
                 group.value
                     .map { it.rules }
                     .flatten()
+                    .distinct()
                     .forEach { rule -> rule.apply(templateFile) }
                 logger.debug("update file :: {}", templateFile.path)
                 write(templateFile)
