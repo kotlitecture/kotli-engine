@@ -12,7 +12,6 @@ class DefaultTemplateRegistryTest {
         val registry = templateIds
             .map { id ->
                 object : BaseTemplateProcessor() {
-                    override fun prepare(state: TemplateState) = Unit
                     override fun createProviders(): List<FeatureProvider> = emptyList()
                     override fun getType(): LayerType = LayerTypes.App
                     override fun getId(): String = id
