@@ -99,11 +99,12 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      * @param context The template context.
      */
     override suspend fun process(context: TemplateContext) {
-        prepare(context)
+        processBefore(context)
         proceedChildren(context)
         applyProcessors(context)
         applyDependencies(context)
         removeProcessors(context)
+        processAfter(context)
     }
 
     /**
@@ -155,11 +156,22 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
     }
 
     /**
-     * Abstract method to be implemented by subclasses for performing processor-specific preparations.
+     * Logic to be implemented by subclasses for performing processor-specific preparations before applying features.
      *
      * @param state The template state.
      */
-    protected abstract fun prepare(state: TemplateState)
+    protected open fun processBefore(state: TemplateState) {
+        logger.debug("processBefore :: {}", state)
+    }
+
+    /**
+     * Logic to be implemented by subclasses for performing processor-specific preparations after applying features.
+     *
+     * @param state The template state.
+     */
+    protected open fun processAfter(state: TemplateState) {
+        logger.debug("processAfter :: {}", state)
+    }
 
     /**
      * Abstract method to be implemented by subclasses for creating a list of feature providers.
