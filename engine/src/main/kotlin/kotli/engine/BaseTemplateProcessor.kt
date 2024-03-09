@@ -90,11 +90,12 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
 
     /**
      * Prepares the template context by executing the necessary steps, including:
-     * 1. Invoking the `doPrepare` method.
+     * 1. Invoking the `processBefore` method.
      * 2. Processing child layers.
      * 3. Applying feature processors.
      * 4. Applying dependencies.
      * 5. Removing processors.
+     * 6. Invoking the `processAfter` method.
      *
      * @param context The template context.
      */
