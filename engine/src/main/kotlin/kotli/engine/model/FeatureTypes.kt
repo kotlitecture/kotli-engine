@@ -24,6 +24,7 @@ enum class FeatureTypes(
     Testing("testing", 7),
     Documentation("documentation", 8),
     Workflow("workflow", 9),
+    Unspecified("unspecified", Int.MAX_VALUE)
 
     ;
 
