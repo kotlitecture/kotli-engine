@@ -100,7 +100,15 @@ open class PathOutputGenerator(
                     MaskUtils.isMask(contextPath) -> {
                         val regexp = MaskUtils.toRegex(contextPath)
                         Files.walk(to)
-                            .filter { regexp.matches(it.pathString) }
+                            .filter {
+                                val matches = regexp.matches(it.pathString)
+                                if (matches) {
+                                    logger.debug("found by mask :: {} -> {}", contextPath, it.pathString)
+                                } else {
+                                    logger.debug("ignored by mask :: {} -> {}", contextPath, it.pathString)
+                                }
+                                matches
+                            }
                             .map { TemplateFile(path = it, markerSeparators = separators) }
                             .forEach { write(it, rules) }
                     }

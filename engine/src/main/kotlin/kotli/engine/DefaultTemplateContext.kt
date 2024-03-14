@@ -44,6 +44,7 @@ class DefaultTemplateContext(
 
     override fun onApplyFeature(id: String, action: (feature: Feature) -> Unit) {
         applied.computeIfAbsent(id) {
+            logger.debug("onApplyFeature :: {}", it)
             val feature = getFeature(id) ?: Feature(id)
             action(feature)
             feature
@@ -53,6 +54,7 @@ class DefaultTemplateContext(
     override fun onRemoveFeature(id: String, action: (feature: Feature) -> Unit) {
         if (!applied.containsKey(id)) {
             removed.computeIfAbsent(id) {
+                logger.debug("onRemoveFeature :: {}", it)
                 val feature = getFeature(id) ?: Feature(id)
                 action(feature)
                 feature
