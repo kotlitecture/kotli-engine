@@ -9,7 +9,9 @@ import kotli.engine.TemplateRegistry
 import kotli.engine.TemplateState
 import kotli.engine.model.Feature
 import kotli.engine.model.Layer
+import kotli.engine.template.FileRule
 import kotli.engine.template.TemplateFile
+import kotli.engine.utils.MaskUtils
 import kotli.engine.utils.PathUtils
 import java.nio.file.Files
 import java.nio.file.Path
@@ -17,6 +19,7 @@ import kotlin.io.path.createDirectories
 import kotlin.io.path.deleteIfExists
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
+import kotlin.io.path.pathString
 import kotlin.io.path.writeLines
 
 /**
@@ -83,22 +86,41 @@ open class PathOutputGenerator(
         state.getRules()
             .groupBy { it.contextPath }
             .forEach { group ->
-                val templateFile = TemplateFile(
-                    path = to.resolve(group.key),
-                    markerSeparators = group.value
-                        .map { it.markerSeparators }
-                        .flatten()
-                        .distinct()
-                )
-                group.value
+                val contextPath = group.key
+                val separators = group.value
+                    .map { it.markerSeparators }
+                    .flatten()
+                    .distinct()
+                val rules = group.value
                     .map { it.rules }
                     .flatten()
                     .distinct()
-                    .forEach { rule -> rule.apply(templateFile) }
-                logger.debug("update file :: {}", templateFile.path)
-                write(templateFile)
+
+                when {
+                    MaskUtils.isMask(contextPath) -> {
+                        val regexp = MaskUtils.toRegex(contextPath)
+                        Files.walk(to)
+                            .filter { regexp.matches(it.pathString) }
+                            .map { TemplateFile(path = it, markerSeparators = separators) }
+                            .forEach { write(it, rules) }
+                    }
+
+                    else -> {
+                        val templateFile = TemplateFile(
+                            path = to.resolve(contextPath),
+                            markerSeparators = separators
+                        )
+                        write(templateFile, rules)
+                    }
+                }
             }
         state.getChildren().onEach(this::generate)
+    }
+
+    private fun write(file: TemplateFile, rules: List<FileRule>) {
+        rules.forEach { rule -> rule.apply(file) }
+        logger.debug("update file :: {}", file.path)
+        write(file)
     }
 
     private fun write(file: TemplateFile) {

@@ -9,7 +9,7 @@ import kotli.engine.template.TemplateFile
  * @param text the text to be written to the file
  */
 data class WriteText(
-        private val text: String
+    private val text: String
 ) : FileRule() {
 
     override fun doApply(file: TemplateFile) {
