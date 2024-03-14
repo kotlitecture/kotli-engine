@@ -15,6 +15,15 @@ interface FeatureDescriptor {
     fun getId(): String
 
     /**
+     * Indicates whether the feature is marked as internal. If true, it will not be available through public config (UI).
+     * It can be useful when you need to declare some feature which is common for several others,
+     * but is useless from the user perspective and should not be available to choose.
+     *
+     * By default, each processor is public.
+     */
+    fun isInternal(): Boolean = false
+
+    /**
      * Gets the icon of the feature. Preferred format is SVG or any other image format of size at least 64px.
      *
      * @param state Current runtime template state with user-defined parameters.

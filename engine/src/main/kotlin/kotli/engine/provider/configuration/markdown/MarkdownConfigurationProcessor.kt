@@ -10,6 +10,8 @@ internal class MarkdownConfigurationProcessor : BaseFeatureProcessor() {
 
     override fun getId(): String = "configuration.markdown_configuration"
 
+    override fun isInternal(): Boolean = true
+
     override fun doApply(state: TemplateState) {
         val templateProcessor = state.processor
         state.layer.features

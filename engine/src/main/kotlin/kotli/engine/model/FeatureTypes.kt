@@ -24,9 +24,6 @@ enum class FeatureTypes(
     Testing("testing", 7),
     Documentation("documentation", 8),
     Workflow("workflow", 9),
-    Transitive("transitive", Int.MIN_VALUE) {
-        override fun isInternal(): Boolean = true
-    },
 
     ;
 
