@@ -104,8 +104,6 @@ open class PathOutputGenerator(
                                 val matches = regexp.matches(it.pathString)
                                 if (matches) {
                                     logger.debug("found by mask :: {} -> {}", contextPath, it.pathString)
-                                } else {
-                                    logger.debug("ignored by mask :: {} -> {}", contextPath, it.pathString)
                                 }
                                 matches
                             }
