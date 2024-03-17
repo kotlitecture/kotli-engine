@@ -1,1 +1,1 @@
-Identify and fix issues early, meet coding standards, and ensure continuous enhancement.
+Quality features are responsible for providing solutions that help identify and address issues early, meet coding standards, and ensure continuous improvement.

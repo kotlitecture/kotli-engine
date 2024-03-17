@@ -1,1 +1,1 @@
-Metadata provides general configuration about project setup and configuration. 
+Metadata offers general details about project setup and configuration. Typically, the recommended metadata are pre-configured and do not need to be altered.

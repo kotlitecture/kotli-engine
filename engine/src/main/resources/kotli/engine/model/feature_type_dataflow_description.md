@@ -1,1 +1,1 @@
-Use ready-to-use patterns to simplify your data management.
+Dataflow features provide predefined technical solutions to facilitate working with various data sources in the application. All solutions ensure the proper way to access the target source or sources they implement.

@@ -1,2 +1,1 @@
-Enhance your product with intuitive navigation, appealing design elements, and consistent user interactions.
-Adopt a user-centric approach for a seamless and engaging experience.
+Design features help pre-define general UI layouts, components, and their appearance, enabling developers to start development without worrying about them later.

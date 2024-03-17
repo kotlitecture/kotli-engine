@@ -1,2 +1,1 @@
-Empower your team with comprehensive layer documentation. Covering code comments, API details, and project insights,
-these features provide clear, accessible, and up-to-date information for seamless collaboration and understanding.
+Thorough documentation of the layer enhances understanding for all involved specialists. These features offer solutions for creating and maintaining project documentation.
