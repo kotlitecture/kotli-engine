@@ -15,6 +15,7 @@ enum class FeatureTypes(
     private val order: Int
 ) : FeatureType {
 
+    Metadata("metadata", -1),
     DevOps("devops", 1),
     DataFlow("dataflow", 2),
     UserFlow("userflow", 3),

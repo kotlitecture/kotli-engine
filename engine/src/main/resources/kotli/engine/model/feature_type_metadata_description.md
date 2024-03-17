@@ -1,0 +1,1 @@
+Metadata provides general configuration about project setup and configuration. 

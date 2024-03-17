@@ -30,6 +30,13 @@ interface FeatureProvider : Dictionary, DependencyProvider<FeatureProcessor> {
     fun isMultiple(): Boolean = true
 
     /**
+     * Determines if at least one of the processors provided by the given provider must be selected.
+     *
+     * @return true if at least one processor must be selected, otherwise false.
+     */
+    fun isRequired(): Boolean = false
+
+    /**
      * Retrieves a list of all available processors for the feature.
      */
     fun getProcessors(): List<FeatureProcessor>
