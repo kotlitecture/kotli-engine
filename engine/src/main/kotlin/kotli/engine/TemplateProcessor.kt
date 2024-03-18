@@ -1,6 +1,5 @@
 package kotli.engine
 
-import kotli.engine.model.Feature
 import kotli.engine.model.Layer
 import kotli.engine.model.LayerTypes
 
@@ -26,7 +25,7 @@ interface TemplateProcessor : TemplateDescriptor {
      * @param context The template context for which presets are to be created.
      * @return A list of features representing the presets for the template context.
      */
-    suspend fun getPresets(context: TemplateContext): List<Layer> = emptyList()
+    fun getPresets(context: TemplateContext): List<Layer> = emptyList()
 
     companion object {
         val App = object : BaseTemplateProcessor() {
