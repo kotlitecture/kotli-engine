@@ -1,5 +1,7 @@
 package kotli.engine
 
+import kotli.engine.model.Layer
+
 /**
  * Provides all the required metadata to describe this processor.
  */
@@ -57,5 +59,14 @@ interface TemplateDescriptor : Dictionary, DependencyProvider<FeatureProcessor> 
      * Returns all registered providers.
      */
     fun getFeatureProviders(): List<FeatureProvider>
+
+    /**
+     * Gets presets for the given template. Presets contain features that are predefined or suggested for
+     * the template. These presets can help users quickly configure their project based on common use cases
+     * or recommended configurations.
+     *
+     * @return A list of features representing the presets for the template context.
+     */
+    fun getPresets(): List<Layer> = emptyList()
 
 }
