@@ -24,6 +24,10 @@ class MaskUtilsTest {
         Assertions.assertTrue(MaskUtils.toRegex("*.tx*").matches("aaa.tx"))
         Assertions.assertFalse(MaskUtils.toRegex("*.tx?").matches("aaa.tx"))
         Assertions.assertTrue(MaskUtils.toRegex("***.*tx***").matches("aaa.tx"))
+        Assertions.assertFalse(MaskUtils.toRegex("*/aaa.txt").matches("aaa.txt"))
+        Assertions.assertTrue(MaskUtils.toRegex("*/aaa.txt").matches("bb/aaa.txt"))
+        Assertions.assertFalse(MaskUtils.toRegex("*\\aaa.txt").matches("aaa.txt"))
+        Assertions.assertTrue(MaskUtils.toRegex("*\\aaa.txt").matches("/dd/bb/aaa.txt"))
     }
 
 }

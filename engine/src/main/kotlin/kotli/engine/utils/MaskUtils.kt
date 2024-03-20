@@ -17,6 +17,8 @@ object MaskUtils {
             when (val char = mask[i]) {
                 '*' -> regex.append(".*")
                 '.' -> regex.append("\\.")
+                '\\' -> regex.append("[\\\\\\\\/]")
+                '/' -> regex.append("[\\\\\\\\/]")
                 '?' -> regex.append(".")
                 else -> regex.append(char)
             }
