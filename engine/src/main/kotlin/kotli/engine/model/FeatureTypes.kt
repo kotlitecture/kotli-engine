@@ -19,13 +19,12 @@ enum class FeatureTypes(
     DevOps("devops", 1),
     DataFlow("dataflow", 2),
     UserFlow("userflow", 3),
-    Design("design", 4),
-    UI("ui", 5),
-    Quality("quality", 6),
-    Testing("testing", 7),
-    Documentation("documentation", 8),
-    Workflow("workflow", 9),
-    Examples("examples", 10),
+    UI("ui", 4),
+    Quality("quality", 5),
+    Testing("testing", 6),
+    Documentation("documentation", 7),
+    Workflow("workflow", 8),
+    Examples("examples", 9),
     Unspecified("unspecified", Int.MAX_VALUE)
 
     ;
@@ -33,7 +32,10 @@ enum class FeatureTypes(
     override fun getId(): String = id
     override fun getOrder(): Int = order
     override fun getIcon(): URL? = ResourceUtils.get(this, "feature_type_${id}.svg")
-    override fun getTitle(): String? = ResourceUtils.getAsString(this, "feature_type_${id}_title.md")
-    override fun getDescription(): String? = ResourceUtils.getAsString(this, "feature_type_${id}_description.md")
+    override fun getTitle(): String? =
+        ResourceUtils.getAsString(this, "feature_type_${id}_title.md")
+
+    override fun getDescription(): String? =
+        ResourceUtils.getAsString(this, "feature_type_${id}_description.md")
 
 }

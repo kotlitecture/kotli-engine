@@ -1,1 +1,1 @@
-UI components that can be widely used throughout the app to address common problems.
+UI design features predefine general UI layouts, components, and their appearance, allowing developers to begin development without concern for these aspects later on.

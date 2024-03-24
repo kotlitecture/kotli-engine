@@ -20,7 +20,9 @@ object ResourceUtils {
      */
     fun getAsString(context: Any, resourceName: String): String? {
         val url = get(context, resourceName) ?: return null
-        return cache.getOrPut(url) { url.readText().trimIndent() }.takeIf { it.isNotEmpty() }
+        return cache
+            .getOrPut(url) { StringUtils.trimLines(url.readText()) }
+            .takeIf { it.isNotEmpty() }
     }
 
     /**
