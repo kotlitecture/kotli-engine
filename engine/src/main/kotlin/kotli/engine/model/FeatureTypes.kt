@@ -36,6 +36,6 @@ enum class FeatureTypes(
         ResourceUtils.getAsString(this, "feature_type_${id}_title.md")
 
     override fun getDescription(): String? =
-        ResourceUtils.getAsString(this, "feature_type_${id}_description.md")
+        ResourceUtils.getAsString(this, "feature_type_${id}_description.md", true)
 
 }

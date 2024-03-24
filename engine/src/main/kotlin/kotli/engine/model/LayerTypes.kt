@@ -30,6 +30,6 @@ enum class LayerTypes(
     override fun getOrder(): Int = order
     override fun getIcon(): URL? = ResourceUtils.get(this, "layer_type_${id}.svg")
     override fun getTitle(): String? = ResourceUtils.getAsString(this, "layer_type_${id}_title.md")
-    override fun getDescription(): String? = ResourceUtils.getAsString(this, "layer_type_${id}_description.md")
+    override fun getDescription(): String? = ResourceUtils.getAsString(this, "layer_type_${id}_description.md", true)
 
 }

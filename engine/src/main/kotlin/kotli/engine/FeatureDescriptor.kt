@@ -48,7 +48,7 @@ interface FeatureDescriptor {
      *
      * @return Text (default value is the content of "description.md", relative to the package declaration).
      */
-    fun getDescription(state: TemplateState = TemplateState.Empty): String? = ResourceUtils.getAsString(this, "description.md")
+    fun getDescription(state: TemplateState = TemplateState.Empty): String? = ResourceUtils.getAsString(this, "description.md", true)
 
     /**
      * Gets the instruction on how to use the feature in the generated template properly.

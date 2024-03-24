@@ -41,6 +41,6 @@ interface Dictionary {
      *
      * @return Text (default value is the content of "description.md", relative to the package declaration).
      */
-    fun getDescription(): String? = ResourceUtils.getAsString(this, "description.md")
+    fun getDescription(): String? = ResourceUtils.getAsString(this, "description.md", true)
 
 }

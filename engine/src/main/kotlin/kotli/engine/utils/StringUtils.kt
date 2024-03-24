@@ -28,7 +28,7 @@ object StringUtils {
                 result.append(line)
             }
         }
-        return result.toString().trimIndent()
+        return result.toString()
     }
 
 }

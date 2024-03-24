@@ -16,12 +16,20 @@ object ResourceUtils {
      *
      * @param context The context object at the level of which the resource is searched.
      * @param resourceName The name of the resource.
+     * @param trimLines Flag indicating whether to trim extra spaces and ensure proper line formatting.
      * @return The resource content as a String.
      */
-    fun getAsString(context: Any, resourceName: String): String? {
+    fun getAsString(context: Any, resourceName: String, trimLines: Boolean = false): String? {
         val url = get(context, resourceName) ?: return null
         return cache
-            .getOrPut(url) { StringUtils.trimLines(url.readText()) }
+            .getOrPut(url) {
+                val text = url.readText().trimIndent()
+                if (trimLines) {
+                    StringUtils.trimLines(text)
+                } else {
+                    text
+                }
+            }
             .takeIf { it.isNotEmpty() }
     }
 
