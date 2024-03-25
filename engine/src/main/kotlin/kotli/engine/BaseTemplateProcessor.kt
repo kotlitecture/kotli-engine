@@ -1,5 +1,7 @@
 package kotli.engine
 
+import kotli.engine.model.Feature
+import kotli.engine.model.Layer
 import kotli.engine.provider.configuration.ConfigurationProvider
 import kotli.engine.provider.configuration.markdown.MarkdownConfigurationProcessor
 import kotlinx.coroutines.async
@@ -106,6 +108,25 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
         applyDependencies(context)
         removeProcessors(context)
         processAfter(context)
+    }
+
+    override fun getPresets(): List<Layer> {
+        val features = providerList
+            .filter { provider -> provider.isRequired() }
+            .mapNotNull { provider -> provider.getProcessors().firstOrNull { !it.isInternal() } }
+            .map { Feature(it.getId()) }
+        if (features.isNotEmpty()) {
+            return listOf(
+                Layer(
+                    id = "",
+                    name = "",
+                    namespace = "com.example.${getType().getId()}",
+                    processorId = getId(),
+                    features = features
+                )
+            )
+        }
+        return emptyList()
     }
 
     /**
