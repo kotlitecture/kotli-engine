@@ -34,6 +34,10 @@ class VersionCatalogProcessor : BaseFeatureProcessor() {
             RemoveMarkedBlock("{quality.dependencies.versions_catalog.config}")
         )
         state.onApplyRules(
+            "gradle.properties",
+            RemoveMarkedLine("systemProp.javax.xml")
+        )
+        state.onApplyRules(
             VersionCatalogRules(
                 RemoveMarkedLine("version-catalog")
             )
