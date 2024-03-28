@@ -1,1 +1,1 @@
-UI design features predefine general UI layouts, components, and their appearance, allowing developers to begin development without concern for these aspects later on.
+UI features predefine general UI layouts, components, and their appearance, allowing developers to begin development without concern for these aspects later on.
