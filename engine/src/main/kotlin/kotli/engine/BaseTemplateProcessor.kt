@@ -110,13 +110,29 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
         processAfter(context)
     }
 
-    override fun getPresets(): List<Layer> {
-        val features = providerList
+    final override fun getPresets(): List<Layer> {
+        val presets = createPresets().toMutableList()
+        val requiredProviders = providerList
             .filter { provider -> provider.isRequired() }
-            .mapNotNull { provider -> provider.getProcessors().firstOrNull { !it.isInternal() } }
-            .map { Feature(it.getId()) }
-        if (features.isNotEmpty()) {
-            return listOf(
+            .filter { provider -> provider.getProcessors().any { !it.isInternal() } }
+        presets.forEachIndexed { index, preset ->
+            val presetProviders = preset.features
+                .map { getFeatureProcessor(it.id) }
+                .map { getFeatureProvider(it::class.java) }
+            val missedFeatures = requiredProviders
+                .minus(presetProviders.toSet())
+                .mapNotNull { provider -> provider.getProcessors().firstOrNull { !it.isInternal() } }
+                .map { Feature(it.getId()) }
+            if (missedFeatures.isNotEmpty()) {
+                val features = preset.features.plus(missedFeatures)
+                presets[index] = preset.copy(features = features)
+            }
+        }
+        if (presets.isEmpty()) {
+            val features = requiredProviders
+                .mapNotNull { provider -> provider.getProcessors().firstOrNull { !it.isInternal() } }
+                .map { Feature(it.getId()) }
+            presets.add(
                 Layer(
                     id = "",
                     name = "",
@@ -126,7 +142,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
                 )
             )
         }
-        return emptyList()
+        return presets
     }
 
     /**
@@ -194,6 +210,11 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
     protected open fun processAfter(state: TemplateState) {
         logger.debug("processAfter :: {}", state)
     }
+
+    /**
+     * Creates presets for the given template.
+     */
+    protected open fun createPresets(): List<Layer> = emptyList()
 
     /**
      * Abstract method to be implemented by subclasses for creating a list of feature providers.
