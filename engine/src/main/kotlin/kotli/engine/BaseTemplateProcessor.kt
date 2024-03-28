@@ -112,26 +112,15 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
 
     final override fun getPresets(): List<Layer> {
         val presets = createPresets().toMutableList()
-        val requiredProviders = providerList
-            .filter { provider -> provider.isRequired() }
-            .filter { provider -> provider.getProcessors().any { !it.isInternal() } }
         presets.forEachIndexed { index, preset ->
-            val presetProviders = preset.features
-                .mapNotNull { getFeatureProcessor(it.id) }
-                .mapNotNull { getFeatureProvider(it::class.java) }
-            val missedFeatures = requiredProviders
-                .minus(presetProviders.toSet())
-                .mapNotNull { provider -> provider.getProcessors().firstOrNull { !it.isInternal() } }
-                .map { Feature(it.getId()) }
+            val missedFeatures = getMissedFeatures(preset.features, { it.id }, { it })
             if (missedFeatures.isNotEmpty()) {
                 val features = preset.features.plus(missedFeatures)
                 presets[index] = preset.copy(features = features)
             }
         }
         if (presets.isEmpty()) {
-            val features = requiredProviders
-                .mapNotNull { provider -> provider.getProcessors().firstOrNull { !it.isInternal() } }
-                .map { Feature(it.getId()) }
+            val features = getMissedFeatures(emptyList(), { it.id }, { it })
             presets.add(createPreset(features = features))
         }
         return presets

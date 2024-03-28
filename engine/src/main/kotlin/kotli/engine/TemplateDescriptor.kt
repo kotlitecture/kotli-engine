@@ -1,5 +1,6 @@
 package kotli.engine
 
+import kotli.engine.model.Feature
 import kotli.engine.model.Layer
 
 /**
@@ -66,5 +67,27 @@ interface TemplateDescriptor : Dictionary, DependencyProvider<FeatureProcessor> 
      * @return A list of features representing the presets for the template context.
      */
     fun getPresets(): List<Layer> = emptyList()
+
+    /**
+     * Finds missed features that are required but not provided.
+     *
+     * @param features List of features to check against.
+     * @param id Function to extract the id of each feature.
+     * @param mapper Function to map a missed feature to the desired type.
+     * @return List of missed features.
+     */
+    fun <T> getMissedFeatures(features: List<T>, id: (feature: T) -> String, mapper: (from: Feature) -> T): List<T> {
+        val requiredProviders = getFeatureProviders()
+            .filter { provider -> provider.isRequired() }
+            .filter { provider -> provider.getProcessors().any { !it.isInternal() } }
+        val layerProviders = features
+            .mapNotNull { getFeatureProcessor(id(it)) }
+            .mapNotNull { getFeatureProvider(it::class.java) }
+        return requiredProviders
+            .minus(layerProviders.toSet())
+            .mapNotNull { provider -> provider.getProcessors().firstOrNull { !it.isInternal() } }
+            .map { Feature(it.getId()) }
+            .map(mapper)
+    }
 
 }
