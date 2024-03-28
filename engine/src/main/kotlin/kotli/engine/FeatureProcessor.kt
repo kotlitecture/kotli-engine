@@ -1,7 +1,5 @@
 package kotli.engine
 
-import org.slf4j.LoggerFactory
-
 /**
  * The Feature processor is responsible for the inclusion or exclusion of the feature it implements
  * in the generated template.
@@ -32,23 +30,5 @@ interface FeatureProcessor : DependencyProvider<FeatureProcessor>, FeatureDescri
      * @param context The current runtime template context with user-defined parameters.
      */
     fun remove(context: TemplateContext) = Unit
-
-    /**
-     * Default implementation of the processor to be called in case the processor is not found for some reason.
-     */
-    class Unknown(private val id: String) : FeatureProcessor {
-
-        private val logger = LoggerFactory.getLogger(Unknown::class.java)
-
-        override fun getId(): String = id
-
-        override fun apply(context: TemplateContext) {
-            logger.debug("apply unknown processor :: {}", id)
-        }
-
-        override fun remove(context: TemplateContext) {
-            logger.debug("remove unknown processor :: {}", id)
-        }
-    }
 
 }

@@ -102,11 +102,11 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
             processors.addLast(processor)
         }
         val templateProcessor = state.processor
-        templateProcessor.getFeatureProvider(processor::class.java).dependencies()
-            .map(templateProcessor::getFeatureProcessor)
-            .onEach { fillDependencies(state, it, processors, true) }
+        templateProcessor.getFeatureProvider(processor::class.java)?.dependencies()
+            ?.mapNotNull(templateProcessor::getFeatureProcessor)
+            ?.onEach { fillDependencies(state, it, processors, true) }
         processor.dependencies()
-            .map(templateProcessor::getFeatureProcessor)
+            .mapNotNull(templateProcessor::getFeatureProcessor)
             .onEach { fillDependencies(state, it, processors, true) }
     }
 

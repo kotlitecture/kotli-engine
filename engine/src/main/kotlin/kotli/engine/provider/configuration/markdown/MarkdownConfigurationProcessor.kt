@@ -17,7 +17,7 @@ internal class MarkdownConfigurationProcessor : BaseFeatureProcessor() {
         state.layer.features
             .asSequence()
             .map { it.id }
-            .map(templateProcessor::getFeatureProcessor)
+            .mapNotNull(templateProcessor::getFeatureProcessor)
             .sortedBy { templateProcessor.getFeatureProcessorOrder(it.getId()) }
             .map { getDependencies(state, it) }
             .flatten()
@@ -25,7 +25,8 @@ internal class MarkdownConfigurationProcessor : BaseFeatureProcessor() {
             .toList()
             .filter { it.getConfiguration(state) != null }
             .groupBy { templateProcessor.getFeatureProvider(it::class.java) }
-            .onEachIndexed { i, group -> proceedInstruction(i, state, group.key, group.value) }
+            .filterKeys { it != null }
+            .onEachIndexed { i, group -> proceedInstruction(i, state, group.key!!, group.value) }
     }
 
     private fun proceedInstruction(

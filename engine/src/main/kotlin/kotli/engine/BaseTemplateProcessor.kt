@@ -74,20 +74,20 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
         return providerList
     }
 
-    override fun getFeatureProcessor(id: String): FeatureProcessor {
-        return processorsById[id] ?: FeatureProcessor.Unknown(id)
+    override fun getFeatureProcessor(id: String): FeatureProcessor? {
+        return processorsById[id]
     }
 
     override fun getFeatureProcessorOrder(id: String): Int {
         return processorsOrderById[id] ?: -1
     }
 
-    override fun getFeatureProcessor(type: Class<out FeatureProcessor>): FeatureProcessor {
-        return processorsByType[type] ?: throw IllegalStateException("no processor :: $type")
+    override fun getFeatureProcessor(type: Class<out FeatureProcessor>): FeatureProcessor? {
+        return processorsByType[type]
     }
 
-    override fun getFeatureProvider(type: Class<out FeatureProcessor>): FeatureProvider {
-        return providersByProcessorType[type] ?: throw IllegalStateException("no provider :: $type")
+    override fun getFeatureProvider(type: Class<out FeatureProcessor>): FeatureProvider? {
+        return providersByProcessorType[type]
     }
 
     /**
@@ -117,8 +117,8 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
             .filter { provider -> provider.getProcessors().any { !it.isInternal() } }
         presets.forEachIndexed { index, preset ->
             val presetProviders = preset.features
-                .map { getFeatureProcessor(it.id) }
-                .map { getFeatureProvider(it::class.java) }
+                .mapNotNull { getFeatureProcessor(it.id) }
+                .mapNotNull { getFeatureProvider(it::class.java) }
             val missedFeatures = requiredProviders
                 .minus(presetProviders.toSet())
                 .mapNotNull { provider -> provider.getProcessors().firstOrNull { !it.isInternal() } }
@@ -186,7 +186,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      */
     private fun applyDependencies(context: TemplateContext) {
         dependencies()
-            .map(this::getFeatureProcessor)
+            .mapNotNull(this::getFeatureProcessor)
             .onEach { processor -> processor.apply(context) }
     }
 
