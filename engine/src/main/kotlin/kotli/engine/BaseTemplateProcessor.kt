@@ -132,17 +132,26 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
             val features = requiredProviders
                 .mapNotNull { provider -> provider.getProcessors().firstOrNull { !it.isInternal() } }
                 .map { Feature(it.getId()) }
-            presets.add(
-                Layer(
-                    id = "",
-                    name = "",
-                    namespace = "com.example.${getType().getId()}",
-                    processorId = getId(),
-                    features = features
-                )
-            )
+            presets.add(createPreset(features = features))
         }
         return presets
+    }
+
+    protected fun createPreset(
+        id: String = "",
+        name: String = "",
+        description: String? = null,
+        namespace: String = "com.example.${getType().getId()}",
+        features: List<Feature>
+    ): Layer {
+        return Layer(
+            id = id,
+            name = name,
+            description = description,
+            namespace = namespace,
+            processorId = getId(),
+            features = features
+        )
     }
 
     /**
