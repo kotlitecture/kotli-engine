@@ -23,10 +23,10 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
      * @param context The template context in which the processor is applied.
      */
     final override fun apply(context: TemplateContext) {
+        getDependencies(context, this)
+            .minus(this)
+            .onEach { dependency -> dependency.apply(context) }
         context.onApplyFeature(getId()) { feature ->
-            getDependencies(context, this)
-                .minus(this)
-                .onEach { dependency -> dependency.apply(context) }
             doApply(context, feature)
         }
     }
@@ -54,8 +54,10 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
         state: TemplateState,
         processor: FeatureProcessor
     ): List<FeatureProcessor> {
+        logger.debug("getDependencies :: proceed :: {}", getId())
         val processors = LinkedList<FeatureProcessor>()
         fillDependencies(state, processor, processors)
+        logger.debug("getDependencies :: found :: {} -> {}", getId(), processors.size)
         return processors.toList()
     }
 
@@ -101,6 +103,7 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
         } else {
             processors.addLast(processor)
         }
+        logger.debug("fillDependencies :: fill :: {} -> {}, all={}", getId(), processor, processors.size)
         val templateProcessor = state.processor
         templateProcessor.getFeatureProvider(processor::class.java)?.dependencies()
             ?.mapNotNull(templateProcessor::getFeatureProcessor)
