@@ -23,10 +23,10 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
      * @param context The template context in which the processor is applied.
      */
     final override fun apply(context: TemplateContext) {
-        getDependencies(context, this)
-            .minus(this)
-            .onEach { dependency -> dependency.apply(context) }
         context.onApplyFeature(getId()) { feature ->
+            getDependencies(context, this)
+                .minus(this)
+                .onEach { dependency -> dependency.apply(context) }
             doApply(context, feature)
         }
     }
