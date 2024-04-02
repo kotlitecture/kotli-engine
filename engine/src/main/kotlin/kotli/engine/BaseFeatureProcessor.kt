@@ -107,9 +107,11 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
         val templateProcessor = state.processor
         templateProcessor.getFeatureProvider(processor::class.java)?.dependencies()
             ?.mapNotNull(templateProcessor::getFeatureProcessor)
+            ?.minus(this)
             ?.onEach { fillDependencies(state, it, processors, true) }
         processor.dependencies()
             .mapNotNull(templateProcessor::getFeatureProcessor)
+            .minus(this)
             .onEach { fillDependencies(state, it, processors, true) }
     }
 
