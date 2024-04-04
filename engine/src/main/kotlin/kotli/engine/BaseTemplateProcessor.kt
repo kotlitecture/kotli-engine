@@ -163,7 +163,12 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      * @param context The template context.
      */
     private fun applyProcessors(context: TemplateContext) {
-        context.layer.features
+        val features = context.layer.features
+        val missedFeatures = getMissedFeatures(features, { it.id }, { it })
+        if (missedFeatures.isNotEmpty()) {
+            logger.debug("adding missed features :: {}", missedFeatures.map { it.id })
+        }
+        features.plus(missedFeatures)
             .sortedBy { getFeatureProcessorOrder(it.id) }
             .forEach { feature -> processorsById[feature.id]?.apply(context) }
     }

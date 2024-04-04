@@ -34,6 +34,10 @@ class DefaultTemplateContext(
 
     override fun getChildren(): List<TemplateContext> = children.values.toList()
 
+    override fun getAppliedFeatures(): List<Feature> = applied.values.toList()
+
+    override fun getRemovedFeatures(): List<Feature> = removed.values.toList()
+
     override fun onApplyRules(contextPath: String, vararg rules: FileRule) {
         onApplyRules(FileRules(contextPath, rules.toList()))
     }

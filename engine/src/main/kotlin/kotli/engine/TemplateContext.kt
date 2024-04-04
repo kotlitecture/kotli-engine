@@ -29,4 +29,18 @@ interface TemplateContext : TemplateState {
      */
     fun onAddChild(layer: Layer): TemplateContext?
 
+    /**
+     * Returns the list of features applied in this context.
+     *
+     * @return The list of applied features.
+     */
+    fun getAppliedFeatures(): List<Feature>
+
+    /**
+     * Returns the list of features removed in this context.
+     *
+     * @return The list of removed features.
+     */
+    fun getRemovedFeatures(): List<Feature>
+
 }
