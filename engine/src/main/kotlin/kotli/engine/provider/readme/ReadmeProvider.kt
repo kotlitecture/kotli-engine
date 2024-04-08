@@ -1,18 +1,18 @@
-package kotli.engine.provider.configuration
+package kotli.engine.provider.readme
 
 import kotli.engine.BaseFeatureProvider
 import kotli.engine.FeatureProcessor
 import kotli.engine.FeatureType
 import kotli.engine.model.FeatureTypes
-import kotli.engine.provider.configuration.markdown.MarkdownConfigurationProcessor
+import kotli.engine.provider.readme.markdown.MarkdownReadmeProcessor
 
-internal class ConfigurationProvider : BaseFeatureProvider() {
+internal class ReadmeProvider : BaseFeatureProvider() {
 
-    override fun getId(): String = "configuration"
+    override fun getId(): String = "readme"
     override fun getType(): FeatureType = FeatureTypes.Documentation
 
     override fun createProcessors(): List<FeatureProcessor> = listOf(
-        MarkdownConfigurationProcessor()
+        MarkdownReadmeProcessor
     )
 
 }

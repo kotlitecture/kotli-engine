@@ -2,8 +2,8 @@ package kotli.engine
 
 import kotli.engine.model.Feature
 import kotli.engine.model.Layer
-import kotli.engine.provider.configuration.ConfigurationProvider
-import kotli.engine.provider.configuration.markdown.MarkdownConfigurationProcessor
+import kotli.engine.provider.readme.ReadmeProvider
+import kotli.engine.provider.readme.markdown.MarkdownReadmeProcessor
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -26,7 +26,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
      * Lazily initialized list of providers associated with the processor.
      * Includes default providers like ConfigurationProvider.
      */
-    private val providerList by lazy { createProviders().plus(ConfigurationProvider()) }
+    private val providerList by lazy { createProviders().plus(ReadmeProvider()) }
 
     /**
      * Lazily initialized map of processors indexed by their class type.
@@ -67,7 +67,7 @@ abstract class BaseTemplateProcessor : TemplateProcessor {
     }
 
     override fun dependencies(): List<Class<out FeatureProcessor>> = listOf(
-        MarkdownConfigurationProcessor::class.java
+        MarkdownReadmeProcessor::class.java
     )
 
     override fun getFeatureProviders(): List<FeatureProvider> {

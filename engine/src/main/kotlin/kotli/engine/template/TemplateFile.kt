@@ -15,13 +15,15 @@ data class TemplateFile(
     val markerSeparators: List<String>
 ) {
 
-    val lines by lazy {
+    val linesDelegate = lazy {
         if (path.exists()) {
             path.readLines().toMutableList()
         } else {
             mutableListOf()
         }
     }
+
+    val lines by linesDelegate
 
     /**
      * Replaces the current text with the specified text.

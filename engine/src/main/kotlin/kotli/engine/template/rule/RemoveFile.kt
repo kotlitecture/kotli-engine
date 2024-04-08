@@ -14,6 +14,7 @@ import kotlin.io.path.deleteRecursively
 class RemoveFile : FileRule() {
 
     override fun doApply(file: TemplateFile) {
+        if (file.linesDelegate.isInitialized()) file.lines.clear()
         file.path.deleteRecursively()
     }
 
