@@ -20,11 +20,11 @@ internal object MarkdownReadmeProcessor : BaseFeatureProcessor() {
         state.processor.getWebUrl()?.let {
             readmeBuilder.appendLine("# About")
             readmeBuilder.appendLine()
-            readmeBuilder.appendLine("- Initial template: $it")
+            readmeBuilder.appendLine("Initial template: $it")
             state.getRoot()
-                .takeIf { root -> root === TemplateProcessor.App }
+                .takeIf { root -> root.processor === TemplateProcessor.App }
                 ?.layer?.id?.takeIf { id -> id.isNotEmpty() }
-                ?.let { readmeBuilder.appendLine("- Project URL: https://kotlitecture.com/project/$it") }
+                ?.let { readmeBuilder.appendLine("Project URL: https://kotlitecture.com/project/$it") }
         }
 
         // features
