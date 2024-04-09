@@ -48,6 +48,7 @@ open class PathOutputGenerator(
         return DefaultTemplateContext(
             contextPath = layer.name,
             registry = registry,
+            parent = null,
             layer = layer
         )
     }
@@ -103,7 +104,11 @@ open class PathOutputGenerator(
                             .filter {
                                 val matches = regexp.matches(it.pathString)
                                 if (matches) {
-                                    logger.debug("found by mask :: {} -> {}", contextPath, it.pathString)
+                                    logger.debug(
+                                        "found by mask :: {} -> {}",
+                                        contextPath,
+                                        it.pathString
+                                    )
                                 }
                                 matches
                             }

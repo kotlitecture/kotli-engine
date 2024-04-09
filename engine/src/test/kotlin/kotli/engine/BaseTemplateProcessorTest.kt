@@ -51,11 +51,13 @@ class BaseTemplateProcessorTest {
                 namespace = ""
             ),
             contextPath = "",
-            registry = DefaultTemplateRegistry(templateProcessor)
+            registry = DefaultTemplateRegistry(templateProcessor),
+            parent = null
         )
         runBlocking { templateProcessor.process(context) }
         Assertions.assertEquals(2, context.getAppliedFeatures().size)
         Assertions.assertEquals("1", context.getAppliedFeatures().first().id)
+        Assertions.assertSame(context.getRoot(), context)
     }
 
     class TestTemplateProcessor(private val providers: List<FeatureProvider>) :

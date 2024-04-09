@@ -21,6 +21,11 @@ interface TemplateState {
     val contextPath: String
 
     /**
+     * The parent state of this one.
+     */
+    val parent: TemplateState?
+
+    /**
      * The template processor responsible for this state.
      */
     val processor: TemplateProcessor
@@ -64,6 +69,15 @@ interface TemplateState {
         onApplyRules(FileRules(contextPath, rules.toList()))
     }
 
+    /**
+     * Returns the root template state.
+     *
+     * @return The root template state.
+     */
+    fun getRoot(): TemplateState {
+        return parent?.getRoot() ?: this
+    }
+
     companion object {
         /**
          * An empty implementation of [TemplateState] for cases where no state is available.
@@ -74,6 +88,7 @@ interface TemplateState {
             override fun getRules(): List<FileRules> = emptyList()
             override fun getFeature(id: String): Feature? = null
             override fun onApplyRules(rules: FileRules) = Unit
+            override val parent: TemplateState? = null
             override val contextPath: String = "/"
             override val layer: Layer = Layer(
                 id = "<YOUR_LAYER_ID>",

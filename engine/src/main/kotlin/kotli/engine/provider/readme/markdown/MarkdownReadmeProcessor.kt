@@ -2,6 +2,7 @@ package kotli.engine.provider.readme.markdown
 
 import kotli.engine.BaseFeatureProcessor
 import kotli.engine.FeatureProcessor
+import kotli.engine.TemplateProcessor
 import kotli.engine.TemplateState
 import kotli.engine.template.rule.WriteText
 import java.net.URLEncoder
@@ -19,7 +20,11 @@ internal object MarkdownReadmeProcessor : BaseFeatureProcessor() {
         state.processor.getWebUrl()?.let {
             readmeBuilder.appendLine("# About")
             readmeBuilder.appendLine()
-            readmeBuilder.appendLine("Created based on a template: $it")
+            readmeBuilder.appendLine("- Initial template: $it")
+            state.getRoot()
+                .takeIf { root -> root === TemplateProcessor.App }
+                ?.layer?.id?.takeIf { id -> id.isNotEmpty() }
+                ?.let { readmeBuilder.appendLine("- Project URL: https://kotlitecture.com/project/$it") }
         }
 
         // features

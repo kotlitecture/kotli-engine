@@ -15,6 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 class DefaultTemplateContext(
     override val layer: Layer,
     override val contextPath: String,
+    override val parent: TemplateState?,
     private val registry: TemplateRegistry
 ) : TemplateContext {
 
@@ -78,6 +79,7 @@ class DefaultTemplateContext(
         val child = DefaultTemplateContext(
             contextPath = path(contextPath, layer.name),
             registry = registry,
+            parent = this,
             layer = layer
         )
         children[name] = child
