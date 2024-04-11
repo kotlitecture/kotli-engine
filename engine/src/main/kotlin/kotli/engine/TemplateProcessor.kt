@@ -21,6 +21,7 @@ interface TemplateProcessor : TemplateDescriptor {
             override fun getId(): String = "app"
             override fun getType(): LayerType = LayerTypes.App
             override fun createProviders(): List<FeatureProvider> = emptyList()
+            override fun dependencies(): List<Class<out FeatureProcessor>> = emptyList()
         }
     }
 
