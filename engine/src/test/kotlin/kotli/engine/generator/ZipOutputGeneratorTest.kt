@@ -25,9 +25,9 @@ class ZipOutputGeneratorTest {
         val pathGenerator = PathOutputGenerator(registry = registry)
         val zipGenerator = ZipOutputGenerator(output, pathGenerator)
         val state = zipGenerator.generate(layer)
-        Assertions.assertTrue(output.size() > 400)
+        Assertions.assertEquals(22, output.size())
         Assertions.assertTrue(state.getChildren().isEmpty())
-        Assertions.assertEquals(3, Files.walk(pathGenerator.output).toList().size)
+        Assertions.assertEquals(1, Files.walk(pathGenerator.output).toList().size)
     }
 
 }

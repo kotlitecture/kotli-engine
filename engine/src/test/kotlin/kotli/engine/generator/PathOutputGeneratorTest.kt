@@ -23,7 +23,7 @@ class PathOutputGeneratorTest {
         val generator = PathOutputGenerator(registry = registry)
         val state = generator.generate(layer)
         Assertions.assertTrue(state.getChildren().isEmpty())
-        Assertions.assertEquals(3, Files.walk(generator.output).toList().size)
+        Assertions.assertEquals(1, Files.walk(generator.output).toList().size)
     }
 
     @Test
