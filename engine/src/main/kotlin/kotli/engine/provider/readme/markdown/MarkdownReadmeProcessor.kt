@@ -147,6 +147,6 @@ internal object MarkdownReadmeProcessor : BaseFeatureProcessor() {
     }
 
     private fun String?.asLink() = this?.let { "[Link]($it)" } ?: "-"
-    private fun String.encoded() = URLEncoder.encode(this, "UTF-8")
+    private fun String.encoded() = URLEncoder.encode(this, "UTF-8").replace("+", "%20")
 
 }
