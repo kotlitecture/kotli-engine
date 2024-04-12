@@ -26,13 +26,15 @@ internal object MarkdownReadmeProcessor : BaseFeatureProcessor() {
                 ?.layer?.id?.takeIf { id -> id.isNotEmpty() }
                 ?.let {
                     readmeBuilder.appendLine()
-                    readmeBuilder.appendLine("Project URL: https://kotlitecture.com/project/$it")
+                    readmeBuilder.appendLine("Project architecture: https://kotlitecture.com/project/$it")
                 }
         }
 
         // features
         val featuresBuilder = StringBuilder()
-        state.layer.features
+        val features = state.layer.features
+        features
+            .plus(state.processor.getMissedFeatures(features, { it.id }, { it }))
             .asSequence()
             .map { it.id }
             .mapNotNull(state.processor::getFeatureProcessor)
@@ -53,9 +55,10 @@ internal object MarkdownReadmeProcessor : BaseFeatureProcessor() {
             readmeBuilder.append(featuresBuilder)
         }
 
-        readmeBuilder.trim().toString()
+        readmeBuilder
+            .trim()
             .takeIf { it.isNotEmpty() }
-            ?.let { state.onApplyRules("README.md", WriteText(it)) }
+            ?.let { state.onApplyRules("README.md", WriteText(it.toString())) }
     }
 
     private fun proceedFeature(
