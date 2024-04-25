@@ -16,12 +16,12 @@ enum class LayerTypes(
 ) : LayerType {
 
     App("app", 0),
-    Backend("backend", 1),
+    Multiplatform("multiplatform", 1),
     Android("android", 2),
-    IOS("ios", 3),
-    Web("web", 4),
-    Desktop("desktop", 5),
-    Multiplatform("multiplatform", 6),
+    Backend("backend", 3),
+    IOS("ios", 4),
+    Web("web", 5),
+    Desktop("desktop", 6),
     Unspecified("unspecified", 7)
 
     ;

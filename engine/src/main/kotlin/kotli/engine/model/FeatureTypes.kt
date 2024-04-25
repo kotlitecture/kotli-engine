@@ -18,14 +18,14 @@ enum class FeatureTypes(
     Metadata("metadata", -1),
     DevOps("devops", 1),
     DataFlow("dataflow", 2),
-    UserFlow("userflow", 3),
-    UI("ui", 4),
+    UI("ui", 3),
+    UserFlow("userflow", 4),
     Quality("quality", 5),
     Testing("testing", 6),
     Documentation("documentation", 7),
     Workflow("workflow", 8),
     Examples("examples", 9),
-    Unspecified("unspecified", Int.MAX_VALUE)
+    Unspecified("unspecified", Int.MIN_VALUE)
 
     ;
 
