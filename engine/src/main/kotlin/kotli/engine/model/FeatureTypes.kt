@@ -16,6 +16,7 @@ enum class FeatureTypes(
 ) : FeatureType {
 
     Metadata("metadata", -1),
+    Essentials("essentials", -1),
     DevOps("devops", 1),
     DataFlow("dataflow", 2),
     UI("ui", 3),
