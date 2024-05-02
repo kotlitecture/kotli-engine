@@ -48,6 +48,7 @@ object PackageUtils {
             .readLines()
             .joinToString("\n") {
                 it.replace(" ${oldPackageName}.", " ${newPackageName}.")
+                    .replace("package $oldPackageName", "package $newPackageName")
             }
         filePath.writeText(text)
     }
