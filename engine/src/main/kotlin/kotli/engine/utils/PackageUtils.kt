@@ -21,6 +21,8 @@ object PackageUtils {
      * @param newPackageName The new package name to replace the old package name.
      */
     fun rename(rootDir: Path, oldPackageName: String, newPackageName: String) {
+        if(!rootDir.exists()) return
+
         val oldPackagePath = oldPackageName.replace('.', '/')
         val newPackagePath = newPackageName.replace('.', '/')
 
