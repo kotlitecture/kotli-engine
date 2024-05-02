@@ -12,7 +12,7 @@ object MaskUtils {
      * @return The regular expression pattern equivalent to the mask.
      */
     fun toRegex(mask: String): Regex {
-        val regex = StringBuilder("^")
+        val regex = StringBuilder("^.*")
         for (i in mask.indices) {
             when (val char = mask[i]) {
                 '*' -> regex.append(".*")

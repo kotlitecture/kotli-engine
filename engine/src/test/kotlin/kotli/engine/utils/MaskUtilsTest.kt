@@ -30,4 +30,13 @@ class MaskUtilsTest {
         Assertions.assertTrue(MaskUtils.toRegex("*\\aaa.txt").matches("/dd/bb/aaa.txt"))
     }
 
+    @Test
+    fun `check mask`() {
+        val path = "/Users/composeApp/src/commonMain/kotlin/kotli/app/showcases/datasource/keyvalue/object/ObjectKeyValueScreen.kt"
+        val mask = "composeApp/src/*.kt"
+        val regexp = MaskUtils.toRegex(mask)
+        println("regexp :: ${regexp.pattern}")
+        Assertions.assertTrue(regexp.matches(path))
+    }
+
 }

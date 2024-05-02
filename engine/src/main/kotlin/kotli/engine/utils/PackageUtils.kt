@@ -3,6 +3,7 @@ package kotli.engine.utils
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import kotlin.io.path.exists
 import kotlin.io.path.readLines
 import kotlin.io.path.writeText
 
@@ -26,8 +27,10 @@ object PackageUtils {
         val oldPackageDir = rootDir.resolve(oldPackagePath)
         val newPackageDir = rootDir.resolve(newPackagePath)
 
-        Files.createDirectories(newPackageDir)
-        Files.move(oldPackageDir, newPackageDir, StandardCopyOption.REPLACE_EXISTING)
+        if (oldPackageDir.exists()) {
+            Files.createDirectories(newPackageDir)
+            Files.move(oldPackageDir, newPackageDir, StandardCopyOption.REPLACE_EXISTING)
+        }
 
         Files.walk(rootDir)
             .filter { Files.isRegularFile(it) }
@@ -47,8 +50,7 @@ object PackageUtils {
         val text = filePath
             .readLines()
             .joinToString("\n") {
-                it.replace(" ${oldPackageName}.", " ${newPackageName}.")
-                    .replace("package $oldPackageName", "package $newPackageName")
+                it.replace(oldPackageName, newPackageName)
             }
         filePath.writeText(text)
     }
