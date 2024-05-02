@@ -47,7 +47,7 @@ object PackageUtils {
         val text = filePath
             .readLines()
             .joinToString("\n") {
-                it.replace(oldPackageName, newPackageName)
+                it.replace(" ${oldPackageName}.", " ${newPackageName}.")
             }
         filePath.writeText(text)
     }
