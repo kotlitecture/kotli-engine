@@ -9,7 +9,7 @@ class LayerTypesTest {
     fun `layer types have icon, title and description`() {
         LayerTypes.entries
             .filter { it.getTitle() != null }
-            .also { Assertions.assertEquals(3, it.size) }
+            .also { Assertions.assertEquals(4, it.size) }
             .forEach { type ->
                 Assertions.assertNotNull(type.getTitle(), type.getId())
             }
