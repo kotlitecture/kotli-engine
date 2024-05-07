@@ -1,8 +1,12 @@
 package kotli.engine.template
 
 import java.nio.file.Path
+import kotlin.io.path.createDirectories
+import kotlin.io.path.deleteIfExists
 import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
 import kotlin.io.path.readLines
+import kotlin.io.path.writeLines
 
 /**
  * Describes any file of the template.
@@ -44,6 +48,33 @@ data class TemplateFile(
         val newText = block(lines.joinToString("\n"))
         lines.clear()
         lines.addAll(newText.lines())
+    }
+
+    /**
+     * Applies all changes made to the underline file path.
+     */
+    fun commit() {
+        when {
+            path.isDirectory() -> return
+            linesDelegate.isInitialized() && lines.isNotEmpty() -> {
+                if (!path.parent.exists()) {
+                    path.parent.createDirectories()
+                }
+                val newLines = lines
+                    .filterIndexed { index, line ->
+                        line.isNotBlank() || lines.getOrNull(index - 1)?.isNotBlank() == true
+                    }
+                    .dropWhile { it.isBlank() }
+                    .dropLastWhile { it.isBlank() }
+                if (newLines.isNotEmpty()) {
+                    path.writeLines(newLines)
+                } else {
+                    path.deleteIfExists()
+                }
+            }
+
+            else -> path.deleteIfExists()
+        }
     }
 
 }

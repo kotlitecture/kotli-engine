@@ -15,12 +15,7 @@ import kotli.engine.utils.MaskUtils
 import kotli.engine.utils.PathUtils
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.io.path.createDirectories
-import kotlin.io.path.deleteIfExists
-import kotlin.io.path.exists
-import kotlin.io.path.isDirectory
 import kotlin.io.path.pathString
-import kotlin.io.path.writeLines
 
 /**
  * Generates the output structure in the given folder.
@@ -131,21 +126,7 @@ open class PathOutputGenerator(
     private fun write(file: TemplateFile, rules: List<FileRule>) {
         rules.forEach { rule -> rule.apply(file) }
         logger.debug("update file :: {}", file.path)
-        write(file)
-    }
-
-    private fun write(file: TemplateFile) {
-        when {
-            file.path.isDirectory() -> return
-            file.lines.isNotEmpty() -> {
-                if (!file.path.parent.exists()) {
-                    file.path.parent.createDirectories()
-                }
-                file.path.writeLines(file.lines)
-            }
-
-            else -> file.path.deleteIfExists()
-        }
+        file.commit()
     }
 
     /**
