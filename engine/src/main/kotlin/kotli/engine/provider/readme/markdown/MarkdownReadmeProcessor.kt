@@ -55,6 +55,14 @@ internal object MarkdownReadmeProcessor : BaseFeatureProcessor() {
             readmeBuilder.append(featuresBuilder)
         }
 
+        // description
+        state.layer.description?.let { description ->
+            readmeBuilder.appendLine()
+            readmeBuilder.appendLine("# Description")
+            readmeBuilder.appendLine()
+            readmeBuilder.appendLine(description)
+        }
+
         readmeBuilder
             .trim()
             .takeIf { it.isNotEmpty() }
