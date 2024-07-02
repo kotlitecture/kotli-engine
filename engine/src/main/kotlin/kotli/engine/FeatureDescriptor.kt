@@ -30,7 +30,8 @@ interface FeatureDescriptor {
      *
      * @return URL to the image resource (default value is "icon.svg" relative to the package declaration).
      */
-    fun getIcon(state: TemplateState = TemplateState.Empty): URL? = ResourceUtils.get(this, "icon.svg")
+    fun getIcon(state: TemplateState = TemplateState.Empty): URL? =
+        ResourceUtils.get(this, "icon.svg")
 
     /**
      * Gets the title of the feature. Short name. Used to display to the user and generate required documentation.
@@ -39,7 +40,8 @@ interface FeatureDescriptor {
      *
      * @return Text (default value is the content of "title.md", relative to the package declaration).
      */
-    fun getTitle(state: TemplateState = TemplateState.Empty): String? = ResourceUtils.getAsString(this, "title.md")
+    fun getTitle(state: TemplateState = TemplateState.Empty): String? =
+        ResourceUtils.getAsString(this, "title.md")
 
     /**
      * Gets the description of the feature. Detailed. Used to display to the user and generate required documentation.
@@ -48,7 +50,8 @@ interface FeatureDescriptor {
      *
      * @return Text (default value is the content of "description.md", relative to the package declaration).
      */
-    fun getDescription(state: TemplateState = TemplateState.Empty): String? = ResourceUtils.getAsString(this, "description.md", true)
+    fun getDescription(state: TemplateState = TemplateState.Empty): String? =
+        ResourceUtils.getAsString(this, "description.md", true)
 
     /**
      * Gets the instruction on how to use the feature in the generated template properly.
@@ -57,7 +60,8 @@ interface FeatureDescriptor {
      *
      * @return Text (default value is the content of "usage.md", relative to the package declaration).
      */
-    fun getUsage(state: TemplateState = TemplateState.Empty): String? = ResourceUtils.getAsString(this, "usage.md")
+    fun getUsage(state: TemplateState = TemplateState.Empty): String? =
+        ResourceUtils.getAsString(this, "usage.md")
 
     /**
      * Gets the step-by-step instruction on how to configure the feature in the generated template so it can be used properly.
@@ -66,7 +70,8 @@ interface FeatureDescriptor {
      *
      * @return Text (default value is the content of "configuration.md", relative to the package declaration).
      */
-    fun getConfiguration(state: TemplateState = TemplateState.Empty): String? = ResourceUtils.getAsString(this, "configuration.md")
+    fun getConfiguration(state: TemplateState = TemplateState.Empty): String? =
+        ResourceUtils.getAsString(this, "configuration.md")
 
     /**
      * Gets the approximate time estimate required to configure the given feature by following available step-by-step instructions.
@@ -114,5 +119,14 @@ interface FeatureDescriptor {
      * @return Web URL or null.
      */
     fun getIntegrationUrl(state: TemplateState = TemplateState.Empty): String? = null
+
+    /**
+     * Retrieves a list of feature tags.
+     * This method provides a default implementation that returns an empty list,
+     * meaning no feature tags are available by default.
+     *
+     * @return a list of `FeatureTag` instances, which is empty by default.
+     */
+    fun getTags(): List<FeatureTag> = emptyList()
 
 }
