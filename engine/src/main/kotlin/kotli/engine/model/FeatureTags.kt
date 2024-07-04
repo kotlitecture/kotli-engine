@@ -16,6 +16,7 @@ enum class FeatureTags(
     Desktop("Desktop", "#C05048"),
     Mobile("Mobile", "#5B77C0"),
     Server("Server", "#3B476D"),
+    Client("Client", "#6457D8"),
     ;
 
     override fun getTitle(): String = title
