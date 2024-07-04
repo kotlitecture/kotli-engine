@@ -21,6 +21,6 @@ interface FeatureTag {
      *
      * @return the color of the feature tag as a `String`, or `null` if the color is not set.
      */
-    fun getColor(): String? = null
+    fun getColor(): String
 
 }
