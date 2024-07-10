@@ -23,11 +23,15 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
      * @param context The template context in which the processor is applied.
      */
     final override fun apply(context: TemplateContext) {
-        getDependencies(context, this)
-            .minus(this)
-            .onEach { dependency -> dependency.apply(context) }
-        context.onApplyFeature(getId()) { feature ->
-            doApply(context, feature)
+        if (canApply(context)) {
+            getDependencies(context, this)
+                .minus(this)
+                .onEach { dependency -> dependency.apply(context) }
+            context.onApplyFeature(getId()) { feature ->
+                doApply(context, feature)
+            }
+        } else {
+            logger.warn("skip processor due to wrong state :: {}", getId())
         }
     }
 
@@ -91,6 +95,15 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
      */
     protected open fun doRemove(state: TemplateState) = Unit
 
+    /**
+     * Checks if the given processor can be applied based on the state provided.
+     *
+     * If not, the processor will be skipped and removed as a result.
+     *
+     * By default, any added processor is applied.
+     */
+    protected open fun canApply(state: TemplateState): Boolean = true
+
     private fun fillDependencies(
         state: TemplateState,
         processor: FeatureProcessor,
@@ -103,7 +116,12 @@ abstract class BaseFeatureProcessor : FeatureProcessor {
         } else {
             processors.addLast(processor)
         }
-        logger.debug("fillDependencies :: fill :: {} -> {}, all={}", getId(), processor, processors.size)
+        logger.debug(
+            "fillDependencies :: fill :: {} -> {}, all={}",
+            getId(),
+            processor,
+            processors.size
+        )
         val templateProcessor = state.processor
         templateProcessor.getFeatureProvider(processor::class.java)?.dependencies()
             ?.mapNotNull(templateProcessor::getFeatureProcessor)
