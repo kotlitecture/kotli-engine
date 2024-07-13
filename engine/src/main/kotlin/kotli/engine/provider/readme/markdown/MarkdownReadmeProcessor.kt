@@ -26,7 +26,7 @@ internal object MarkdownReadmeProcessor : BaseFeatureProcessor() {
                 ?.layer?.id?.takeIf { id -> id.isNotEmpty() }
                 ?.let {
                     readmeBuilder.appendLine()
-                    readmeBuilder.appendLine("Project architecture: https://kotlitecture.com/project/$it")
+                    readmeBuilder.appendLine("Project architecture: https://kotli.xyz/project/$it")
                 }
         }
 
